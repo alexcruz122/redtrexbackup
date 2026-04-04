@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RedTrex Technologies – Buy Genuine Windows & Microsoft Software Keys Online Sri Lanka</title>
+  <title>RedTrex Technologies|Buy Genuine Windows|Microsoft Software Keys Online|Sri Lanka</title>
   <meta name="description" content="Purchase 100% genuine Windows, Microsoft Office, SQL Server, and Visual Studio product keys online. Fast delivery, safe checkout, and global activation from RedTrex Technologies.">
   <link rel="icon" type="image/png" href="Assest/company.png" />
   <link rel="stylesheet" href="style.css" />
@@ -1726,7 +1726,7 @@
 
       <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.8; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.4;">
         Microsoft, Windows, and Office are trademarks of Microsoft Corporation.
-EaseUS is a trademark of CHENGDU Yiwo Tech Development Co., Ltd.
+        EaseUS is a trademark of CHENGDU Yiwo Tech Development Co., Ltd.
       </p>
     </div>
   </footer>
@@ -1776,9 +1776,14 @@ EaseUS is a trademark of CHENGDU Yiwo Tech Development Co., Ltd.
       const card = btn.closest('.product-card');
       const unitPrice = parseFloat(card.dataset.unitPrice);
       const priceLkr = card.querySelector('.price-lkr');
+      const priceUsd = card.querySelector('.price-usd');
       if (priceLkr) {
         const totalPrice = (unitPrice * newVal).toFixed(2);
         priceLkr.textContent = Number(totalPrice).toLocaleString() + ' LKR';
+        if (priceUsd && window._lkrToUsdRate) {
+          const usdTotal = (totalPrice * window._lkrToUsdRate).toFixed(2);
+          priceUsd.textContent = '≈ $' + Number(usdTotal).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
+        }
       }
     }
 
@@ -1792,9 +1797,14 @@ EaseUS is a trademark of CHENGDU Yiwo Tech Development Co., Ltd.
         const card = this.closest('.product-card');
         const unitPrice = parseFloat(card.dataset.unitPrice);
         const priceLkr = card.querySelector('.price-lkr');
+        const priceUsd = card.querySelector('.price-usd');
         if (priceLkr) {
           const totalPrice = (unitPrice * val).toFixed(2);
           priceLkr.textContent = Number(totalPrice).toLocaleString() + ' LKR';
+          if (priceUsd && window._lkrToUsdRate) {
+            const usdTotal = (totalPrice * window._lkrToUsdRate).toFixed(2);
+            priceUsd.textContent = '≈ $' + Number(usdTotal).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
+          }
         }
       });
     });
@@ -1872,6 +1882,42 @@ EaseUS is a trademark of CHENGDU Yiwo Tech Development Co., Ltd.
     }
   </script>
 
+
+  <!-- Live USD Price Script -->
+  <script>
+    (async function loadUsdPrices() {
+      let rate = null;
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await res.json();
+        if (data && data.rates && data.rates.LKR) {
+          rate = 1 / data.rates.LKR; // 1 LKR in USD
+          window._lkrToUsdRate = rate;
+        }
+      } catch (e) {
+        // Fallback to approximate rate if API fails
+        rate = 1 / 310;
+        window._lkrToUsdRate = rate;
+      }
+
+      if (!rate) return;
+
+      document.querySelectorAll('.product-card').forEach(card => {
+        const priceLkr = card.querySelector('.price-lkr');
+        const unitPrice = parseFloat(card.dataset.unitPrice);
+        if (!priceLkr || isNaN(unitPrice)) return;
+
+        // Create USD price element if not already present
+        if (!card.querySelector('.price-usd')) {
+          const priceUsd = document.createElement('p');
+          priceUsd.className = 'price-usd';
+          const usdAmount = (unitPrice * rate).toFixed(2);
+          priceUsd.textContent = '≈ $' + Number(usdAmount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
+          priceLkr.insertAdjacentElement('afterend', priceUsd);
+        }
+      });
+    })();
+  </script>
 
   <script src="https://webchatagent.com/widget/web-chat-agent.js" async></script>
 
