@@ -2256,19 +2256,19 @@
     }
 
     function checkoutCart() {
-      if (cart.length === 0) return;
-      if (cart.length === 1) {
-        const item = cart[0];
-        const encodedName = encodeURIComponent(item.name);
-        // Save to localStorage as fallback
-        localStorage.setItem('redtrex_pending_checkout', JSON.stringify(cart));
-        window.location.href = `/checkout?product=${encodedName}&price=${item.unitPrice}&qty=${item.qty}`;
-      } else {
-        // Always save cart to localStorage so checkout page can read it reliably
-        localStorage.setItem('redtrex_pending_checkout', JSON.stringify(cart));
-        window.location.href = `/checkout?multi=1`;
+        if (cart.length === 0) return;
+        var cartJson = JSON.stringify(cart);
+        try { localStorage.setItem('redtrex_pending_checkout', cartJson); } catch(e) {}
+        try { sessionStorage.setItem('redtrex_pending_checkout', cartJson); } catch(e) {}
+
+        if (cart.length === 1) {
+          var item = cart[0];
+          var encodedName = encodeURIComponent(item.name);
+          window.location.href = 'checkout.html?product=' + encodedName + '&price=' + item.unitPrice + '&qty=' + item.qty;
+        } else {
+          window.location.href = 'checkout.html?multi=1';
+        }
       }
-    }
 
     // ── Inject "Add to Cart" buttons onto every product card ──
     document.addEventListener('DOMContentLoaded', () => {
