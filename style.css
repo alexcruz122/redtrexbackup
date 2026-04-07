@@ -90,42 +90,58 @@ nav {
 /* Mobile specific adjustments */
 @media (max-width: 600px) {
   nav {
-    padding: 15px 10px;
-    gap: 12px;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 8px 14px 8px !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
   }
 
-  .nav-dropdown, 
-  .customer-portal-btn {
-    width: 90%; /* Buttons take most of the width */
-    text-align: center;
+  /* Hide non-essential nav items on mobile */
+  .customer-portal-btn,
+  .disclaimer-container {
+    display: none !important;
+  }
+
+  /* Keep Menu dropdown compact — first row left */
+  .nav-dropdown {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .nav-dropdown .dropdown-toggle {
     width: 100%;
+    font-size: 0.85rem;
+    padding: 8px 12px;
   }
 
-  .customer-portal-btn {
-    font-size: 0.9rem;
-    padding: 12px 10px;
-    margin: 0;
+  /* Cart button — third row, centered */
+  .cart-icon-btn {
+    order: 100;
+    width: 100%;
+    display: flex !important;
+    justify-content: center !important;
+    font-size: 1.1rem;
+    padding: 8px 10px;
+    margin-top: 4px;
   }
 
+  /* Search bar — second row, full width */
   .search-container {
-    width: 90%;
-    max-width: none;
-    margin: 5px 0 0 0;
-    order: 3; /* Search bar at the bottom */
-    display: flex;
-    justify-content: center;
+    order: 99;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 4px 0 0 0 !important;
+    display: flex !important;
   }
 
   #productSearch {
-    font-size: 1rem;
-    padding: 12px 15px;
-    text-align: center; /* Center placeholder and text */
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    box-sizing: border-box;
   }
 }
 
@@ -1097,4 +1113,190 @@ nav {
   margin-top: -8px;
   margin-bottom: 6px;
   letter-spacing: 0.02em;
+}
+
+/* ── Promotions / Discounts Section ── */
+.promo-section-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff6b35, #f7c59f, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+
+.promo-section-subtitle {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.92rem;
+  margin-bottom: 24px;
+}
+
+.promo-card {
+  position: relative;
+  border: 1px solid rgba(255, 140, 50, 0.4) !important;
+  box-shadow: 0 0 20px rgba(255, 100, 30, 0.2), 0 4px 24px rgba(0,0,0,0.3) !important;
+}
+
+.promo-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #ff4500, #ff8c00);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 8px rgba(255, 69, 0, 0.45);
+  z-index: 2;
+}
+
+.promo-original-price {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: line-through;
+  margin-bottom: 2px;
+  margin-top: 4px;
+}
+
+/* ── Bundle Card Dual Images ── */
+.bundle-images {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+
+.bundle-img {
+  width: 42%;
+  max-width: 120px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  padding: 6px;
+}
+
+.bundle-plus {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+}
+
+.bundle-includes {
+  font-size: 0.75rem;
+  color: rgba(255, 200, 100, 0.85);
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+/* ── Dropdown Divider & Mobile Search ── */
+.dropdown-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 6px 0;
+}
+
+.dropdown-search-wrap {
+  padding: 6px 8px 4px;
+  position: relative;
+}
+
+.dropdown-search-wrap input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  outline: none;
+}
+
+.dropdown-search-wrap input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.mobile-search-results {
+  width: 100%;
+  top: calc(100% + 2px);
+}
+
+/* ── Live Exchange Rate Ticker ── */
+.rate-ticker {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.78rem;
+  padding: 5px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  letter-spacing: 0.02em;
+}
+
+.rate-ticker-label {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.rate-ticker-sep {
+  opacity: 0.35;
+}
+
+.rate-ticker-updated {
+  opacity: 0.45;
+  font-size: 0.72rem;
+  margin-left: 4px;
+}
+
+/* ── Footer Version Badge ── */
+.site-version {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+/* ── Bundle Deal Time Gate ── */
+.bundle-avail-status {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 8px 0 6px;
+  text-align: center;
+  min-height: 36px;
+  line-height: 1.5;
+}
+
+.bundle-avail-status small {
+  opacity: 0.65;
+  font-size: 0.72rem;
+}
+
+.bundle-locked {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  filter: grayscale(60%);
+}
+
+.bundle-unlocked {
+  opacity: 1 !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  filter: none;
 }
