@@ -2453,48 +2453,16 @@
     })();
   </script>
 
+  <!-- Elfsight AI Chatbot | RinaAi-RedTrex -->
   <script src="https://elfsightcdn.com/platform.js" async></script>
-
-  <web-chat-agent 
-    chatbot-id="elfsight-app-af1fe23f-74f4-4a51-a118-de8581f8af21" 
-    theme-color="#f01111" 
-    title="Rina-Ai(REDTREX)" 
-    avatar-src="https://i.imgur.com/V4ECvij.jpeg" 
-    chat-bubble-image="https://i.imgur.com/V4ECvij.jpeg" 
-    font-family="IBM Plex Sans" 
-    welcome-message="Hello Welcome To RedTrex How Can We Assist You Today?" 
-    bot-message-color="#f3f4f6" 
-    user-message-color="#2563eb" 
-    hide-branding="true"
-  ></web-chat-agent>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const chatAgent = document.querySelector("web-chat-agent");
-      if (!chatAgent) return;
-
-      const applyFix = () => {
-        const shadow = chatAgent.shadowRoot;
-        if (!shadow) return;
-
-        const input = shadow.querySelector("input, textarea");
-        if (input) {
-          input.style.color = "#000";
-          input.style.backgroundColor = "#fff";
-          input.style.caretColor = "#000";
-        }
-      };
-
-      const interval = setInterval(() => {
-        applyFix();
-        const shadow = chatAgent.shadowRoot;
-        if (shadow && shadow.querySelector("input, textarea")) {
-          clearInterval(interval);
-          new MutationObserver(applyFix).observe(shadow, { childList: true, subtree: true });
-        }
-      }, 300);
-    });
-  </script>
+  <div class="elfsight-app-af1fe23f-74f4-4a51-a118-de8581f8af21" data-elfsight-app-lazy></div>
+  <style>
+    .eapps-widget-show-btn,
+    [class*="eapps-widget-show"],
+    [class*="eapps-apps-branding"],
+    .eapps-apps-branding,
+    a[href*="elfsight.com"][target="_blank"] { display: none !important; }
+  </style>
 
   <script>
     let slideIndex = 0;
