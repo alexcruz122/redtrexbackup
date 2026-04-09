@@ -570,6 +570,8 @@
         var params = new URLSearchParams(window.location.search);
         var totalAmount = 0;
         var hasProduct = false;
+        var productName = 'Product';
+        var qty = 1;
         var productInfoEl = document.getElementById('productInfo');
 
         function renderCartTable(cartItems) {
@@ -609,6 +611,8 @@
               if (parsedCart && parsedCart.length > 0) {
                 renderCartTable(parsedCart);
                 hasProduct = true;
+                productName = parsedCart.map(function(i){ return i.name; }).join(', ');
+                qty = parsedCart.reduce(function(s,i){ return s + i.qty; }, 0);
               } else {
                 productInfoEl.innerText = 'No items found in cart.';
               }
@@ -624,12 +628,14 @@
             if (parsedCart && parsedCart.length > 0) {
               renderCartTable(parsedCart);
               hasProduct = true;
+              productName = parsedCart.map(function(i){ return i.name; }).join(', ');
+              qty = parsedCart.reduce(function(s,i){ return s + i.qty; }, 0);
             }
           } catch(e) { productInfoEl.innerText = 'Cart error. Please return to the store.'; }
         } else {
-          var productName = params.get('product') || '';
+          productName = params.get('product') || '';
           var unitPrice = parseFloat(params.get('price') || 0);
-          var qty = parseInt(params.get('qty') || 1);
+          qty = parseInt(params.get('qty') || 1);
           if (productName && unitPrice > 0) {
             hasProduct = true;
             var subtotal = unitPrice * qty;
