@@ -360,14 +360,14 @@ nav {
     order: 3;
     margin: 10px 0 0 0;
   }
-  
+
   #productSearch {
     width: 100%; /* Full width on mobile by default or keep compact? User said 'extends smoothly' */
     color: #fff;
     padding-left: 35px;
     background-position: 10px center;
   }
-  
+
   #productSearch::placeholder {
     color: rgba(255, 255, 255, 0.6);
   }
@@ -1030,7 +1030,7 @@ nav {
     background-size: contain;
     background-repeat: no-repeat;
   }
-  
+
   /* Mobile Menu Toggle (3 Dots) */
   .mobile-menu-toggle {
     display: none;
@@ -1082,7 +1082,7 @@ nav {
       justify-content: center;
     }
   }
-  
+
   @media (max-width: 768px) {
     .nav-links {
       display: none !important;
@@ -1105,7 +1105,7 @@ nav {
       cursor: pointer;
     }
   }
-  
+
 /* USD Price Display */
 .price-usd {
   font-size: 0.85rem;
