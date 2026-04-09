@@ -397,6 +397,47 @@
 </head>
 <body>
 
+  <!-- Domain Migration Notice -->
+  <div id="domainNotice" style="
+    background: linear-gradient(90deg, rgba(180,30,30,0.92), rgba(100,10,10,0.95));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,100,80,0.35);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,150,130,0.2);
+    color: #fff;
+    font-size: 0.82rem;
+    padding: 8px 48px 8px 16px;
+    text-align: center;
+    letter-spacing: 0.01em;
+    line-height: 1.5;
+    position: relative;
+    z-index: 9999;
+  ">
+    <span style="opacity:0.75; margin-right:6px;"></span>
+    <strong>Important Notice:</strong> We are officially migrating to our new domain.
+    <strong>www.redtrex.com.lk</strong> is now our primary website.
+    <span style="opacity:0.85;"> </span>
+    <span style="opacity:0.9;">redtrex.store will be retired shortly. Please update your bookmarks.</span>
+    <button onclick="document.getElementById('domainNotice').style.display='none'" style="
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      border-radius: 6px;
+      width: 24px;
+      height: 24px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    " title="Dismiss">✕</button>
+  </div>
+
   <!-- Live Exchange Rate Ticker -->
   <div class="rate-ticker" id="rateTicker">
     <span class="rate-ticker-label">💱 Live LKR/USD Rate:</span>
@@ -426,9 +467,9 @@
         <a href="https://www.redtrex.com.lk/refund">Refund</a>
         <a href="https://invoice.zohosecure.com/portal/redtrextechnologies/signin">Customer/Reseller Portal</a>
         <hr class="dropdown-divider" />
-        <a href="https://www.redtrex.com.lk/faq">❓ FAQ</a>
-        <a href="https://tudo.lk/store/redtrex-technologies" target="_blank">🛍️ Buy From Tudo.lk</a>
-        <a href="#" onclick="openDisclaimerPopup(); return false;">⚠️ Disclaimer</a>
+        <a href="https://www.redtrex.com.lk/faq">FAQ</a>
+        <a href="https://tudo.lk/store/redtrex-technologies" target="_blank">Buy From Tudo.lk</a>
+        <a href="#" onclick="openDisclaimerPopup(); return false;">Disclaimer</a>
       </div>
     </div>
     <a href="https://www.redtrex.com.lk/faq" class="g2g-btn customer-portal-btn">FAQ</a>
@@ -500,7 +541,7 @@
   </div>
 
   <video autoplay muted loop id="bg-video" playsinline>
-    <source src="assetphy/white-lines-on-blue-background.1920x1080.mp4" type="video/mp4">
+    <source src="Assest/27725-365890983.mp4" type="video/mp4">
   </video>
 
   <!-- ================= PROMOTIONS / DISCOUNTS ================= -->
@@ -2074,7 +2115,9 @@
     </div>
 
     <div class="footer-bottom" id="site-disclaimer">
-      <p>© 2026 RedTrex Technologies. All Rights Reserved. &nbsp;<span class="site-version">AI VER : v1.0.6</span></p>
+      <p>© 2026 RedTrex Technologies. All Rights Reserved. &nbsp;<span class="site-version">AI API VER : v1.0.6</span>
+      <span class="site-version">SITE VER : v7.2.0</span>
+      </p>
       
       <!-- TrustBox widget - Review Collector -->
       <div class="trustpilot-widget" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="695cc6e19a00ec5c081ad5cf" data-style-height="52px" data-style-width="100%" data-token="d9199b8b-2dd3-442e-bb28-a0178778ded4" style="margin: 20px 0;">
@@ -2088,19 +2131,6 @@
       </p>
     </div>
   </footer>
-
-  <div id="popupModal" class="popup-modal">
-    <div class="popup-content glass-effect">
-      <button class="close-btn" onclick="closePopup()">✕</button>
-      <h2 class="popup-title">Domain Migration</h2>
-      <p class="popup-text">
-        Dear Valued Customer,
-        We are soon moving to a redtrex.com.lk Domain to provide better service to our customers in Sri Lanka.
-        If you outside from Sri Lanka, Don't worry we will still provide you with the best service
-        as we always do. Thank you for your understanding.
-      </p>
-    </div>
-  </div>
 
   <!-- Disclaimer Popup -->
   <div id="disclaimerPopup" class="popup-modal">
@@ -2174,13 +2204,6 @@
       window.location.href = `https://www.redtrex.store/checkout?product=${encodedName}&price=${unitPrice}&qty=${qty}`;
     }
 
-    // Popup Management
-    function closePopup() {
-      const modal = document.getElementById('popupModal');
-      modal.style.display = 'none';
-      localStorage.setItem('popupClosed', new Date().getTime());
-    }
-
     function closeDisclaimerPopup() {
       document.getElementById('disclaimerPopup').style.display = 'none';
     }
@@ -2188,17 +2211,6 @@
     function openDisclaimerPopup() {
       document.getElementById('disclaimerPopup').style.display = 'flex';
     }
-
-    window.addEventListener('load', function() {
-      const hideDuration = 1000 * 60 * 5;
-      const lastClosed = localStorage.getItem('popupClosed');
-      const now = new Date().getTime();
-
-      if (!lastClosed || now - lastClosed > hideDuration) {
-        const modal = document.getElementById('popupModal');
-        if (modal) modal.style.display = 'flex';
-      }
-    });
 
     // Search Functionality
     const searchInput = document.getElementById('productSearch');
