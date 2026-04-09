@@ -569,9 +569,6 @@
       // ====== Prefill product info from URL ======
         var params = new URLSearchParams(window.location.search);
         var totalAmount = 0;
-        var hasProduct = false;
-        var productName = 'Product';
-        var qty = 1;
         var productInfoEl = document.getElementById('productInfo');
 
         function renderCartTable(cartItems) {
@@ -588,16 +585,10 @@
               + '<td style="text-align:right;padding:6px 2px;font-weight:600;color:#333;">' + Number(lineTotal.toFixed(2)).toLocaleString() + '</td>'
               + '</tr>';
           });
-          var serviceFee = 94.65;
-          var grandTotal = runningTotal + serviceFee;
-          html += '<tr><td colspan="2" style="text-align:right;padding:6px 2px;color:#555;font-size:13px;">Subtotal:</td>'
-            + '<td style="text-align:right;padding:6px 2px;color:#555;font-size:13px;">' + Number(runningTotal.toFixed(2)).toLocaleString() + '</td></tr>';
-          html += '<tr><td colspan="2" style="text-align:right;padding:6px 2px;color:#888;font-size:12px;">Service Fee:</td>'
-            + '<td style="text-align:right;padding:6px 2px;color:#888;font-size:12px;">' + serviceFee.toFixed(2) + '</td></tr>';
-          html += '<tr style="border-top:1px solid rgba(240,43,43,0.3);"><td colspan="2" style="text-align:right;padding:8px 2px;font-weight:700;color:#F02B2B;font-size:14px;">Total:</td>'
-            + '<td style="text-align:right;padding:8px 2px;font-weight:700;color:#F02B2B;font-size:14px;">' + Number(grandTotal.toFixed(2)).toLocaleString() + '</td></tr>';
+          html += '<tr><td colspan="2" style="text-align:right;padding:8px 2px;font-weight:700;color:#F02B2B;font-size:14px;">Total:</td>'
+            + '<td style="text-align:right;padding:8px 2px;font-weight:700;color:#F02B2B;font-size:14px;">' + Number(runningTotal.toFixed(2)).toLocaleString() + '</td></tr>';
           html += '</table>';
-          totalAmount = grandTotal;
+          totalAmount = runningTotal;
           productInfoEl.style.textAlign = 'left';
           productInfoEl.innerHTML = html;
         }
@@ -607,66 +598,26 @@
             var pending = localStorage.getItem('redtrex_pending_checkout')
               || sessionStorage.getItem('redtrex_pending_checkout');
             if (pending) {
-              var parsedCart = JSON.parse(pending);
-              if (parsedCart && parsedCart.length > 0) {
-                renderCartTable(parsedCart);
-                hasProduct = true;
-                productName = parsedCart.map(function(i){ return i.name; }).join(', ');
-                qty = parsedCart.reduce(function(s,i){ return s + i.qty; }, 0);
-              } else {
-                productInfoEl.innerText = 'No items found in cart.';
-              }
+              renderCartTable(JSON.parse(pending));
               try { localStorage.removeItem('redtrex_pending_checkout'); } catch(e) {}
               try { sessionStorage.removeItem('redtrex_pending_checkout'); } catch(e) {}
             } else {
-              productInfoEl.innerText = 'Cart data not found. Please return to the store.';
+              productInfoEl.innerText = 'Multiple items (cart data not found)';
             }
-          } catch(e) { productInfoEl.innerText = 'Cart error. Please return to the store.'; }
+          } catch(e) { productInfoEl.innerText = 'Multiple items'; }
         } else if (params.get('cart')) {
           try {
-            var parsedCart = JSON.parse(decodeURIComponent(params.get('cart')));
-            if (parsedCart && parsedCart.length > 0) {
-              renderCartTable(parsedCart);
-              hasProduct = true;
-              productName = parsedCart.map(function(i){ return i.name; }).join(', ');
-              qty = parsedCart.reduce(function(s,i){ return s + i.qty; }, 0);
-            }
-          } catch(e) { productInfoEl.innerText = 'Cart error. Please return to the store.'; }
+            renderCartTable(JSON.parse(decodeURIComponent(params.get('cart'))));
+          } catch(e) { productInfoEl.innerText = 'Multiple items'; }
         } else {
-          productName = params.get('product') || '';
+          var productName = params.get('product') || 'Product';
           var unitPrice = parseFloat(params.get('price') || 0);
-          qty = parseInt(params.get('qty') || 1);
-          if (productName && unitPrice > 0) {
-            hasProduct = true;
-            var subtotal = unitPrice * qty;
-            var serviceFee = 94.65;
-            totalAmount = subtotal + serviceFee;
-            productInfoEl.innerHTML = '<table style="width:100%;font-size:13px;border-collapse:collapse;">'
-              + '<tr><td style="padding:4px 2px;color:#333;">' + productName + ' × ' + qty + '</td><td style="text-align:right;color:#333;">' + Number(subtotal.toFixed(2)).toLocaleString() + '</td></tr>'
-              + '<tr><td style="padding:4px 2px;color:#888;font-size:12px;">Service Fee</td><td style="text-align:right;color:#888;font-size:12px;">' + serviceFee.toFixed(2) + '</td></tr>'
-              + '<tr style="border-top:1px solid rgba(240,43,43,0.3);"><td style="padding:6px 2px;font-weight:700;color:#F02B2B;">Total</td><td style="text-align:right;font-weight:700;color:#F02B2B;">' + Number(totalAmount.toFixed(2)).toLocaleString() + '</td></tr>'
-              + '</table>';
-          } else {
-            productInfoEl.innerText = 'No product selected. Please return to the store.';
-          }
+          var qty = parseInt(params.get('qty') || 1);
+          totalAmount = unitPrice * qty;
+          productInfoEl.innerText = productName + ' × ' + qty;
         }
 
-        document.getElementById('amount').value = totalAmount > 0 ? totalAmount.toFixed(2) : '';
-
-        if (!hasProduct) {
-          var payBtn = document.querySelector('button[type="submit"], .pay-btn, #payBtn');
-          if (payBtn) {
-            payBtn.disabled = true;
-            payBtn.style.opacity = '0.4';
-            payBtn.style.cursor = 'not-allowed';
-            payBtn.title = 'No product selected';
-          }
-          var amountInput = document.getElementById('amount');
-          if (amountInput) {
-            amountInput.disabled = true;
-            amountInput.placeholder = 'No product selected';
-          }
-        }
+        document.getElementById('amount').value = totalAmount.toFixed(2);
 
       // ====== Form Validation ======
       function validateForm() {
@@ -679,11 +630,7 @@
         amountError.classList.remove("show");
         termsError.classList.remove("show");
 
-        if (!hasProduct) {
-          amountError.innerText = "No product selected. Please return to the store.";
-          amountError.classList.add("show");
-          isValid = false;
-        } else if (!amount || amount < 10) {
+        if (!amount || amount < 10) {
           amountError.innerText = "Minimum amount is LKR 10";
           amountError.classList.add("show");
           isValid = false;
@@ -746,10 +693,10 @@
             type: "SALE",
             product_name: productName,
             qty: qty,
-            return_url: "https://www.redtrex.com.lk/payment-success"
+            return_url: "https://www.redtrex.store/payment-success"
           };
 
-          const response = await fetch("https://directpay-backend.onrender.com/create-payment", {
+          const response = await fetch("https://www.api.redtrex.store/create-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(orderData)
