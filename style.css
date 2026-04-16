@@ -1062,6 +1062,33 @@ nav {
     background-repeat: no-repeat;
   }
 
+  /* Sold Count Badge */
+  .sold-count-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 5px 14px;
+    background: rgba(255, 60, 60, 0.08);
+    border: 1px solid rgba(255, 80, 80, 0.2);
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255, 180, 160, 0.9);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .sold-count-badge .sold-icon {
+    font-size: 0.82rem;
+  }
+
+  .sold-count-badge .sold-num {
+    color: #ff7a5a;
+    font-weight: 700;
+  }
+
   /* Mobile Menu Toggle (3 Dots) */
   .mobile-menu-toggle {
     display: none;
