@@ -2116,7 +2116,7 @@
 
     <div class="footer-bottom" id="site-disclaimer">
       <p>© 2026 RedTrex Technologies. All Rights Reserved. &nbsp;<span class="site-version">AI API VER : v1.0.6</span>
-      <span class="site-version">SITE VER : v7.2.0</span>
+      <span class="site-version">SITE VER : v7.2.1</span>
       </p>
       
       <!-- TrustBox widget - Review Collector -->
@@ -2211,6 +2211,60 @@
     function openDisclaimerPopup() {
       document.getElementById('disclaimerPopup').style.display = 'flex';
     }
+    const soldCounts = {
+      'Windows 11 Pro Product Key [OEM] [5PC] PROMO':                            0,
+      'EaseUS Data Recovery Wizard Professional (Life-Time Upgrade) PROMO':       0,
+      'Windows 11 Pro + Office 2024 Bundle [OEM] [1PC]':                         0,
+      'Windows 11 Pro OEM Key':                                                   571,
+      'Windows 11 Pro Retail Key':                                                2,
+      'Windows 11 Pro Product Key [OEM] [5PC]':                                  0,
+      'Windows Server 2022 Standard [2PC]':                                       0,
+      'Windows Server 2022 Datacenter [2PC]':                                     0,
+      'Windows Server 2025 Standard [2PC]':                                       1,
+      'Windows Server 2025 Datacenter [2PC]':                                     0,
+      'Microsoft Office 2024':                                                    48,
+      'Microsoft Office Professional Plus [2021] [1PC]':                         190,
+      'Visio 2021 Professional [1PC]':                                            0,
+      'Microsoft Office Professional Plus [2021] [5PC]':                         0,
+      'Microsoft Office 365 A3 Subscription (5 Device/1Year)':                   3,
+      'Microsoft Office 2021 Home and Business For MAC (1MAC)':                  0,
+      'SQL Server 2019 Standard [1PC]':                                           0,
+      'Outlook 2016 [5PC]':                                                       0,
+      'Visual Studio 2022 Enterprise [2PC]':                                      16,
+      'Visual Studio 2022 Professional [5PC]':                                    0,
+      'Visual Studio 2026 Enterprise [5PC]':                                      0,
+      'Visual Studio 2026 Professional [5PC]':                                    0,
+      'CorelDraw Standard 2021 [1PC]':                                            5,
+      'Microsoft Project Standard 2019 1PC [Retail]':                            0,
+      'Microsoft Project Professional 2019 1PC [Retail]':                        0,
+      'Microsoft Project Standard 2024 1PC [BIND]':                              0,
+      'Microsoft Project Professional 2024 1PC [BIND]':                          20,
+      'Windows Server 2025 Remote Desktop Services Device connections (50) CAL':  1,
+      'Windows Server 2025 Remote Desktop Services User connections (50) CAL':    0,
+      'EaseUS Data Recovery Wizard Professional (1 Year)':                       0,
+      'EaseUS Data Recovery Wizard Professional (1 Month)':                      0,
+      'EaseUS Data Recovery Wizard Professional (Life-Time Upgrade)':            0,
+      'EaseUS Data Recovery Wizard Professional  (Life-Time Upgrade)':           0,
+      'EaseUS Todo Backup Home ( Yearly Subscription )':                         0,
+      'EaseUS Todo Backup Home ( Current - Perpetual )':                         0,
+      'EaseUS Todo Backup Home ( Lifetime Upgrades )':                           0,
+      'EaseUS Partition Master Professional (Monthly Subscription)':             0,
+      'EaseUS Partition Master Professional (1 - Year Subscription)':            0,
+      'EaseUS Partition Master Professional (Lifetime Upgrades)':                0,
+      'EaseUS PDF Editor (1-Year Upgrades)':                                      0,
+      'EaseUS PDF Editor (1-Month Upgrades)':                                     0,
+      'EaseUS PDF Editor (Life-Time Upgrades)':                                   0,
+    };
+    (function() {
+      document.querySelectorAll('.product-card').forEach(function(card) {
+        var name = card.getAttribute('data-name') || '';
+        var count = soldCounts.hasOwnProperty(name) ? soldCounts[name] : 100;
+        var badge = document.createElement('div');
+        badge.className = 'sold-count-badge';
+        badge.innerHTML = 'Sold: <span class="sold-num">' + count + '</span>';
+        card.appendChild(badge);
+      });
+    })();
 
     // Search Functionality
     const searchInput = document.getElementById('productSearch');
