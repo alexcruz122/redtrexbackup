@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activation Guide — RedTrex Technologies</title>
+  <link rel="icon" type="image/png" href="Assest/company.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a12;
+      color: #e8e8f0;
+      min-height: 100vh;
+    }
+
+    /* Background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(200,30,30,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(120,20,20,0.10) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: linear-gradient(90deg, rgba(180,30,30,0.88), rgba(100,10,10,0.92));
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,100,80,0.3);
+      padding: 8px 20px;
+      font-size: 0.8rem;
+      text-align: center;
+      color: #ffddd8;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ── ACTIVATION NOTICE ── */
+    .activation-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      max-width: 860px;
+      margin: 24px auto 0;
+      padding: 14px 20px;
+      background: rgba(255, 195, 0, 0.07);
+      border: 1px solid rgba(255, 195, 0, 0.3);
+      border-radius: 12px;
+      color: #f5e0a0;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      backdrop-filter: blur(8px);
+    }
+    .activation-notice .notice-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      filter: brightness(1.4) sepia(1) hue-rotate(10deg) saturate(3);
+    }
+    .activation-notice a {
+      color: #ffd966;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .activation-notice a:hover { color: #ffe899; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: rgba(10,10,20,0.75);
+      backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(255,80,60,0.2);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,150,130,0.12);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo { height: 36px; }
+
+    .nav-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      flex: 1;
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, rgba(220,40,40,0.38), rgba(160,20,20,0.28));
+      backdrop-filter: blur(16px);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,100,80,0.45);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(200,30,30,0.25), inset 0 1px 0 rgba(255,180,160,0.3);
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: linear-gradient(135deg, rgba(255,60,60,0.52), rgba(200,30,30,0.42));
+      transform: translateY(-1px);
+    }
+
+    /* ── PAGE HERO ── */
+    .hero {
+      text-align: center;
+      padding: 52px 20px 36px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff6b6b, #ff4444, #cc2222);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: rgba(220,220,240,0.75);
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── TAB BAR ── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 20px 28px;
+      position: relative;
+      z-index: 1;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 10px 28px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,100,80,0.35);
+      background: rgba(255,255,255,0.04);
+      color: rgba(220,220,240,0.7);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover {
+      background: linear-gradient(135deg, rgba(220,40,40,0.42), rgba(160,20,20,0.32));
+      border-color: rgba(255,120,100,0.6);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(200,30,30,0.3), inset 0 1px 0 rgba(255,180,160,0.3);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .guide-section { display: none; }
+    .guide-section.active { display: block; }
+
+    /* ── GLASS CARD ── */
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.02) 100%);
+      backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(255,100,80,0.18);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,180,160,0.14);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .card-icon img,
+    .tab-icon,
+    .portal-icon img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .portal-icon img {
+      width: 56px;
+      height: 56px;
+    }
+
+    .info-icon img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      vertical-align: middle;
+    }
+
+    .tab-icon {
+      width: 18px;
+      height: 18px;
+      margin-right: 4px;
+    }
+
+    .step-icon {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .card-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card-header .badge {
+      margin-left: auto;
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(255,100,80,0.15);
+      border: 1px solid rgba(255,100,80,0.3);
+      color: #ff9980;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── STEPS ── */
+    .steps { list-style: none; }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(220,40,40,0.5), rgba(160,20,20,0.4));
+      border: 1px solid rgba(255,100,80,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #ff9980;
+      box-shadow: 0 2px 8px rgba(200,30,30,0.2);
+    }
+
+    .step-body { flex: 1; }
+
+    .step-body strong {
+      display: block;
+      font-size: 0.95rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .step-body p {
+      font-size: 0.85rem;
+      color: rgba(200,200,220,0.75);
+      line-height: 1.55;
+    }
+
+    .step-body code {
+      display: inline-block;
+      margin-top: 6px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,100,80,0.2);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      color: #ffb8a8;
+      font-family: 'Courier New', monospace;
+      word-break: break-all;
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      display: flex;
+      gap: 12px;
+      background: rgba(255,200,50,0.07);
+      border: 1px solid rgba(255,200,50,0.25);
+      border-left: 4px solid #ffcc33;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      font-size: 0.84rem;
+      color: rgba(220,220,200,0.85);
+      line-height: 1.55;
+    }
+
+    .info-box .info-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    .success-box {
+      display: flex;
+      gap: 12px;
+      background: rgba(40,180,80,0.08);
+      border: 1px solid rgba(40,180,80,0.25);
+      border-left: 4px solid #28b450;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      font-size: 0.84rem;
+      color: rgba(200,240,210,0.85);
+      line-height: 1.55;
+    }
+
+    .success-box .info-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── PORTAL SECTION ── */
+    .portal-card {
+      background: linear-gradient(135deg, rgba(30,60,180,0.22) 0%, rgba(20,40,140,0.16) 100%);
+      backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(100,140,255,0.3);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(160,190,255,0.15);
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .portal-card .portal-icon { font-size: 3rem; margin-bottom: 14px; }
+
+    .portal-card h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .portal-card p {
+      color: rgba(200,210,240,0.8);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto 24px;
+    }
+
+    .portal-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, rgba(60,100,220,0.55), rgba(40,70,180,0.45));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(120,160,255,0.45);
+      border-radius: 40px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(40,70,220,0.3), inset 0 1px 0 rgba(180,200,255,0.3);
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .portal-btn:hover {
+      background: linear-gradient(135deg, rgba(80,120,240,0.65), rgba(60,90,200,0.55));
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(60,100,240,0.4);
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: rgba(255,120,100,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 28px 0 20px;
+      position: relative;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 36%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,100,80,0.3));
+    }
+
+    .section-divider::before { right: 54%; }
+    .section-divider::after  { left: 54%; background: linear-gradient(270deg, transparent, rgba(255,100,80,0.3)); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.78rem;
+      color: rgba(180,180,200,0.5);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      z-index: 1;
+    }
+
+    footer a { color: rgba(255,120,100,0.7); text-decoration: none; }
+    footer a:hover { color: #ff7a5a; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      .glass-card, .portal-card { padding: 20px 16px; }
+      nav { padding: 10px 14px; }
+      .hero { padding: 36px 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Notice -->
+  <div class="topbar">
+    <strong>Notice:</strong> Each product key is licensed for one device only. Do not share or resell.
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <img src="Assest/company.png" alt="RedTrex Logo" class="nav-logo">
+    <a href="/" class="nav-title">RedTrex Technologies</a>
+    <a href="/" class="nav-btn">← Home</a>
+    <a href="/actptl" class="nav-btn">Activation Portal</a>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Activation Guide</h1>
+    <p>Step-by-step instructions to activate your Microsoft Windows or Office product key purchased from RedTrex Technologies.</p>
+  </div>
+
+  <!-- Activation Notice -->
+  <div class="activation-notice">
+    <img src="icons/tip.png" alt="Info" class="notice-icon">
+    <span>Most Microsoft product keys activate automatically online. Some keys may require activation through the <strong>official Microsoft Activation Portal</strong> — if your key does not activate automatically, please use the <a href="#" onclick="goToPortalTab(); return false;">MS Activation Portal</a> tab below.</span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('windows', this)"><img src="icons/windows.png" alt="Windows" class="tab-icon"> Windows Activation</button>
+    <button class="tab-btn" onclick="showTab('office', this)"><img src="icons/office.png" alt="Office" class="tab-icon"> Office Activation</button>
+    <button class="tab-btn" onclick="showTab('portal', this)"><img src="icons/portal.svg" alt="Portal" class="tab-icon"> MS Activation Portal</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- ══ WINDOWS TAB ══ -->
+    <div id="tab-windows" class="guide-section active">
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/windows.png" alt="Windows"></span>
+          <h2>Activate Windows 10 / 11</h2>
+          <span class="badge">OEM &amp; Retail</span>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Open Windows Settings</strong>
+              <p>Press <kbd>Win + I</kbd> to open Settings, then go to <strong>System → Activation</strong>.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Click "Change product key"</strong>
+              <p>Under the Activation section, click <strong>Change product key</strong> (you may need admin permission).</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Enter your 25-character key</strong>
+              <p>Type the product key you received from RedTrex in the format:</p>
+              <code>XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</code>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Click "Next" and then "Activate"</strong>
+              <p>Windows will connect to Microsoft servers and verify your key. Ensure you are connected to the internet.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <strong>Activation complete</strong>
+              <p>You should see <em>"Windows is activated"</em> confirmation. Your copy is now genuine and licensed.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="success-box">
+          <span class="info-icon"><img src="icons/check.png" alt="Success"></span>
+          <span>After activation, Windows Update will work fully and the "Activate Windows" watermark will disappear.</span>
+        </div>
+      </div>
+
+      <div class="section-divider">Alternative Method</div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/cmd.png" alt="Command Prompt"></span>
+          <h2>Activate via Command Prompt</h2>
+          <span class="badge">Advanced</span>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Open Command Prompt as Administrator</strong>
+              <p>Press <kbd>Win + S</kbd>, type <strong>cmd</strong>, right-click and select <strong>Run as administrator</strong>.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Enter your product key</strong>
+              <p>Type the following command and press Enter (replace with your actual key):</p>
+              <code>slmgr /ipk XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</code>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Activate online</strong>
+              <p>Then run this command to connect to Microsoft and activate:</p>
+              <code>slmgr /ato</code>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Check activation status</strong>
+              <p>Optionally confirm activation with:</p>
+              <code>slmgr /xpr</code>
+            </div>
+          </li>
+        </ol>
+        <div class="info-box">
+          <span class="info-icon"><img src="icons/warning.png" alt="Warning"></span>
+          <span>If activation fails with error <strong>0xC004F074</strong>, your PC may be offline or blocked by a firewall. Try again with a stable internet connection or contact our support.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ OFFICE TAB ══ -->
+    <div id="tab-office" class="guide-section">
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/office.png" alt="Office"></span>
+          <h2>Activate Microsoft Office 2021 / 2024</h2>
+          <span class="badge">OEM &amp; Retail</span>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Install Microsoft Office</strong>
+              <p>Download and install Office from the official Microsoft website if you haven't already. Use your RedTrex key during or after installation.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Open any Office application</strong>
+              <p>Launch Word, Excel, PowerPoint, or any Office app. You will be prompted to activate or sign in.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Choose "Enter a product key instead"</strong>
+              <p>On the activation screen, select the option to enter a product key rather than signing in with a Microsoft account.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Enter your 25-character product key</strong>
+              <p>Type the key you received from RedTrex in the format:</p>
+              <code>XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</code>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <strong>Follow the on-screen prompts</strong>
+              <p>Click <strong>Next</strong> and allow Office to verify the key with Microsoft servers. Ensure you are connected to the internet.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <strong>Activation complete</strong>
+              <p>Once verified, you will see the <em>"Activation successful"</em> message. Office is now fully licensed on your device.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="success-box">
+          <span class="info-icon"><img src="icons/check.png" alt="Success"></span>
+          <span>All Office apps (Word, Excel, PowerPoint, Outlook, etc.) will unlock immediately after successful activation.</span>
+        </div>
+      </div>
+
+      <div class="section-divider">Phone Activation (Offline)</div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/phone.png" alt="Phone"></span>
+          <h2>Activate Office by Phone</h2>
+          <span class="badge">Offline Method</span>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Open the Activation Wizard</strong>
+              <p>Open an Office app → File → Account → Activate Product, then choose <strong>I want to activate the software by telephone</strong>.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Select your country</strong>
+              <p>Select <strong>Sri Lanka</strong> or your country from the dropdown. A Microsoft phone number will be displayed.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Call the Microsoft number</strong>
+              <p>Call the number shown. An automated system will ask for the Installation ID displayed on screen.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Enter the Confirmation ID</strong>
+              <p>The system will provide a Confirmation ID. Enter it in the activation wizard to complete activation.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="info-box">
+          <span class="info-icon"><img src="icons/tip.png" alt="Tip"></span>
+          <span>Phone activation is useful when your PC has no internet access or online activation keeps failing. It works 24/7 through Microsoft's automated system.</span>
+        </div>
+      </div>
+
+      <div class="section-divider">Office 365 / Microsoft 365</div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/m365.png" alt="Microsoft 365"></span>
+          <h2>Microsoft 365 — Pre-Activated Account</h2>
+          <span class="badge">Account Login</span>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Receive your account credentials from RedTrex</strong>
+              <p>After purchase, you will receive a Microsoft 365 email address and a temporary password from RedTrex Technologies. Your account is already activated and ready to use.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Sign in at Microsoft 365</strong>
+              <p>Go to <strong>microsoft365.com</strong> in your browser and click <strong>Sign in</strong>. Enter the email and temporary password provided by RedTrex.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Change your password on first login</strong>
+              <p>You will be prompted to set a new password immediately. Choose a strong, unique password and save it securely. This is required before you can access your account.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Access your Microsoft 365 apps</strong>
+              <p>Once signed in, you can use Office apps directly in the browser or download and install them on your device from your Microsoft 365 account dashboard.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="info-box">
+          <span class="info-icon"><img src="icons/warning.png" alt="Warning"></span>
+          <span><strong>Important:</strong> The email address of your account <strong>cannot be changed</strong>. Only the password can be updated. Keep your credentials safe — do not share your password with anyone.</span>
+        </div>
+        <div class="success-box">
+          <span class="info-icon"><img src="icons/check.png" alt="Success"></span>
+          <span>No product key is needed. Your Microsoft 365 subscription is already active — simply sign in and start using it.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ PORTAL TAB ══ -->
+    <div id="tab-portal" class="guide-section">
+
+      <div class="portal-card">
+        <div class="portal-icon"><img src="icons/key.png" alt="Key"></div>
+        <h2>Microsoft Product Activation Portal</h2>
+        <p>
+          Use the official Microsoft Activation Portal to activate your product key directly through Microsoft's servers.
+          You must agree to the licensing terms before accessing the portal.
+        </p>
+        <a href="https://visualsupport.microsoft.com" class="portal-btn">Open Activation Portal →</a>
+      </div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/checklist.png" alt="Checklist"></span>
+          <h2>Before You Use the Portal</h2>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Have your product key ready</strong>
+              <p>Keep the 25-character key from your RedTrex purchase accessible. You will need it during the activation process.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Read and agree to the licensing terms</strong>
+              <p>Each key is licensed for a single device only. You must accept the terms on the portal page before proceeding.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Click "Activation Portal" to proceed</strong>
+              <p>After agreeing, you will be taken to Microsoft's official activation server. Follow the instructions there to complete activation.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Contact support if needed</strong>
+              <p>If activation fails, contact our support team via WhatsApp for assistance within 24 hours.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="info-box">
+          <span class="info-icon"><img src="icons/warning.png" alt="Warning"></span>
+          <span><strong>Important:</strong> Reusing, sharing, or reselling a product key violates Microsoft licensing terms and Redtrex's reseller policy. Misuse may result in immediate license deactivation with no refund or replacement.</span>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/support.png" alt="Support"></span>
+          <h2>Need Help Activating?</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num"><img src="icons/whatsapp.png" alt="WhatsApp" class="step-icon"></div>
+            <div class="step-body">
+              <strong>WhatsApp Support</strong>
+              <p>Message us directly for fast activation help — available 7 days a week.</p>
+              <a href="https://wa.me/94712622012" target="_blank" style="display:inline-block; margin-top:10px; padding:9px 20px; background:rgba(37,211,102,0.15); border:1px solid rgba(37,211,102,0.35); border-radius:8px; color:#25d366; font-weight:600; font-size:0.85rem; text-decoration:none;">
+                Chat on WhatsApp →
+              </a>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"><img src="icons/web.png" alt="Web" class="step-icon"></div>
+            <div class="step-body">
+              <strong>Customer Portal</strong>
+              <p>Log in to the Zoho customer portal to view your order history</p>
+              <a href="https://invoice.zohosecure.com/portal/redtrextechnologies/signin" target="_blank" style="display:inline-block; margin-top:10px; padding:9px 20px; background:rgba(60,100,220,0.15); border:1px solid rgba(60,100,220,0.35); border-radius:8px; color:#7aadff; font-weight:600; font-size:0.85rem; text-decoration:none;">
+                Customer Portal →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 RedTrex Technologies — <a href="/">redtrex.com.lk</a> · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/refund">Refund Policy</a></p>
+    <p style="margin-top:6px;">CRM: 0189790001535</p>
+  </footer>
+
+  <script>
+    function showTab(name, btn) {
+      document.querySelectorAll('.guide-section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function goToPortalTab() {
+      var portalBtn = document.querySelector('.tab-btn:nth-child(3)');
+      showTab('portal', portalBtn);
+      document.querySelector('.tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  </script>
+
+</body>
+</html>
