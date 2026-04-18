@@ -10,90 +10,98 @@
           * { margin: 0; padding: 0; box-sizing: border-box; }
 
           :root {
-            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --bg-secondary: rgba(255, 255, 255, 0.95);
-            --text-primary: #333;
-            --text-secondary: #555;
-            --text-tertiary: #666;
-            --border-color: rgba(240, 43, 43, 0.2);
-            --input-bg: rgba(255, 255, 255, 0.8);
-            --section-bg: rgba(240, 43, 43, 0.05);
+            --brand: #DC2626;
+            --brand-dark: #B91C1C;
+            --brand-soft: rgba(220, 38, 38, 0.08);
+            --bg-primary: #f4f5f7;
+            --bg-secondary: #ffffff;
+            --surface: #fafbfc;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-tertiary: #6b7280;
+            --border-color: #e5e7eb;
+            --border-strong: #d1d5db;
+            --input-bg: #ffffff;
+            --section-bg: #f9fafb;
           }
 
           body.dark-mode {
-            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            --bg-secondary: rgba(20, 20, 30, 0.95);
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --text-tertiary: #909090;
-            --border-color: rgba(240, 43, 43, 0.3);
-            --input-bg: rgba(30, 30, 45, 0.8);
-            --section-bg: rgba(240, 43, 43, 0.1);
+            --bg-primary: #0f1115;
+            --bg-secondary: #1a1d24;
+            --surface: #15181f;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --text-tertiary: #9ca3af;
+            --border-color: #2a2e38;
+            --border-strong: #3a3f4b;
+            --input-bg: #1f232c;
+            --section-bg: #1a1d24;
+            --brand-soft: rgba(220, 38, 38, 0.14);
           }
 
           body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Tahoma, sans-serif;
             background: var(--bg-primary);
-            background-image: url('https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg');
+            background-image: url('Assest/paywallpaper.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 16px;
+            justify-content: flex-start;
+            padding: 32px 16px;
             position: relative;
-            overflow: hidden;
             transition: background 0.3s ease;
           }
-
-          body::after {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(102, 126, 234, 0.3);
-            z-index: -1;
-            pointer-events: none;
-          }
-
           body::before {
             content: '';
-            position: absolute;
-            width: 400px; height: 400px;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.5;
-            background: rgba(255, 255, 255, 0.1);
-            top: -100px; left: -100px;
-            animation: float 20s infinite ease-in-out;
-            z-index: -1;
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(244,245,247,0.55), rgba(220,38,38,0.10));
+            z-index: 0;
             pointer-events: none;
           }
-          @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
+          body.dark-mode::before {
+            background: linear-gradient(135deg, rgba(15,17,21,0.78), rgba(15,17,21,0.55));
           }
 
           .checkout-container {
-            background: var(--bg-secondary);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37),
-                        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-            padding: 32px 28px;
-            max-width: 500px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 12px 40px rgba(17, 24, 39, 0.12);
+            padding: 36px 32px;
+            max-width: 540px;
             width: 100%;
-            animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            max-height: 92vh;
-            overflow-y: auto;
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             z-index: 1;
             transition: background 0.3s ease, border-color 0.3s ease;
           }
+          body.dark-mode .checkout-container {
+            background: rgba(26, 29, 36, 0.72);
+            border-color: rgba(255, 255, 255, 0.08);
+          }
+
+          .version-tag {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            text-align: center;
+            margin: 18px 0 8px;
+            font-family: 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.7);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+            user-select: all;
+          }
+          body.dark-mode .version-tag { color: rgba(255, 255, 255, 0.55); }
 
           /* ===== GATEWAY NOTICE BANNER ===== */
           .gateway-notice {
@@ -196,51 +204,38 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
           }
 
-          .logo-container { text-align: center; margin-bottom: 22px; }
+          .logo-container { text-align: center; margin-bottom: 18px; }
           .logo-placeholder {
-            width: 100px; height: 100px;
-            margin: 0 auto 14px;
-            background: linear-gradient(135deg, #F02B2B 0%, #764ba2 100%);
-            background-size: contain; background-position: center; background-repeat: no-repeat;
-            border-radius: 22px;
+            width: 72px; height: 72px;
+            margin: 0 auto 12px;
+            background: #ffffff;
+            background-size: 70% 70%; background-position: center; background-repeat: no-repeat;
+            border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 24px rgba(240, 43, 43, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
-            position: relative; overflow: hidden;
-          }
-          .logo-placeholder::before {
-            content: '';
-            position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shine 3s infinite;
-          }
-          @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(220, 38, 38, 0.10);
+            border: 1px solid var(--border-color);
           }
 
           h2 {
-            color: var(--text-primary); margin-bottom: 6px; font-size: 26px; text-align: center; font-weight: 800;
-            background: linear-gradient(135deg, #F44E4E 0%, #764ba2 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            color: var(--text-primary); margin-bottom: 4px; font-size: 22px; text-align: center;
+            font-weight: 700; letter-spacing: -0.3px;
           }
-          .subtitle { color: var(--text-tertiary); text-align: center; margin-bottom: 22px; font-size: 13px; font-weight: 500; }
+          .subtitle { color: var(--text-tertiary); text-align: center; margin-bottom: 26px; font-size: 13px; font-weight: 400; }
           .form-group { margin-bottom: 16px; }
           label { display: block; color: var(--text-secondary); font-weight: 600; margin-bottom: 7px; font-size: 13px; }
           .required { color: #e74c3c; }
           .input-wrapper { position: relative; }
-          .currency-prefix { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #F02B2B; font-weight: 700; font-size: 15px; }
+          .currency-prefix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); font-weight: 600; font-size: 14px; }
 
           input:not([type="checkbox"]), select {
-            width: 100%; padding: 13px 16px; border: 2px solid var(--border-color);
-            background: var(--input-bg); backdrop-filter: blur(10px);
-            border-radius: 12px; font-size: 15px; transition: all 0.3s ease; font-family: inherit; color: var(--text-primary);
+            width: 100%; padding: 12px 14px; border: 1px solid var(--border-strong);
+            background: var(--input-bg);
+            border-radius: 10px; font-size: 15px; transition: border-color 0.2s ease, box-shadow 0.2s ease; font-family: inherit; color: var(--text-primary);
             -webkit-appearance: none; appearance: none;
           }
           input:not([type="checkbox"]):focus, select:focus {
-            outline: none; border-color: #F02B2B;
-            box-shadow: 0 0 0 4px rgba(240, 43, 43, 0.1), 0 4px 12px rgba(240, 43, 43, 0.15);
-            transform: translateY(-1px);
+            outline: none; border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
           }
           input:not([type="checkbox"]):disabled { opacity: 0.6; cursor: not-allowed; }
           input, select, button, a { -webkit-tap-highlight-color: transparent; }
@@ -260,25 +255,20 @@
           }
 
           .pay-btn {
-            width: 100%; padding: 16px;
-            background: linear-gradient(135deg, #F02B2B 0%, #764ba2 100%);
-            color: white; border: none; border-radius: 14px; font-size: 17px; font-weight: 700;
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 10px;
-            box-shadow: 0 8px 24px rgba(240, 43, 43, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+            width: 100%; padding: 15px;
+            background: var(--brand);
+            color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease; margin-top: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 4px 12px rgba(220, 38, 38, 0.25);
             position: relative; overflow: hidden;
-            min-height: 58px;
+            min-height: 52px;
             display: flex; align-items: center; justify-content: center;
             flex-direction: column; gap: 2px;
+            letter-spacing: 0.2px;
           }
-          .pay-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-          }
-          .pay-btn:hover:not(:disabled)::before { left: 100%; }
-          .pay-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(240, 43, 43, 0.5); }
+          .pay-btn:hover:not(:disabled) { background: var(--brand-dark); box-shadow: 0 2px 4px rgba(0,0,0,0.06), 0 6px 16px rgba(220, 38, 38, 0.35); }
           .pay-btn:active:not(:disabled) { transform: translateY(1px); }
-          .pay-btn:disabled { opacity: 0.88; cursor: not-allowed; transform: none; }
+          .pay-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
           .btn-main-text { font-size: 17px; font-weight: 700; line-height: 1.2; }
           .btn-sub-text { font-size: 11.5px; font-weight: 400; opacity: 0.85; letter-spacing: 0.2px; }
@@ -308,27 +298,27 @@
 
           .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border-color), transparent); margin: 22px 0; }
 
-          .section-title { color: #F02B2B; font-weight: 700; font-size: 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
-          .section-title::before { content: ''; width: 4px; height: 17px; background: linear-gradient(135deg, #F02B2B 0%, #764ba2 100%); border-radius: 2px; flex-shrink: 0; }
+          .section-title { color: var(--text-primary); font-weight: 600; font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .section-title::before { content: ''; width: 3px; height: 14px; background: var(--brand); border-radius: 2px; flex-shrink: 0; }
 
           .product-info {
-            font-weight: 600; font-size: 16px; margin-bottom: 18px; text-align: center;
-            padding: 13px; line-height: 1.4;
-            background: linear-gradient(135deg, var(--section-bg), rgba(118, 75, 162, 0.1));
-            border-radius: 12px; border: 1px solid var(--border-color); color: #F02B2B;
+            font-weight: 600; font-size: 15px; margin-bottom: 22px; text-align: center;
+            padding: 14px; line-height: 1.4;
+            background: var(--section-bg);
+            border-radius: 10px; border: 1px solid var(--border-color); color: var(--text-primary);
           }
 
           .terms-section { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border-color); }
           .terms-title { color: var(--text-primary); font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
           .terms-content {
-            background: linear-gradient(135deg, var(--section-bg), rgba(118, 75, 162, 0.1));
-            border-radius: 12px; padding: 14px; border: 1px solid var(--border-color);
+            background: var(--section-bg);
+            border-radius: 10px; padding: 14px; border: 1px solid var(--border-color);
             max-height: 240px; overflow-y: auto; font-size: 12px; color: var(--text-secondary); line-height: 1.6;
           }
           .terms-content::-webkit-scrollbar { width: 5px; }
-          .terms-content::-webkit-scrollbar-track { background: rgba(102, 126, 234, 0.05); border-radius: 10px; }
-          .terms-content::-webkit-scrollbar-thumb { background: rgba(240, 43, 43, 0.3); border-radius: 10px; }
-          .terms-content h4 { color: #F02B2B; font-size: 12px; font-weight: 700; margin-top: 12px; margin-bottom: 6px; }
+          .terms-content::-webkit-scrollbar-track { background: transparent; }
+          .terms-content::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+          .terms-content h4 { color: var(--text-primary); font-size: 12px; font-weight: 700; margin-top: 12px; margin-bottom: 6px; }
           .terms-content h4:first-child { margin-top: 0; }
           .terms-content ul { margin-left: 15px; margin-bottom: 6px; }
           .terms-content li { margin-bottom: 4px; list-style-type: disc; }
@@ -345,30 +335,106 @@
             padding: 8px 10px; background: transparent; border-radius: 8px; border: none;
             transition: all 0.3s ease; cursor: pointer; text-decoration: none;
           }
-          .security-badge-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(240, 43, 43, 0.2); }
-          .badge-icon { width: 34px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(240, 43, 43, 0.2)); }
+          .security-badge-item { opacity: 0.7; }
+          .security-badge-item:hover { opacity: 1; }
+          .badge-icon { width: 32px; height: 30px; object-fit: contain; }
 
-          .support-section { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border-color); }
-          .support-title { text-align: center; color: var(--text-primary); font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-          .support-details { background: linear-gradient(135deg, var(--section-bg), rgba(118, 75, 162, 0.1)); border-radius: 12px; padding: 13px; border: 1px solid var(--border-color); }
-          .support-item { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: var(--text-secondary); font-size: 13px; flex-wrap: wrap; }
+          .support-section { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--border-color); }
+          .support-title { text-align: center; color: var(--text-primary); font-size: 13px; font-weight: 600; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .support-details { background: var(--section-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); }
+          .support-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--text-secondary); font-size: 13px; flex-wrap: wrap; }
           .support-item:last-child { margin-bottom: 0; }
-          .support-icon { font-size: 16px; min-width: 20px; text-align: center; flex-shrink: 0; }
-          .support-icon img { width: 20px; height: 20px; object-fit: contain; }
-          .support-link { color: #F02B2B; text-decoration: none; font-weight: 600; }
-          .support-link:hover { color: #764ba2; text-decoration: underline; }
+          .support-icon { font-size: 15px; min-width: 20px; text-align: center; flex-shrink: 0; opacity: 0.75; }
+          .support-icon img { width: 18px; height: 18px; object-fit: contain; }
+          .support-link { color: var(--brand); text-decoration: none; font-weight: 600; }
+          .support-link:hover { color: var(--brand-dark); text-decoration: underline; }
 
           .dark-mode-toggle {
-            margin-top: 20px; padding: 14px 16px; border-top: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: center; gap: 13px;
-            background: linear-gradient(135deg, var(--section-bg), rgba(118, 75, 162, 0.08));
-            border-radius: 12px; position: relative; z-index: 10;
+            margin-top: 22px; padding: 12px 16px;
+            display: flex; align-items: center; justify-content: space-between; gap: 13px;
+            background: var(--section-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px; position: relative; z-index: 10;
           }
-          .toggle-label { color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 7px; white-space: nowrap; }
-          .toggle-switch { position: relative; width: 50px; height: 27px; background-color: rgba(240, 43, 43, 0.2); border-radius: 14px; cursor: pointer; transition: background-color 0.3s ease; border: 2px solid rgba(240, 43, 43, 0.4); flex-shrink: 0; }
-          .toggle-switch.active { background-color: rgba(240, 43, 43, 0.6); }
-          .toggle-slider { position: absolute; top: 2px; left: 2px; width: 19px; height: 19px; background-color: white; border-radius: 50%; transition: left 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-          .toggle-switch.active .toggle-slider { left: 25px; }
+          .toggle-label { color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+          .toggle-switch { position: relative; width: 44px; height: 24px; background-color: var(--border-strong); border-radius: 12px; cursor: pointer; transition: background-color 0.2s ease; border: none; flex-shrink: 0; }
+          .toggle-switch.active { background-color: var(--brand); }
+          .toggle-slider { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background-color: white; border-radius: 50%; transition: left 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+          .toggle-switch.active .toggle-slider { left: 22px; }
+
+          /* ===== Payment Methods ===== */
+          .payment-methods { margin: 8px 0 22px; }
+          .pm-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+          .pm-option {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 14px 16px; margin-bottom: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            position: relative;
+          }
+          .pm-option:hover { border-color: var(--border-strong); background: var(--section-bg); }
+          .pm-option.active {
+            border-color: var(--brand);
+            background: var(--brand-soft);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+          }
+          .pm-radio {
+            width: 18px; height: 18px; border-radius: 50%;
+            border: 2px solid var(--border-strong);
+            flex-shrink: 0; margin-top: 2px;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color 0.2s ease;
+            background: var(--bg-secondary);
+          }
+          .pm-option.active .pm-radio { border-color: var(--brand); }
+          .pm-option.active .pm-radio::after {
+            content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--brand);
+          }
+          .pm-content { flex: 1; min-width: 0; }
+          .pm-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+          .pm-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+          .pm-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: var(--brand-soft); color: var(--brand); text-transform: uppercase; letter-spacing: 0.5px; }
+          .pm-desc { font-size: 12.5px; color: var(--text-tertiary); line-height: 1.5; }
+
+          .pm-details {
+            display: none;
+            margin: 4px 0 12px;
+            padding: 18px;
+            background: var(--section-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+          }
+          .pm-details.show { display: block; animation: pmFade 0.3s ease; }
+          @keyframes pmFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+          .pm-details h4 { color: var(--text-primary); font-size: 13px; margin: 8px 0 4px; font-weight: 700; }
+          .pm-details h4:first-child { margin-top: 0; }
+          .pm-details .pm-row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; border-bottom: 1px dotted var(--border-color); }
+          .pm-details .pm-row:last-child { border-bottom: none; }
+          .pm-details .pm-row strong { color: var(--text-primary); font-weight: 600; }
+          .pm-details .pm-row span { font-family: 'Courier New', monospace; color: #F02B2B; font-weight: 700; word-break: break-all; text-align: right; }
+          .pm-qr-wrap { display: flex; justify-content: center; margin: 12px 0; }
+          .pm-qr { display: block; max-width: 180px; border-radius: 12px; border: 3px solid #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.15); background: #fff; padding: 8px; }
+          .pm-qr-placeholder {
+            display: none;
+            flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            width: 180px; height: 180px;
+            background: repeating-linear-gradient(45deg, rgba(240,43,43,0.04), rgba(240,43,43,0.04) 8px, transparent 8px, transparent 16px);
+            border: 2px dashed rgba(240,43,43,0.5);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-align: center; padding: 12px;
+          }
+          .pm-qr-placeholder-icon { font-size: 42px; color: rgba(240,43,43,0.6); line-height: 1; }
+          .pm-qr-placeholder-text { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+          .pm-qr-placeholder-sub { font-size: 10px; line-height: 1.4; }
+          .pm-qr-placeholder code { background: rgba(240,43,43,0.1); padding: 1px 5px; border-radius: 4px; color: #F02B2B; font-size: 10px; }
+          .pm-note { margin-top: 10px; padding: 10px; background: rgba(255,195,0,0.1); border-left: 3px solid #ffc300; border-radius: 6px; font-size: 12px; color: var(--text-secondary); }
+          .pm-cta { display: inline-block; margin-top: 10px; padding: 9px 16px; background: #25d366; color: #fff !important; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 12px; }
+          .pm-cta:hover { background: #1ebe5b; }
     </style>
   </head>
   <body>
@@ -419,6 +485,114 @@
           />
         </div>
         <div class="error" id="amountError">Minimum amount is LKR 10</div>
+        <div id="usdEquivalent" style="margin-top: 6px; font-size: 12.5px; color: var(--text-tertiary); display: flex; align-items: center; gap: 6px;">
+          <span style="opacity:0.75;">≈</span>
+          <span id="usdEquivalentValue">USD —</span>
+          <span style="opacity:0.55; font-size: 11px;">(estimate)</span>
+        </div>
+      </div>
+
+      <!-- ===== Payment Method Selector ===== -->
+      <div class="section-title">Choose Payment Method</div>
+      <div class="payment-methods" id="paymentMethods">
+
+        <!-- 1. QR Pay -->
+        <div class="pm-option" data-method="qr">
+          <div class="pm-radio"></div>
+          <div class="pm-content">
+            <div class="pm-header">
+              <span class="pm-name">QR Pay (Local Only)</span>
+              <span class="pm-badge">LANKAQR</span>
+            </div>
+            <div class="pm-desc">Scan and pay instantly using any LankaQR / LankaPay enabled banking or e-wallet app (Sampath, Genie, FriMi, eZ Cash, mCash, etc.). Fastest local payment option.</div>
+          </div>
+        </div>
+        <div class="pm-details" id="pm-details-qr">
+          <h4>Scan QR with your banking app</h4>
+          <div class="pm-qr-wrap">
+            <img src="Assest/QR PAY.jpeg" alt="LankaQR Code" class="pm-qr"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="pm-qr-placeholder">
+              <span class="pm-qr-placeholder-icon">⬚</span>
+              <span class="pm-qr-placeholder-text">QR Code</span>
+              <span class="pm-qr-placeholder-sub">Upload <code>Assest/qr-code.png</code> to display here</span>
+            </div>
+          </div>
+          <div class="pm-row"><strong>Merchant:</strong><span>RedTrex Technologies</span></div>
+          <div class="pm-row"><strong>Network:</strong><span>LankaQR / LankaPay</span></div>
+          <div class="pm-note">After payment, send us the receipt screenshot via WhatsApp to confirm your order.</div>
+          <div class="pm-note">Store Name might show as "LQRM --Pivot Gem" on your banking app when making QR Payment.</div>
+          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20QR%20payment%20for%20my%20order." target="_blank" class="pm-cta">I've Paid — Notify on WhatsApp</a>
+        </div>
+
+        <!-- 2. Local Bank Transfer -->
+        <div class="pm-option" data-method="bank">
+          <div class="pm-radio"></div>
+          <div class="pm-content">
+            <div class="pm-header">
+              <span class="pm-name">Bank Transfer</span>
+              <span class="pm-badge">LKR / USD / EUR</span>
+            </div>
+            <div class="pm-desc">Direct bank transfer in Sri Lankan Rupees (local) or international wire in USD/EUR via ACH or SEPA . Suitable for larger orders or business customers.</div>
+          </div>
+        </div>
+        <div class="pm-details" id="pm-details-bank">
+          <h4>Local Transfer (LKR)</h4>
+          <div class="pm-row"><strong>Bank:</strong><span>Commercial Bank PLC</span></div>
+          <div class="pm-row"><strong>Account Name:</strong><span>W.D.Y Fernando</span></div>
+          <div class="pm-row"><strong>Account Number:</strong><span>8005394377</span></div>
+          <div class="pm-row"><strong>Branch:</strong><span>Negombo</span></div>
+          <h4>International Wire USD (ACH)</h4>
+          <div class="pm-row"><strong>Bank:</strong><span>Lead Bank</span></div>
+          <div class="pm-row"><strong>Beneficiary:</strong><span>W.D.Y Fernando</span></div>
+          <div class="pm-row"><strong>Account Number:</strong><span>216258445843</span></div>
+          <div class="pm-row"><strong>Routing : </strong><span>101019644</span></div>
+          <h4>International Wire EUR (SEPA)</h4>
+          <div class="pm-row"><strong>Bank:</strong><span>Banking Circle S.A.</span></div>
+          <div class="pm-row"><strong>Beneficiary:</strong><span>Bride Building Sp. Z.o.o.</span></div>
+          <div class="pm-row"><strong>IBAN:</strong><span>LU564080000044224039</span></div>
+          <div class="pm-row"><strong>BIC: </strong><span>BCIRLULL</span></div>
+          <div class="pm-note">Please share the deposit slip or wire confirmation via WhatsApp once the transfer is sent.</div>
+          <div class="pm-note">Please note that USD/EUR payment confirmations may take 2–5 business days. Orders will be fulfilled only after the payment has been successfully confirmed.</div>
+          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20bank%20transfer%20for%20my%20order." target="_blank" class="pm-cta">I've Paid — Notify on WhatsApp</a>
+        </div>
+
+        <!-- 3. Bybit / Binance Pay -->
+        <div class="pm-option" data-method="crypto">
+          <div class="pm-radio"></div>
+          <div class="pm-content">
+            <div class="pm-header">
+              <span class="pm-name">Bybit / Binance Pay</span>
+              <span class="pm-badge">Crypto</span>
+            </div>
+            <div class="pm-desc">Pay with USDT or any supported coin via Binance Pay or Bybit Pay using a UID transfer. Instant, zero gas fee, ideal for international customers.</div>
+          </div>
+        </div>
+        <div class="pm-details" id="pm-details-crypto">
+          <h4>Binance Pay</h4>
+          <div class="pm-row"><strong>Binance UID:</strong><span>491329885</span></div>
+          <div class="pm-row"><strong>Name:</strong><span>RedTrex</span></div>
+          <h4>Bybit Pay</h4>
+          <div class="pm-row"><strong>Bybit UID:</strong><span>492259959</span></div>
+          <div class="pm-row"><strong>Name:</strong><span>RedTrex</span></div>
+          <h4>Preferred Coin</h4>
+          <div class="pm-row"><strong>Asset:</strong><span>USDT (TRC20 / BEP20)</span></div>
+          <div class="pm-note">Send screenshot of the transfer (TXID + amount) via WhatsApp to receive your product key.</div>
+          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20crypto%20payment%20(Binance%2FBybit)%20for%20my%20order." target="_blank" class="pm-cta">I've Paid — Notify on WhatsApp</a>
+        </div>
+
+        <!-- 4. Visa / Debit / Credit Card (DirectPay - original) -->
+        <div class="pm-option active" data-method="card">
+          <div class="pm-radio"></div>
+          <div class="pm-content">
+            <div class="pm-header">
+              <span class="pm-name">Visa / Debit / Credit Card</span>
+              <span class="pm-badge">Recommended</span>
+            </div>
+            <div class="pm-desc">Pay securely with any Visa, Mastercard or American Express card via DirectPay — Sri Lanka's PCI-DSS compliant payment gateway. Instant order confirmation.</div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Terms and Conditions Section -->
@@ -427,7 +601,7 @@
         <div class="terms-content">
           <h4>1. Payment Processing</h4>
           <ul>
-            <li>All payments are processed via DirectPay, a secure payment gateway</li>
+            <li>All Debit/Credit Card payments are processed via DirectPay, a secure payment gateway</li>
             <li>We do not store card or payment details on our servers</li>
             <li>Payment confirmation issued upon successful authorization</li>
           </ul>
@@ -480,6 +654,11 @@
         <div class="error" id="termsError">
           Please accept the terms and conditions to proceed
         </div>
+      </div>
+
+      <div id="cardLimitNotice" style="display:none; margin: 0 0 14px; padding: 14px 16px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); border-left: 4px solid #f59e0b; border-radius: 10px; color: var(--text-primary); font-size: 13px; line-height: 1.55;">
+        <strong style="color:#b45309; display:block; margin-bottom:4px;">Card Payment Limit Exceeded</strong>
+        Visa / Debit / Credit Card payments are limited to a maximum of <strong>LKR 49,000</strong> (~ USD 154.20) per transaction. For higher amounts, please choose <strong>Local Bank Transfer</strong>, <strong>Bybit / Binance Pay</strong>, or <strong>QR Pay</strong> above.
       </div>
 
       <button class="pay-btn" id="payBtn">
@@ -541,6 +720,8 @@
       </div>
     </div>
 
+    <div class="version-tag">LKNG2026APRDTRX519409BV</div>
+
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
 
     <script>
@@ -574,19 +755,19 @@
         function renderCartTable(cartItems) {
           var html = '<strong style="display:block;margin-bottom:8px;font-size:14px;">Order Summary</strong>';
           html += '<table style="width:100%;font-size:13px;border-collapse:collapse;">';
-          html += '<tr style="border-bottom:1px solid rgba(240,43,43,0.2);"><th style="text-align:left;padding:4px 2px;color:#F02B2B;">Product</th><th style="text-align:center;color:#F02B2B;white-space:nowrap;">Qty</th><th style="text-align:right;color:#F02B2B;white-space:nowrap;">Price (LKR)</th></tr>';
+          html += '<tr style="border-bottom:1px solid var(--border-color);"><th style="text-align:left;padding:4px 2px;color:var(--brand);">Product</th><th style="text-align:center;color:var(--brand);white-space:nowrap;">Qty</th><th style="text-align:right;color:var(--brand);white-space:nowrap;">Price (LKR)</th></tr>';
           var runningTotal = 0;
           cartItems.forEach(function(item) {
             var lineTotal = item.unitPrice * item.qty;
             runningTotal += lineTotal;
-            html += '<tr style="border-bottom:1px solid rgba(0,0,0,0.06);">'
-              + '<td style="padding:6px 2px;text-align:left;font-size:12px;font-weight:500;color:#333;">' + item.name + '</td>'
-              + '<td style="text-align:center;padding:6px 4px;color:#555;">×' + item.qty + '</td>'
-              + '<td style="text-align:right;padding:6px 2px;font-weight:600;color:#333;">' + Number(lineTotal.toFixed(2)).toLocaleString() + '</td>'
+            html += '<tr style="border-bottom:1px solid var(--border-color);">'
+              + '<td style="padding:6px 2px;text-align:left;font-size:12px;font-weight:500;color:var(--text-primary);">' + item.name + '</td>'
+              + '<td style="text-align:center;padding:6px 4px;color:var(--text-secondary);">×' + item.qty + '</td>'
+              + '<td style="text-align:right;padding:6px 2px;font-weight:600;color:var(--text-primary);">' + Number(lineTotal.toFixed(2)).toLocaleString() + '</td>'
               + '</tr>';
           });
-          html += '<tr><td colspan="2" style="text-align:right;padding:8px 2px;font-weight:700;color:#F02B2B;font-size:14px;">Total:</td>'
-            + '<td style="text-align:right;padding:8px 2px;font-weight:700;color:#F02B2B;font-size:14px;">' + Number(runningTotal.toFixed(2)).toLocaleString() + '</td></tr>';
+          html += '<tr><td colspan="2" style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;">Total:</td>'
+            + '<td style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;">' + Number(runningTotal.toFixed(2)).toLocaleString() + '</td></tr>';
           html += '</table>';
           totalAmount = runningTotal;
           productInfoEl.style.textAlign = 'left';
@@ -668,9 +849,76 @@
         btn.disabled = false;
       }
 
+      // ====== Payment Method Selector ======
+      const CARD_MAX_LKR = 49000;
+      let selectedMethod = "card";
+      function updateCardLimitState() {
+        const amount = parseFloat(document.getElementById("amount").value) || 0;
+        const overLimit = selectedMethod === "card" && amount > CARD_MAX_LKR;
+        const notice = document.getElementById("cardLimitNotice");
+        const payBtn = document.getElementById("payBtn");
+        if (notice) notice.style.display = overLimit ? "block" : "none";
+        if (selectedMethod === "card") {
+          payBtn.disabled = overLimit;
+          payBtn.style.opacity = overLimit ? "0.5" : "";
+          payBtn.style.cursor = overLimit ? "not-allowed" : "";
+        }
+      }
+      function selectPaymentMethod(method) {
+        selectedMethod = method;
+        document.querySelectorAll(".pm-option").forEach(opt => {
+          opt.classList.toggle("active", opt.dataset.method === method);
+        });
+        document.querySelectorAll(".pm-details").forEach(d => d.classList.remove("show"));
+        const details = document.getElementById("pm-details-" + method);
+        if (details) details.classList.add("show");
+
+        // Toggle card-specific UI: only the DirectPay flow uses payBtn + secure-badge + security-badges
+        const isCard = method === "card";
+        document.getElementById("payBtn").style.display = isCard ? "" : "none";
+        const secureBadge = document.querySelector(".secure-badge");
+        if (secureBadge) secureBadge.style.display = isCard ? "" : "none";
+        const securityBadges = document.querySelector(".security-badges");
+        if (securityBadges) securityBadges.style.display = isCard ? "" : "none";
+        const termsSection = document.querySelector(".terms-section");
+        if (termsSection) termsSection.style.display = isCard ? "" : "none";
+        updateCardLimitState();
+      }
+      document.querySelectorAll(".pm-option").forEach(opt => {
+        opt.addEventListener("click", () => selectPaymentMethod(opt.dataset.method));
+      });
+      document.getElementById("amount").addEventListener("input", updateCardLimitState);
+      // Initialize default (card)
+      selectPaymentMethod("card");
+
+      // ====== USD Equivalent (display-only, payment stays in LKR) ======
+      let _lkrPerUsd = 310; // fallback
+      function updateUsdEquivalent() {
+        const lkr = parseFloat(document.getElementById("amount").value) || 0;
+        const usd = lkr / _lkrPerUsd;
+        document.getElementById("usdEquivalentValue").innerText =
+          "USD " + usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      (async function fetchRate() {
+        try {
+          const res = await fetch("https://open.er-api.com/v6/latest/USD");
+          const data = await res.json();
+          if (data && data.rates && data.rates.LKR) _lkrPerUsd = data.rates.LKR;
+        } catch (e) { /* keep fallback */ }
+        updateUsdEquivalent();
+      })();
+      document.getElementById("amount").addEventListener("input", updateUsdEquivalent);
+      updateUsdEquivalent();
+
       // ====== DirectPay Integration ======
       document.getElementById("payBtn").onclick = async () => {
         if (!validateForm()) return;
+        const amt = parseFloat(document.getElementById("amount").value) || 0;
+        if (amt > CARD_MAX_LKR) {
+          alert("Card payments are limited to LKR " + CARD_MAX_LKR.toLocaleString() + " (~ USD 154.20).\n\nPlease choose Bank Transfer, Bybit / Binance Pay, or QR Pay for higher amounts.");
+          updateCardLimitState();
+          return;
+        }
 
         const payBtn = document.getElementById("payBtn");
         payBtn.disabled = true;
