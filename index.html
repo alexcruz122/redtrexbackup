@@ -2202,7 +2202,7 @@
     function goToCheckout(productName, unitPrice, qtyInput) {
       const qty = parseInt(qtyInput.value) || 1;
       const encodedName = encodeURIComponent(productName);
-      window.location.href = `https://www.redtrex.store/checkout?product=${encodedName}&price=${unitPrice}&qty=${qty}`;
+      window.location.href = `checkout.html?product=${encodedName}&price=${unitPrice}&qty=${qty}`;
     }
 
     function closeDisclaimerPopup() {
