@@ -458,6 +458,10 @@
       <h1 class="ls-title">RedTrex Technologies</h1>
       <p class="ls-tagline">Empowering Tomorrow's Tech Today</p>
       <div class="ls-bar"><div class="ls-bar-fill"></div></div>
+      <div class="ls-versions">
+        <span class="ls-ver-pill">AI API VER : v1.0.6</span>
+        <span class="ls-ver-pill">SITE VER : v7.3.0</span>
+      </div>
     </div>
   </div>
   <style>
@@ -530,10 +534,24 @@
       0%   { transform: translateX(-120%); }
       100% { transform: translateX(320%); }
     }
+    #loadingScreen .ls-versions {
+      display: flex; justify-content: center; gap: 10px;
+      margin-top: 18px; flex-wrap: wrap;
+    }
+    #loadingScreen .ls-ver-pill {
+      font-family: 'Courier New', monospace;
+      font-size: 0.72rem; letter-spacing: 0.5px;
+      color: #ff8a8a;
+      background: rgba(229, 57, 53, 0.10);
+      border: 1px solid rgba(229, 57, 53, 0.35);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
     @media (max-width: 480px) {
       #loadingScreen .ls-logo-wrap { width: 110px; height: 110px; }
       #loadingScreen .ls-logo { width: 72px; height: 72px; }
       #loadingScreen .ls-title { font-size: 1.4rem; }
+      #loadingScreen .ls-ver-pill { font-size: 0.65rem; padding: 3px 8px; }
     }
   </style>
   <script>
@@ -640,6 +658,13 @@
       </button>
     </div>
 
+    <!-- Service Status Indicator (auto-updates based on Sri Lanka time) -->
+    <div class="service-status" id="serviceStatus" title="Service hours: 8:00 AM – 12:00 AM (Sri Lanka Time)">
+      <span class="status-label">Service Status:</span>
+      <span class="status-dot" id="statusDot"></span>
+      <span class="status-text" id="statusText">Checking…</span>
+    </div>
+
     <div class="search-container">
       <input type="text" id="productSearch" placeholder="Search products..." autocomplete="off" />
       <ul id="searchResults" class="search-results"></ul>
@@ -680,23 +705,199 @@
       </a>
     </div>
 
-    <div class="mySlides fade">
-        <img src="Assest/Partnership.png" style="width:100%" alt="Slide 2">
-      </a>
-    </div>
-
-    <div class="mySlides fade">
-        <img src="Assest/Avurudu 2026 Deals – Special Discount Bundles COLOR.png" style="width:100%" alt="Slide 3">
-      </a>
-    </div>
-
     <!-- Navigation dots -->
     <div class="dot-container">
       <span class="dot" onclick="currentSlide(1)"></span> 
-      <span class="dot" onclick="currentSlide(2)"></span>
-      <span class="dot" onclick="currentSlide(3)"></span>
     </div>
   </div>
+
+  <!-- ================= CUSTOMER REVIEWS MARQUEE ================= -->
+    <section class="reviews-marquee" aria-label="Customer reviews">
+      <div class="reviews-marquee-header">
+        <div class="reviews-marquee-title">
+          <span class="reviews-source-icons">
+            <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" class="g-logo">
+            <span class="reviews-source-divider">+</span>
+            <svg viewBox="0 0 32 32" width="20" height="20" aria-label="Trustpilot"><path fill="#00B67A" d="M16 0l3.708 11.412H32l-9.854 7.176L25.854 30 16 22.824 6.146 30l3.708-11.412L0 11.412h12.292z"/></svg>
+          </span>
+          <span>What our customers say on <strong>Google</strong> &amp; <strong>Trustpilot</strong></span>
+          <span class="reviews-stars">★★★★★ <em>5.0</em></span>
+        </div>
+        <a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank" rel="noopener" class="reviews-write-btn">Write a Review →</a>
+      </div>
+
+      <div class="reviews-track-wrap">
+        <div class="reviews-track">
+          <article class="review-card">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#16a34a">H</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Hexadecimal</div>
+                <div class="review-meta">★★★★★ · Mar 13, 2026</div>
+              </div>
+              <span class="review-source-tp" title="Trustpilot review"><svg viewBox="0 0 32 32" width="18" height="18" aria-hidden="true"><path fill="#00B67A" d="M16 0l3.708 11.412H32l-9.854 7.176L25.854 30 16 22.824 6.146 30l3.708-11.412L0 11.412h12.292z"/></svg></span>
+            </div>
+            <p class="review-body">Absolutely awesome service. I bought their recovery service and Windows 11 Pro key. They recovered all of my lost data within 2 days, and the product key worked perfectly. Will choose their services again in the future.</p>
+          </article>
+
+        <article class="review-card">
+            <div class="review-head">
+              <img class="review-avatar review-avatar-img" src="https://lh3.googleusercontent.com/a-/ALV-UjVmOMhT62U-h3EEKOhYmDlq8eRYEKFLQn1bl6rBRZeg0Z0Xc5O6Tw=s128-c-rp-mo-br100" alt="Rizwan Deen">
+              <div class="review-meta-wrap">
+                <div class="review-name">Rizwan Deen</div>
+                <div class="review-meta">★★★★★ · 8 weeks ago</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card">
+            <div class="review-head">
+              <img class="review-avatar review-avatar-img" src="https://lh3.googleusercontent.com/a-/ALV-UjVPi4dukTCiQBYIoXHlBCy21MicnQIfvCAjsLo3FVEFYwkEQHU=s128-c-rp-mo-br100" alt="Tech Wave Solutions">
+              <div class="review-meta-wrap">
+                <div class="review-name">Tech Wave Solutions</div>
+                <div class="review-meta">★★★★★ · 42 weeks ago</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body">Excellent service. Recommended.</p>
+          </article>
+
+        <article class="review-card">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#0891b2">R</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Rezo</div>
+                <div class="review-meta">★★★★★ · Feb 23, 2026</div>
+              </div>
+              <span class="review-source-tp" title="Trustpilot review"><svg viewBox="0 0 32 32" width="18" height="18" aria-hidden="true"><path fill="#00B67A" d="M16 0l3.708 11.412H32l-9.854 7.176L25.854 30 16 22.824 6.146 30l3.708-11.412L0 11.412h12.292z"/></svg></span>
+            </div>
+            <p class="review-body">Bought Windows Standard Server 2025. Quick service, reasonable pricing. Got exactly what I need. Recommended.</p>
+          </article>
+
+        <article class="review-card">
+            <div class="review-head">
+              <img class="review-avatar review-avatar-img" src="https://lh3.googleusercontent.com/a-/ALV-UjV9nDTwKOB7gePexpiSf0zGuauE4m7noevhteqJbo80iXNElfs=s128-c-rp-mo-br100" alt="VSS Trading Pvt Ltd">
+              <div class="review-meta-wrap">
+                <div class="review-name">VSS Trading Pvt Ltd</div>
+                <div class="review-meta">★★★★★ · 20 weeks ago</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#ea580c">S</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Sandaya Kumari</div>
+                <div class="review-meta">★★★★★ · Dec 31, 2024</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#059669">V</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Vac Remo</div>
+                <div class="review-meta">★★★★★ · Dec 31, 2024</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#16a34a">H</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Hexadecimal</div>
+                <div class="review-meta">★★★★★ · Mar 13, 2026</div>
+              </div>
+              <span class="review-source-tp" title="Trustpilot review"><svg viewBox="0 0 32 32" width="18" height="18" aria-hidden="true"><path fill="#00B67A" d="M16 0l3.708 11.412H32l-9.854 7.176L25.854 30 16 22.824 6.146 30l3.708-11.412L0 11.412h12.292z"/></svg></span>
+            </div>
+            <p class="review-body">Absolutely awesome service. I bought their recovery service and Windows 11 Pro key. They recovered all of my lost data within 2 days, and the product key worked perfectly. Will choose their services again in the future.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <img class="review-avatar review-avatar-img" src="https://lh3.googleusercontent.com/a-/ALV-UjVmOMhT62U-h3EEKOhYmDlq8eRYEKFLQn1bl6rBRZeg0Z0Xc5O6Tw=s128-c-rp-mo-br100" alt="Rizwan Deen">
+              <div class="review-meta-wrap">
+                <div class="review-name">Rizwan Deen</div>
+                <div class="review-meta">★★★★★ · 8 weeks ago</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <img class="review-avatar review-avatar-img" src="https://lh3.googleusercontent.com/a-/ALV-UjVPi4dukTCiQBYIoXHlBCy21MicnQIfvCAjsLo3FVEFYwkEQHU=s128-c-rp-mo-br100" alt="Tech Wave Solutions">
+              <div class="review-meta-wrap">
+                <div class="review-name">Tech Wave Solutions</div>
+                <div class="review-meta">★★★★★ · 42 weeks ago</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body">Excellent service. Recommended.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#0891b2">R</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Rezo</div>
+                <div class="review-meta">★★★★★ · Feb 23, 2026</div>
+              </div>
+              <span class="review-source-tp" title="Trustpilot review"><svg viewBox="0 0 32 32" width="18" height="18" aria-hidden="true"><path fill="#00B67A" d="M16 0l3.708 11.412H32l-9.854 7.176L25.854 30 16 22.824 6.146 30l3.708-11.412L0 11.412h12.292z"/></svg></span>
+            </div>
+            <p class="review-body">Bought Windows Standard Server 2025. Quick service, reasonable pricing. Got exactly what I need. Recommended.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <img class="review-avatar review-avatar-img" src="https://lh3.googleusercontent.com/a-/ALV-UjV9nDTwKOB7gePexpiSf0zGuauE4m7noevhteqJbo80iXNElfs=s128-c-rp-mo-br100" alt="VSS Trading Pvt Ltd">
+              <div class="review-meta-wrap">
+                <div class="review-name">VSS Trading Pvt Ltd</div>
+                <div class="review-meta">★★★★★ · 20 weeks ago</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#ea580c">S</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Sandaya Kumari</div>
+                <div class="review-meta">★★★★★ · Dec 31, 2024</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#059669">V</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Vac Remo</div>
+                <div class="review-meta">★★★★★ · Dec 31, 2024</div>
+              </div>
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
+            </div>
+            <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
   <video autoplay muted loop id="bg-video" playsinline>
     <source src="Assest/27725-365890983.mp4" type="video/mp4">
@@ -2205,30 +2406,30 @@
 
       <!-- MIDDLE: Partners & Reviews -->
       <div class="footer-logo">
-        <h4>Partners & Reviews</h4>
+        <h4>Trusted Partners</h4>
 
         <div class="partner-logos">
-          <a href="Assest/REDTrex- Reseller Certificate.png"><img src="Assest/Partner Authorition logo.svg"></a>
-          <a href="https://microsoft.na3.adobesign.com/verifier?tx=CBJCHBCAABAAauszPdDOshbJePrkX7hheXImt4sGfbZj"><img src="Assest/m-csp.png"></a>
-          <a href="https://bybit.com"><img src="assetphy/Bybit-Logo.png"></a>
-          <a href="https://anydesk.com/en/partners"><img src="Assest/anydesk.png"></a>
-          <a href="https://www.directpay.lk/"><img src="https://res.cloudinary.com/directpay/image/upload/v1621411813/logo-bckp-min_tvuf38.png"></a>
+          <a href="Assest/REDTrex- Reseller Certificate.png" title="Authorized Reseller"><img src="Assest/Partner Authorition logo.svg" alt="Authorized Reseller"></a>
+          <a href="https://microsoft.na3.adobesign.com/verifier?tx=CBJCHBCAABAAauszPdDOshbJePrkX7hheXImt4sGfbZj" title="Microsoft CSP"><img src="Assest/m-csp.png" alt="Microsoft Cloud Solution Provider"></a>
+          <a href="https://bybit.com" title="Bybit"><img src="assetphy/Bybit-Logo.png" alt="Bybit"></a>
+          <a href="https://anydesk.com/en/partners" title="AnyDesk Partner"><img src="Assest/anydesk.png" alt="AnyDesk"></a>
+          <a href="https://www.directpay.lk/" title="DirectPay"><img src="https://res.cloudinary.com/directpay/image/upload/v1621411813/logo-bckp-min_tvuf38.png" alt="DirectPay"></a>
         </div>
 
-        <div class="google-rating text-center">
+        <div class="google-rating">
           <span class="stars">★★★★★</span>
           <span class="rating-text">5.0 / 5.0</span>
           <p class="review-count">
-            <a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank">(6 Google Reviews)</a>
+            <a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank">Read our 5 Google Reviews →</a>
           </p>
         </div>
 
-        <div class="payment-logos">
-          <img src="Assest/visa-ico.webp">
-          <img src="Assest/mastercard.webp">
-          <img src="Assest/American-Express-Logo.png">
-          <img src="Assest/tether-usdt-logo.png">
-          <img src="Assest/toncoin.webp">
+        <div class="payment-logos" title="Accepted Payment Methods">
+          <img src="Assest/visa-ico.webp" alt="Visa">
+          <img src="Assest/mastercard.webp" alt="Mastercard">
+          <img src="Assest/American-Express-Logo.png" alt="American Express">
+          <img src="Assest/tether-usdt-logo.png" alt="Tether USDT">
+          <img src="Assest/toncoin.webp" alt="TON Coin">
         </div>
       </div>
 
@@ -2248,7 +2449,7 @@
 
     <div class="footer-bottom" id="site-disclaimer">
       <p>© 2026 RedTrex Technologies. All Rights Reserved. &nbsp;<span class="site-version">AI API VER : v1.0.6</span>
-      <span class="site-version">SITE VER : v7.2.2</span>
+      <span class="site-version">SITE VER : v7.3.0</span>
       </p>
       
       <!-- TrustBox widget - Review Collector -->
@@ -2268,18 +2469,12 @@
   <div id="disclaimerPopup" class="popup-modal">
       <div class="popup-content glass-effect">
         <button class="close-btn" onclick="closeDisclaimerPopup()">✕</button>
-        <h2 class="popup-title">🛡️ Official Business Disclosure</h2>
-        <p class="popup-text" style="font-size: 0.95rem; line-height: 1.6; text-align: left;">
-          <strong>Digital Marketplace Notice:</strong><br>
-          Redtrex.store operates exclusively as a <strong>Digital Marketplace</strong> for software activation keys. We specialize in 100% paperless, instant delivery.
-          <br><br>
-          <strong>No Physical Goods:</strong><br>
-          We do not stock, sell, or ship physical merchandise (toys, collectibles, or hardware). We have no affiliation with any physical retail brands or toy manufacturers.
-          <br><br>
-          <strong>Consumer Trust:</strong><br>
-          All transactions are encrypted and delivered digitally. Any reference to third-party trademarks is for descriptive purposes only.
+        <h2 class="popup-title">Important Information</h2>
+        <p class="popup-text" style="font-size: 0.95rem; line-height: 1.65; text-align: left;">
+          <strong>Authorized Software Reseller</strong><br>
+          RedTrex Technologies is an authorized reseller of genuine software product keys, including Microsoft,EaseUS and other industry-leading vendors. Every license we sell is sourced through legitimate distribution channels.
         </p>
-        <button onclick="closeDisclaimerPopup()" style="width:100%; padding: 10px; background: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">I Understand</button>
+        <button onclick="closeDisclaimerPopup()" style="width:100%; padding: 12px; background: linear-gradient(135deg,#DC2626,#b91c1c); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(220,38,38,0.35);">I Understand</button>
       </div>
   </div>
 
@@ -2347,27 +2542,27 @@
       'Windows 11 Pro Product Key [OEM] [5PC] PROMO':                            0,
       'EaseUS Data Recovery Wizard Professional (Life-Time Upgrade) PROMO':       0,
       'Windows 11 Pro + Office 2024 Bundle [OEM] [1PC]':                         0,
-      'Windows 11 Pro OEM Key':                                                   573,
-      'Windows 11 Pro Retail Key':                                                2,
+      'Windows 11 Pro OEM Key':                                                   576,
+      'Windows 11 Pro Retail Key':                                                5,
       'Windows 11 Pro Product Key [OEM] [5PC]':                                  0,
       'Windows Server 2022 Standard [2PC]':                                       0,
       'Windows Server 2022 Datacenter [2PC]':                                     0,
       'Windows Server 2025 Standard [2PC]':                                       1,
       'Windows Server 2025 Datacenter [2PC]':                                     0,
-      'Microsoft Office 2024':                                                    58,
-      'Microsoft Office Professional Plus [2021] [1PC]':                         192,
+      'Microsoft Office 2024':                                                    65,
+      'Microsoft Office Professional Plus [2021] [1PC]':                         194,
       'Visio 2021 Professional [1PC]':                                            0,
       'Microsoft Office Professional Plus [2021] [5PC]':                         0,
       'Microsoft Office 365 A3 Subscription (5 Device/1Year)':                   3,
       'Microsoft Office 2021 Home and Business For MAC (1MAC)':                  0,
-      'SQL Server 2019 Standard [1PC]':                                           0,
+      'SQL Server 2019 Standard [1PC]':                                           1,
       'Outlook 2016 [5PC]':                                                       0,
       'Visual Studio 2022 Enterprise [2PC]':                                      16,
       'Visual Studio 2022 Professional [5PC]':                                    0,
       'Visual Studio 2026 Enterprise [5PC]':                                      0,
       'Visual Studio 2026 Professional [5PC]':                                    0,
-      'CorelDraw Standard 2021 [1PC]':                                            5,
-      'Microsoft Project Standard 2019 1PC [Retail]':                            0,
+      'CorelDraw Standard 2021 [1PC]':                                            8,
+      'Microsoft Project Standard 2019 1PC [Retail]':                            1,
       'Microsoft Project Professional 2019 1PC [Retail]':                        0,
       'Microsoft Project Standard 2024 1PC [BIND]':                              0,
       'Microsoft Project Professional 2024 1PC [BIND]':                          20,
@@ -2436,6 +2631,32 @@
         searchResults.style.display = 'block';
       });
     }
+
+    // ===== Service Status (Sri Lanka time, UTC+5:30) =====
+    function updateServiceStatus() {
+      var el = document.getElementById('serviceStatus');
+      var dot = document.getElementById('statusDot');
+      var txt = document.getElementById('statusText');
+      if (!el || !txt) return;
+      // Convert current UTC time to Sri Lanka time
+      var now = new Date();
+      var sl = new Date(now.getTime() + (5.5 * 60 + now.getTimezoneOffset()) * 60000);
+      var hr = sl.getHours();
+      // Online: 8:00 AM (08) to 11:59 PM (23). Offline: 12 AM (00) to 7:59 AM (07)
+      var isOnline = (hr >= 8 && hr <= 23);
+      el.classList.remove('online', 'offline');
+      if (isOnline) {
+        el.classList.add('online');
+        txt.textContent = 'Online';
+        el.title = 'We are online and processing orders. Service hours: 8:00 AM – 12:00 AM (Sri Lanka Time)';
+      } else {
+        el.classList.add('offline');
+        txt.textContent = 'Offline';
+        el.title = 'We are currently offline (12:00 AM – 8:00 AM SLT). Please expect delays in orders during this time.';
+      }
+    }
+    updateServiceStatus();
+    setInterval(updateServiceStatus, 60000);
 
   </script>
 
