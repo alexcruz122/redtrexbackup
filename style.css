@@ -1661,9 +1661,10 @@ nav {
   font-weight: 500;
   color: #e5e7eb;
   margin-left: 4px;
-  cursor: help;
+  cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
   white-space: nowrap;
+  position: relative;
 }
 .service-status:hover {
   background: rgba(255, 255, 255, 0.08);
@@ -1702,7 +1703,74 @@ nav {
   100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 }
 
+.status-popup {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a2e;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 12px 16px;
+  min-width: 220px;
+  max-width: 280px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 9999;
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+}
+.status-popup::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid rgba(255,255,255,0.15);
+}
+.status-popup::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #1a1a2e;
+}
+.status-popup.open { display: block; }
+.status-popup-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.service-status.online .status-popup-title { color: #4ade80; }
+.service-status.offline .status-popup-title { color: #fbbf24; }
+.status-popup-detail {
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
 @media (max-width: 900px) {
   .service-status .status-label { display: none; }
-  .service-status { padding: 5px 10px; font-size: 12px; }
+  .service-status { padding: 5px 10px; font-size: 12px; cursor: pointer; }
+}
+
+.service-status-row {
+  display: contents;
+}
+
+@media (max-width: 600px) {
+  .service-status-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    order: 98;
+    margin-top: 4px;
+  }
 }
