@@ -659,10 +659,16 @@
     </div>
 
     <!-- Service Status Indicator (auto-updates based on Sri Lanka time) -->
-    <div class="service-status" id="serviceStatus" title="Service hours: 8:00 AM – 12:00 AM (Sri Lanka Time)">
-      <span class="status-label">Service Status:</span>
-      <span class="status-dot" id="statusDot"></span>
-      <span class="status-text" id="statusText">Checking…</span>
+    <div class="service-status-row">
+      <div class="service-status" id="serviceStatus" title="Service hours: 8:00 AM – 12:00 AM (Sri Lanka Time)" onclick="toggleStatusPopup(event)">
+        <span class="status-label">Service Status:</span>
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">Checking…</span>
+        <div class="status-popup" id="statusPopup">
+          <div class="status-popup-title" id="statusPopupTitle"></div>
+          <div class="status-popup-detail" id="statusPopupDetail"></div>
+        </div>
+      </div>
     </div>
 
     <div class="search-container">
@@ -812,6 +818,18 @@
             <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
           </article>
 
+        <article class="review-card">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#60a5fa">R</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Ravindu Chamod</div>
+                <div class="review-meta">★★★★★ · Apr 26, 2026</div>
+              </div>
+              <span class="review-source-tp" title="Trustpilot review"><svg viewBox="0 0 32 32" width="18" height="18" aria-hidden="true"><path fill="#00B67A" d="M16 0l3.708 11.412H32l-9.854 7.176L25.854 30 16 22.824 6.146 30l3.708-11.412L0 11.412h12.292z"/></svg></span>
+            </div>
+            <p class="review-body">Excerllent service</p>
+          </article>
+
         <article class="review-card" aria-hidden="true">
             <div class="review-head">
               <div class="review-avatar" style="background:#16a34a">H</div>
@@ -894,6 +912,18 @@
               <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="review-source-google" alt="Google" title="Google review">
             </div>
             <p class="review-body review-body-empty">Rated us <strong>5 stars</strong> on Google.</p>
+          </article>
+
+        <article class="review-card" aria-hidden="true">
+            <div class="review-head">
+              <div class="review-avatar" style="background:#60a5fa">R</div>
+              <div class="review-meta-wrap">
+                <div class="review-name">Ravindu Chamod</div>
+                <div class="review-meta">★★★★★ · Apr 26, 2026</div>
+              </div>
+              <span class="review-source-tp" title="Trustpilot review"><svg viewBox="0 0 32 32" width="18" height="18" aria-hidden="true"><path fill="#00B67A" d="M16 0l3.708 11.412H32l-9.854 7.176L25.854 30 16 22.824 6.146 30l3.708-11.412L0 11.412h12.292z"/></svg></span>
+            </div>
+            <p class="review-body">Excerllent service</p>
           </article>
         </div>
       </div>
@@ -2637,6 +2667,8 @@
       var el = document.getElementById('serviceStatus');
       var dot = document.getElementById('statusDot');
       var txt = document.getElementById('statusText');
+      var popupTitle = document.getElementById('statusPopupTitle');
+      var popupDetail = document.getElementById('statusPopupDetail');
       if (!el || !txt) return;
       // Convert current UTC time to Sri Lanka time
       var now = new Date();
@@ -2649,14 +2681,30 @@
         el.classList.add('online');
         txt.textContent = 'Online';
         el.title = 'We are online and processing orders. Service hours: 8:00 AM – 12:00 AM (Sri Lanka Time)';
+        if (popupTitle) popupTitle.textContent = '● We are Online';
+        if (popupDetail) popupDetail.textContent = 'We are processing orders right now.\nService hours: 8:00 AM – 12:00 AM (Sri Lanka Time)';
       } else {
         el.classList.add('offline');
         txt.textContent = 'Offline';
         el.title = 'We are currently offline (12:00 AM – 8:00 AM SLT). Please expect delays in orders during this time.';
+        if (popupTitle) popupTitle.textContent = '● We are Offline';
+        if (popupDetail) popupDetail.textContent = 'Currently offline (12:00 AM – 8:00 AM SLT).\nPlease expect delays during this time.';
       }
     }
     updateServiceStatus();
     setInterval(updateServiceStatus, 60000);
+
+    // ===== Service Status Popup Toggle =====
+    function toggleStatusPopup(e) {
+      e.stopPropagation();
+      var popup = document.getElementById('statusPopup');
+      if (!popup) return;
+      popup.classList.toggle('open');
+    }
+    document.addEventListener('click', function() {
+      var popup = document.getElementById('statusPopup');
+      if (popup) popup.classList.remove('open');
+    });
 
   </script>
 
