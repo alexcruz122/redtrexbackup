@@ -460,7 +460,7 @@
       <div class="ls-bar"><div class="ls-bar-fill"></div></div>
       <div class="ls-versions">
         <span class="ls-ver-pill">AI API VER : v1.0.6</span>
-        <span class="ls-ver-pill">SITE VER : v7.3.0</span>
+        <span class="ls-ver-pill">SITE VER : v7.3.1</span>
       </div>
     </div>
   </div>
@@ -2463,7 +2463,7 @@
         </div>
       </div>
 
-       <!-- RIGHT: Legal -->
+      <!-- RIGHT: Legal -->
       <div class="footer-links">
         <h4>Legal & Policies</h4>
         <ul>
@@ -2479,7 +2479,7 @@
 
     <div class="footer-bottom" id="site-disclaimer">
       <p>© 2026 RedTrex Technologies. All Rights Reserved. &nbsp;<span class="site-version">AI API VER : v1.0.6</span>
-      <span class="site-version">SITE VER : v7.3.0</span>
+      <span class="site-version">SITE VER : v7.3.1</span>
       </p>
       
       <!-- TrustBox widget - Review Collector -->
@@ -2959,6 +2959,83 @@
       slideIndex = n - 1;
       showSlides();
     }
+
+    /* ============== REVIEWS MARQUEE — manual nav with glass arrows ============== */
+    (function () {
+      const wrap = document.querySelector('.reviews-track-wrap');
+      const track = document.querySelector('.reviews-track');
+      if (!wrap || !track) return;
+
+      const ANIM_DURATION = 60; // matches CSS reviewsScroll duration
+
+      // Build glass arrow buttons
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'reviews-arrow prev';
+      prevBtn.setAttribute('aria-label', 'Previous reviews');
+      prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>';
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'reviews-arrow next';
+      nextBtn.setAttribute('aria-label', 'Next reviews');
+      nextBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>';
+
+      wrap.appendChild(prevBtn);
+      wrap.appendChild(nextBtn);
+
+      let reviewsPaused = false;
+
+      function getTranslateX() {
+        const cs = getComputedStyle(track);
+        if (!cs.transform || cs.transform === 'none') return 0;
+        const m = cs.transform.match(/matrix.*\(([^)]+)\)/);
+        if (!m) return 0;
+        const v = m[1].split(',').map(x => parseFloat(x.trim()));
+        return v.length === 6 ? v[4] : (v.length === 16 ? v[12] : 0);
+      }
+      function getHalfWidth() { return track.scrollWidth / 2; }
+
+      function pauseTrack() {
+        if (reviewsPaused) return;
+        const x = getTranslateX();
+        track.style.animation = 'none';
+        track.style.transform = 'translateX(' + x + 'px)';
+        reviewsPaused = true;
+      }
+
+      function resumeTrack() {
+        if (!reviewsPaused) return;
+        const x = getTranslateX();
+        const half = getHalfWidth();
+        const fraction = half ? Math.min(Math.max(Math.abs(x) / half, 0), 1) : 0;
+        track.style.transform = '';
+        track.style.animation = '';
+        track.style.animationDelay = (-fraction * ANIM_DURATION) + 's';
+        reviewsPaused = false;
+      }
+
+      function shift(dir) {
+        pauseTrack();
+        const step = (track.firstElementChild ? track.firstElementChild.getBoundingClientRect().width : 340) + 18;
+        let x = getTranslateX() + (dir > 0 ? -step : step);
+        const half = getHalfWidth();
+        if (half) {
+          if (x > 0) x -= half;
+          if (x < -half) x += half;
+        }
+        track.style.transform = 'translateX(' + x + 'px)';
+      }
+
+      prevBtn.addEventListener('click', function (e) { e.stopPropagation(); shift(-1); });
+      nextBtn.addEventListener('click', function (e) { e.stopPropagation(); shift(1); });
+
+      // Resume auto-scroll when user clicks anywhere outside the reviews marquee
+      document.addEventListener('click', function (e) {
+        if (!reviewsPaused) return;
+        const marquee = document.querySelector('.reviews-marquee');
+        if (marquee && marquee.contains(e.target)) return;
+        resumeTrack();
+      });
+    })();
   </script>
   <button id="scrollToTopBtn" title="Go to top">↑</button>
 
@@ -2982,5 +3059,6 @@
       }
     }
   </script>
+
 </body>
 </html>
