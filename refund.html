@@ -1,202 +1,353 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="transition-colors duration-500 ease-in-out">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RedTrex Technologies - Refund Policy</title>
-    <!-- Load Tailwind CSS -->
+    <title>RedTrex Technologies — Refund Policy</title>
+    <meta name="description" content="RedTrex Technologies refund policy: 24-hour refund period for digital products, replacement guarantee, and process details." />
+    <link rel="icon" type="image/png" href="Assest/company.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        'primary-dark': '#1a1a2e',
-                        'primary-light': '#ffffff',
-                        'accent-blue': '#00d4ff',
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { 'primary-dark': '#1a1a2e', 'primary-light': '#ffffff', 'accent-blue': '#00d4ff' }
                 }
             }
         }
     </script>
+
     <style>
-        .glass-footer {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 -4px 40px rgba(0, 0, 0, 0.1);
+        html { scroll-behavior: smooth; }
+        * { transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
+
+        .hero-bg {
+            background:
+                radial-gradient(circle at 15% 30%, rgba(0, 212, 255, 0.22), transparent 45%),
+                radial-gradient(circle at 85% 70%, rgba(120, 80, 255, 0.22), transparent 50%),
+                linear-gradient(135deg, #0f0f1f 0%, #1a1a2e 60%, #16213e 100%);
         }
 
-        .footer-icon {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            background-color: #00d4ff;
-            border-radius: 50%;
-            margin-right: 0.5rem;
+        .dotted { background-image: radial-gradient(rgba(0, 212, 255, 0.25) 1px, transparent 1px); background-size: 22px 22px; }
+
+        .policy-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        /* Partner logos styling */
-        .partner-logo {
-            width: 90px;
-            height: auto;
-            object-fit: contain;
-            filter: grayscale(100%);
-            transition: filter 0.3s ease, transform 0.3s ease;
+        .dark .policy-card {
+            background: rgba(26, 26, 46, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .partner-logo:hover {
-            filter: grayscale(0%);
-            transform: scale(1.05);
+
+        .section-card { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .section-card:hover { border-left-color: #00d4ff; transform: translateX(4px); }
+
+        .section-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 44px; height: 44px; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(120, 80, 255, 0.15));
+            color: #00d4ff; flex-shrink: 0;
         }
+
+        .alert-info { background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 212, 255, 0.03)); border-left: 4px solid #00d4ff; }
+        .dark .alert-info { background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 212, 255, 0.04)); }
+
+        .alert-warn { background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(239, 68, 68, 0.03)); border-left: 4px solid #ef4444; }
+        .dark .alert-warn { background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05)); }
+
+        .step-number {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff, #7850ff);
+            color: #1a1a2e; font-weight: 800; font-size: 0.95rem;
+            box-shadow: 0 4px 14px rgba(0, 212, 255, 0.4);
+        }
+
+        .glass-footer { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.15); }
+        .footer-icon { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.6rem; background: #00d4ff; box-shadow: 0 0 8px rgba(0, 212, 255, 0.6); }
+        .partner-logo { width: 90px; height: auto; object-fit: contain; filter: grayscale(100%) brightness(1.4); opacity: 0.75; transition: all 0.3s ease; }
+        .partner-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.08); }
+
+        #theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 50; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 9999px; padding: 0.6rem; border: 1px solid rgba(255, 255, 255, 0.15); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); }
+        #theme-toggle:hover { transform: scale(1.08); background: rgba(255, 255, 255, 0.2); }
+        #theme-toggle svg { width: 22px; height: 22px; color: #00d4ff; }
+        .dark #theme-toggle svg { color: #ffd700; }
+        .sun-icon, .moon-icon { display: none; }
+        .dark .sun-icon { display: block; }
+        :not(.dark) .moon-icon { display: block; }
+
+        .toc-link { transition: all 0.2s ease; border-left: 2px solid transparent; padding-left: 0.75rem; }
+        .toc-link:hover { border-left-color: #00d4ff; color: #00d4ff; transform: translateX(2px); }
     </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
-<!-- Header -->
-<header class="bg-primary-dark shadow-lg p-4 sticky top-0 z-10">
-    <div class="max-w-7xl mx-auto flex justify-center">
-        <img src="Assest/company.png" alt="RedTrex Logo" class="h-16 object-contain" />
-    </div>
-</header>
+<body class="bg-gray-50 text-gray-900 dark:bg-primary-dark dark:text-primary-light font-sans min-h-screen flex flex-col">
 
-<!-- Main -->
-<main class="flex-grow max-w-5xl mx-auto w-full px-4 sm:px-6 py-10">
-    <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl">
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-dark text-center mb-8 border-b pb-3">
-            Refund Policy
-        </h1>
+    <button id="theme-toggle" aria-label="Toggle theme">
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z"/></svg>
+    </button>
 
-        <p class="text-gray-600 mb-6 text-lg">At RedTrex Technologies, we aim for customer satisfaction. This refund policy outlines how we handle returns, replacements, and refunds.</p>
+    <header class="bg-primary-dark dark:bg-gray-900 shadow-lg p-4 sticky top-0 z-40 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto flex justify-center">
+            <a href="index.html"><img src="Assest/company.png" alt="RedTrex Logo" class="h-16 object-contain" /></a>
+        </div>
+    </header>
 
-        <!-- Digital Products -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold text-primary-dark mb-3 flex items-center gap-2">
-                <span class="text-3xl" role="img" aria-label="Money Bag">💰</span> Digital Products
-            </h2>
-            <p class="text-gray-700 bg-blue-50 p-4 rounded-lg border-l-4 border-accent-blue">
-                Every digital product comes with a <strong>24-hour refund period</strong>. If your ordered product key isn't working or is invalid, we will issue a refund to your original payment method or send a replacement immediately. This process takes a few minutes to 1 hour. RedTrex will always stay online for you until you successfully activate your product.
-            </p>
-            <p class="text-gray-700 bg-red-50 p-3 rounded-lg border-l-4 border-red-500 mt-3">
-                <strong>Please Note:</strong> Change of mind or ordering the wrong product is not eligible for refund or replacement.
-            </p>
-        </section>
+    <main class="flex-grow">
 
-        <!-- Refund Process -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold text-primary-dark mb-3 flex items-center gap-2">
-                <span class="text-3xl" role="img" aria-label="Clock">⏱️</span> Refund Process
-            </h2>
-            <p class="text-gray-700">
-                Refunds or replacements are processed after verification. Please contact us at <a href="mailto:redtrex@technologist.com" class="text-accent-blue hover:underline font-medium">redtrex@technologist.com</a> to initiate a refund request.
-            </p>
-        </section>
-
-        <!-- Exceptions -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold text-primary-dark mb-3 flex items-center gap-2">
-                <span class="text-3xl" role="img" aria-label="Warning Sign">⚠️</span> Exceptions
-            </h2>
-            <p class="text-gray-700 bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
-                Software keys That shared incorrectly are not eligible for refund.
-            </p>
-        </section>
-
-        <!-- Contact Us -->
-        <section>
-            <h2 class="text-2xl font-semibold text-primary-dark mb-3 flex items-center gap-2">
-                <span class="text-3xl" role="img" aria-label="Speech Bubble">💬</span> Contact Us
-            </h2>
-            <p class="text-gray-700">
-                If you have any questions about our refund policy, please reach out via email or phone.
-            </p>
-        </section>
-    </div>
-</main>
-
-<!-- Footer -->
-<footer class="glass-footer mt-auto py-10 px-4 sm:px-6 lg:px-8 text-white bg-primary-dark/80">
-    <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-
-            <!-- Company Info -->
-            <div class="space-y-3">
-                <h3 class="text-xl font-bold text-accent-blue mb-4">RedTrex Technologies</h3>
-                <p class="text-sm flex items-start"><span class="footer-icon mt-1"></span> 74, Katuwapitiya Road Negombo, Sri-Lanka, 11500.</p>
-                <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+94712622012" class="hover:underline">+94 71 262 2012</a></p>
-                <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+94722692012" class="hover:underline">+94 72 269 2012</a></p>
-                <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+12055884201" class="hover:underline">+1 205 588 4201 (TOLL-FREE)</a></p>
-                <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="mailto:redtrex@technologist.com" class="hover:underline">redtrex@technologist.com</a></p>
-            </div>
-
-            <!-- Quick Links -->
-            <div>
-                <h4 class="text-lg font-semibold mb-4 text-gray-200">Quick Links</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="index.html" class="hover:text-accent-blue">Home</a></li>
-                    <li><a href="services.html" class="hover:text-accent-blue">Services</a></li>
-                    <li><a href="about.html" class="hover:text-accent-blue">About Us</a></li>
-                </ul>
-            </div>
-
-            <!-- Legal Links -->
-            <div>
-                <h4 class="text-lg font-semibold mb-4 text-gray-200">Legal</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="terms.html" class="hover:text-accent-blue">Terms & Conditions</a></li>
-                    <li><a href="privacy.html" class="hover:text-accent-blue">Privacy Policy</a></li>
-                    <li><a href="refund.html" class="text-accent-blue font-bold">Refund Policy</a></li>
-                </ul>
-            </div>
-
-            <!-- Partners & Reviews -->
-            <div class="space-y-4 text-center">
-                <h4 class="text-lg font-semibold mb-4 text-gray-200">Partners & Reviews</h4>
-
-                <div class="flex justify-center items-center gap-4 flex-wrap">
-                    <a href="Assest/REDTrex- Reseller Certificate.png" target="_blank" title="Authorized Reseller">
-                        <img src="Assest/Partner Authorition logo.svg" class="partner-logo" alt="Authorized Reseller" />
-                    </a>
-
-                    <a href="https://microsoft.na3.adobesign.com/verifier?tx=CBJCHBCAABAAauszPdDOshbJePrkX7hheXImt4sGfbZj" target="_blank" title="Microsoft CSP">
-                        <img src="Assest/m-csp.png" class="partner-logo" alt="Microsoft Partner" />
-                    </a>
-
-                    <a href="https://www.bybit.com/" target="_blank" title="Bybit">
-                        <img src="assetphy/Bybit-Logo.png" class="partner-logo" alt="Bybit Partner" />
-                    </a>
-
-                    <a href="https://anydesk.com/en/partners" target="_blank" title="AnyDesk Partner">
-                        <img src="Assest/anydesk.png" class="partner-logo" alt="Anydesk Partner" />
-                    </a>
+        <section class="hero-bg text-white relative overflow-hidden">
+            <div class="absolute inset-0 dotted opacity-30"></div>
+            <div class="max-w-5xl mx-auto px-6 py-16 sm:py-20 relative z-10 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent-blue/15 border border-accent-blue/30 mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 0 1 8 8v2M3 10l6 6m-6-6l6-6"/></svg>
                 </div>
+                <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Refund Policy</h1>
+                <p class="text-gray-300 max-w-2xl mx-auto">Customer satisfaction first. Here's how returns, replacements, and refunds work at RedTrex.</p>
+                <p class="text-xs text-gray-400 mt-4 tracking-wider uppercase">Last updated: May 2026</p>
+            </div>
+        </section>
 
-                <div class="text-sm space-y-1">
-                    <div class="flex justify-center items-center text-yellow-400">
-                        <span class="text-xl">★★★★★</span>
-                        <span class="ml-2 text-white font-medium">5.0 / 5.0</span>
+        <!-- Quick Promise Strip -->
+        <section class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+            <div class="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="flex items-center gap-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-800">
+                    <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg></div>
+                    <div><div class="font-bold text-primary-dark dark:text-primary-light text-sm">24-Hour Window</div><div class="text-xs text-gray-500 dark:text-gray-400">Refund period for digital keys</div></div>
+                </div>
+                <div class="flex items-center gap-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-800">
+                    <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg></div>
+                    <div><div class="font-bold text-primary-dark dark:text-primary-light text-sm">Instant Replacement</div><div class="text-xs text-gray-500 dark:text-gray-400">Or refund to original method</div></div>
+                </div>
+                <div class="flex items-center gap-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-800">
+                    <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+                    <div><div class="font-bold text-primary-dark dark:text-primary-light text-sm">Online Until Activation</div><div class="text-xs text-gray-500 dark:text-gray-400">We stay with you until done</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 px-4 sm:px-6">
+            <div class="max-w-5xl mx-auto grid lg:grid-cols-4 gap-8">
+
+                <aside class="lg:col-span-1 hidden lg:block">
+                    <div class="sticky top-28">
+                        <h3 class="text-xs font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-4">On This Page</h3>
+                        <nav class="space-y-2 text-sm">
+                            <a href="#digital" class="toc-link block text-gray-700 dark:text-gray-300">Digital Products</a>
+                            <a href="#physical" class="toc-link block text-gray-700 dark:text-gray-300">Physical Products</a>
+                            <a href="#process" class="toc-link block text-gray-700 dark:text-gray-300">Refund Process</a>
+                            <a href="#exceptions" class="toc-link block text-gray-700 dark:text-gray-300">Exceptions</a>
+                            <a href="#contact" class="toc-link block text-gray-700 dark:text-gray-300">Contact Us</a>
+                        </nav>
                     </div>
-                    <p class="text-gray-400">
-                        <a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank" class="hover:text-accent-blue text-xs">
-                            (5 Google Reviews)
-                        </a>
+                </aside>
+
+                <div class="lg:col-span-3 policy-card rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
+
+                    <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                        At RedTrex Technologies, we aim for customer satisfaction. This refund policy outlines how we handle returns, replacements, and refunds.
                     </p>
+
+                    <div id="digital" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Digital Products</h2>
+                        </div>
+                        <div class="alert-info p-5 rounded-xl mb-3">
+                            <p class="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                Every digital product comes with a <strong class="text-accent-blue">24-hour refund period</strong>. If your ordered product key isn't working or is invalid, we will issue a refund to your original payment method or send a replacement immediately. This process takes a few minutes to 1 hour. RedTrex will always stay online for you until you successfully activate your product.
+                            </p>
+                        </div>
+                        <div class="alert-warn p-4 rounded-xl">
+                            <p class="text-gray-800 dark:text-gray-200 text-sm"><strong class="text-red-600 dark:text-red-400">Please Note:</strong> Change of mind or ordering the wrong product is not eligible for refund or replacement.</p>
+                        </div>
+                    </div>
+
+                    <div id="physical" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Physical Products</h2>
+                        </div>
+                        <div class="alert-info p-5 rounded-xl mb-3">
+                            <p class="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                For physical goods (hardware, CCTV equipment, accessories, etc.) we offer a <strong class="text-accent-blue">7-day return period</strong> from the date of delivery. Items must be returned <strong>unused</strong>, in their <strong>original packaging</strong>, and with <strong>all accessories and documentation</strong> included.
+                            </p>
+                        </div>
+
+                        <h3 class="font-bold text-primary-dark dark:text-primary-light mt-5 mb-2 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-accent-blue"></span> Damaged or Defective on Arrival
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                            If your item arrives damaged, defective, or incorrect, contact us within <strong>48 hours</strong> of delivery with photos or a short video. We will arrange a free replacement or a full refund — whichever you prefer. Return shipping in this case is on us.
+                        </p>
+
+                        <h3 class="font-bold text-primary-dark dark:text-primary-light mt-5 mb-2 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-accent-blue"></span> Manufacturer Warranty
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                            Hardware items are covered by the manufacturer's warranty (duration varies by product). We assist with all warranty claims and coordinate directly with the brand on your behalf.
+                        </p>
+
+                        <h3 class="font-bold text-primary-dark dark:text-primary-light mt-5 mb-2 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-accent-blue"></span> Return Shipping
+                        </h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                            For change-of-mind returns, the customer covers the return shipping cost. For defective, damaged, or incorrect items, RedTrex covers all return and replacement shipping.
+                        </p>
+
+                        <div class="alert-warn p-4 rounded-xl mt-4">
+                            <p class="text-gray-800 dark:text-gray-200 text-sm"><strong class="text-red-600 dark:text-red-400">Not Eligible for Return:</strong> Items that have been used, installed, customized, or damaged by the customer. Software keys, license codes, and downloadable items are covered under the Digital Products policy above.</p>
+                        </div>
+                    </div>
+
+                    <div id="process" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Refund Process</h2>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex gap-4 items-start">
+                                <div class="step-number">1</div>
+                                <div class="flex-1 pt-1">
+                                    <h3 class="font-bold text-primary-dark dark:text-primary-light mb-1">Contact Us</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Email <a href="mailto:redtrex@technologist.com" class="text-accent-blue font-medium hover:underline">redtrex@technologist.com</a> or message us on WhatsApp with your order details.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 items-start">
+                                <div class="step-number">2</div>
+                                <div class="flex-1 pt-1">
+                                    <h3 class="font-bold text-primary-dark dark:text-primary-light mb-1">Verification</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Our team verifies the issue with your product key — usually within minutes.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 items-start">
+                                <div class="step-number">3</div>
+                                <div class="flex-1 pt-1">
+                                    <h3 class="font-bold text-primary-dark dark:text-primary-light mb-1">Resolution</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Choose between an instant replacement key or a refund to your original payment method.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="exceptions" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Exceptions</h2>
+                        </div>
+                        <div class="alert-warn p-5 rounded-xl">
+                            <p class="text-gray-800 dark:text-gray-200">Software keys that have been shared incorrectly (entered on the wrong account or device) are <strong>not</strong> eligible for refund.</p>
+                        </div>
+                    </div>
+
+                    <div id="contact" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 0 1-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Contact Us</h2>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">If you have any questions about our refund policy, please reach out via email or phone.</p>
+
+                        <div class="grid sm:grid-cols-2 gap-3">
+                            <a href="mailto:redtrex@technologist.com" class="flex items-center gap-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/15 transition border border-gray-200 dark:border-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg>
+                                <div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">Email</div>
+                                    <div class="text-sm font-semibold text-primary-dark dark:text-primary-light">redtrex@technologist.com</div>
+                                </div>
+                            </a>
+                            <a href="tel:+94712622012" class="flex items-center gap-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-accent-blue/10 dark:hover:bg-accent-blue/15 transition border border-gray-200 dark:border-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                <div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">Phone</div>
+                                    <div class="text-sm font-semibold text-primary-dark dark:text-primary-light">+94 71 262 2012</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-accent-blue/10 to-purple-500/10 border border-accent-blue/20 flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-primary-dark dark:text-primary-light">Need help with an order?</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">We're online and respond within minutes.</p>
+                        </div>
+                        <a href="https://wa.me/94712622012" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-accent-blue text-primary-dark font-semibold rounded-full hover:scale-105 transition transform shadow-md">Message on WhatsApp</a>
+                    </div>
                 </div>
             </div>
+        </section>
+    </main>
 
+    <footer class="glass-footer mt-auto py-12 px-4 sm:px-6 lg:px-8 text-white bg-primary-dark dark:bg-gray-900 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-accent-blue mb-4">RedTrex Technologies</h3>
+                    <p class="text-sm flex items-start"><span class="footer-icon mt-1.5"></span>74, Katuwapitiya Road, Negombo, Sri-Lanka, 11500.</p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+94712622012" class="hover:text-accent-blue transition">+94 71 262 2012</a></p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+94722692012" class="hover:text-accent-blue transition">+94 72 269 2012</a></p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+12055884201" class="hover:text-accent-blue transition">+1 205 588 4201 (TOLL-FREE)</a></p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="mailto:redtrex@technologist.com" class="hover:text-accent-blue transition">redtrex@technologist.com</a></p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:text-accent-blue transition">Home</a></li>
+                        <li><a href="services.html" class="hover:text-accent-blue transition">Services</a></li>
+                        <li><a href="about.html" class="hover:text-accent-blue transition">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-accent-blue transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="terms.html" class="hover:text-accent-blue transition">Terms & Conditions</a></li>
+                        <li><a href="privacy.html" class="hover:text-accent-blue transition">Privacy Policy</a></li>
+                        <li><a href="refund.html" class="text-accent-blue font-bold">Refund Policy</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4 text-center">
+                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Partners & Reviews</h4>
+                    <div class="flex justify-center items-center gap-4 flex-wrap">
+                        <a href="https://microsoft.na3.adobesign.com/verifier?tx=CBJCHBCAABAAauszPdDOshbJePrkX7hheXImt4sGfbZj" target="_blank"><img src="Assest/m-csp.png" class="partner-logo" alt="Microsoft Partner" /></a>
+                        <a href="https://www.bybit.com/" target="_blank"><img src="assetphy/Bybit-Logo.png" class="partner-logo" alt="Bybit Partner" /></a>
+                        <a href="https://anydesk.com/en/partners" target="_blank"><img src="Assest/anydesk.png" class="partner-logo" alt="Anydesk Partner" /></a>
+                        <a href="https://www.directpay.lk/" target="_blank"><img src="https://res.cloudinary.com/directpay/image/upload/v1621411813/logo-bckp-min_tvuf38.png" class="partner-logo" alt="DirectPay Partner" /></a>
+                    </div>
+                    <div class="text-sm space-y-1">
+                        <div class="flex justify-center items-center text-yellow-400">
+                            <span class="text-xl">★★★★★</span>
+                            <span class="ml-2 text-white font-medium">5.0 / 5.0</span>
+                        </div>
+                        <p class="text-gray-400"><a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank" class="hover:text-accent-blue text-xs">(5 Google Reviews)</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-10 pt-6 border-t border-white/10 text-center">
+                <p class="text-sm text-gray-400">&copy; 2026 RedTrex Technologies. All Rights Reserved.</p>
+            </div>
         </div>
+    </footer>
 
-        <div class="mt-8 pt-6 border-t border-gray-700 text-center">
-            <p class="text-sm text-gray-400">&copy; 2026 RedTrex Technologies. All Rights Reserved.</p>
-            <p class="text-xs text-gray-500 mt-4 max-w-3xl mx-auto leading-relaxed">
-                Redtrex.store is a digital-only marketplace specializing in software keys. We do not sell or ship physical products. We are not affiliated with any toy manufacturers or retail brands selling physical 'Red T-Rex' merchandise.
-            </p>
-        </div>
-    </div>
-</footer>
-
+    <script>
+        (function () {
+            const html = document.documentElement;
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) html.classList.add('dark');
+            const btn = document.getElementById('theme-toggle');
+            btn && btn.addEventListener('click', () => { html.classList.toggle('dark'); localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light'; });
+        })();
+    </script>
 </body>
 </html>
