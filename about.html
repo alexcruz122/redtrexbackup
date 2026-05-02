@@ -6,245 +6,735 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About RedTrex Technologies</title>
 
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Tailwind Custom Config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        'primary-dark': '#1a1a2e',
-                        'primary-light': '#ffffff',
-                        'accent-blue': '#00d4ff',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 
     <style>
-        /* Glass Footer */
-        .glass-footer {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
+        :root {
+            --dark: #0d0608;
+            --dark-2: #120a0c;
+            --dark-3: #1a0e10;
+            --accent: #ff3c3c;
+            --accent-dim: rgba(255, 60, 60, 0.12);
+            --accent-glow: rgba(255, 60, 60, 0.4);
+            --white: #fff5f5;
+            --muted: #9a8085;
         }
 
-        /* Footer Icons */
-        .footer-icon {
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--dark);
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* ── NOISE OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* ── HEADER ── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13, 6, 8, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            padding: 100px 24px 80px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(255,60,60,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-tag {
             display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            margin-right: 0.5rem;
-            background-color: #00d4ff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-dim);
+            border: 1px solid rgba(255,60,60,0.25);
+            padding: 6px 16px;
+            border-radius: 100px;
+            margin-bottom: 24px;
         }
 
-        /* Partner Logo Styling */
-        .partner-logo {
-            width: 90px;
-            height: auto;
+        .hero h1 {
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #ffffff 0%, #ff6b6b 50%, #ff8c42 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* ── GRID SECTIONS ── */
+        .section-wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,60,60,0.2);
+            max-width: 120px;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 40px;
+            color: var(--white);
+        }
+
+        /* ── MISSION BLOCK ── */
+        .mission-block {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,60,60,0.1);
+            border-radius: 20px;
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+
+        .mission-block::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, #ff3c3c, #ff8c42, transparent);
+        }
+
+        .mission-block blockquote {
+            font-size: 1.35rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            color: var(--white);
+            border-left: 3px solid var(--accent);
+            padding-left: 24px;
+            margin-top: 28px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* ── VALUES GRID ── */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+
+        .value-card {
+            background: var(--dark-2);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 36px 32px;
+            position: relative;
+            transition: border-color 0.3s, transform 0.3s;
+            overflow: hidden;
+        }
+
+        .value-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 3px; width: 0;
+            background: linear-gradient(135deg, #ff3c3c, #ff8c42);
+            transition: width 0.4s ease;
+            border-radius: 0 0 0 16px;
+        }
+
+        .value-card:hover {
+            border-color: rgba(255,60,60,0.3);
+            transform: translateY(-4px);
+        }
+
+        .value-card:hover::after {
+            width: 100%;
+        }
+
+        .value-gif {
+            width: 64px;
+            height: 64px;
             object-fit: contain;
-            filter: grayscale(100%);
-            transition: filter 0.3s ease, transform 0.3s ease;
+            margin-bottom: 18px;
+            display: block;
+            mix-blend-mode: screen;
+        }
+
+        .value-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .value-card p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* ── JOURNEY TIMELINE ── */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 80px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(to bottom, #ff3c3c, transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff3c3c, #ff8c42);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .timeline-year {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .timeline-item h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+
+        .timeline-item p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* ── OWNER SECTION ── */
+        .owner-section {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,60,60,0.12);
+            border-radius: 24px;
+            padding: 56px;
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 56px;
+            align-items: center;
+        }
+
+        .owner-section::before {
+            content: '';
+            position: absolute;
+            top: -100px; right: -100px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(255,60,60,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .owner-photo-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .owner-photo-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff3c3c, #ff8c42 40%, transparent 60%, #ff3c3c);
+            animation: spin 6s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .owner-photo-wrap img {
+            position: relative;
+            z-index: 1;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top center;
+            border: 4px solid var(--dark-3);
+            display: block;
+        }
+
+        .owner-info .role-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-dim);
+            border: 1px solid rgba(255,60,60,0.2);
+            padding: 4px 14px;
+            border-radius: 100px;
+            margin-bottom: 14px;
+        }
+
+        .owner-info h2 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+
+        .owner-info p {
+            font-size: 0.98rem;
+            color: var(--muted);
+            line-height: 1.75;
+            max-width: 520px;
+        }
+
+        .owner-divider {
+            width: 48px;
+            height: 2px;
+            background: linear-gradient(135deg, #ff3c3c, #ff8c42);
+            margin: 20px 0;
+            border-radius: 2px;
+        }
+
+        /* ── CTA ── */
+        .cta-block {
+            text-align: center;
+            padding: 72px 24px;
+            position: relative;
+            overflow: hidden;
+            background: var(--dark-2);
+            border: 1px solid rgba(255,60,60,0.1);
+            border-radius: 24px;
+            margin-bottom: 80px;
+        }
+
+        .cta-block::before {
+            z-index: 0;
+            content: '';
+            position: absolute;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px; height: 300px;
+            background: radial-gradient(ellipse, rgba(255,60,60,0.12) 0%, transparent 70%);
+        }
+
+        .cta-block h2 {
+            font-size: clamp(1.6rem, 4vw, 2.6rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 14px;
+        }
+
+        .cta-block p {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 36px;
+        }
+
+        .btn-primary {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, #ff3c3c, #ff8c42);
+            color: #ffffff;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 100px;
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 32px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: rgba(13, 6, 8, 0.96);
+            border-top: 1px solid rgba(255,60,60,0.1);
+            padding: 60px 24px 32px;
+        }
+
+        .footer-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .footer-col p, .footer-col a, .footer-col li {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.8;
+            text-decoration: none;
+            list-style: none;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover { color: var(--white); }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 28px;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .partner-logo {
+            height: 28px;
+            width: auto;
+            object-fit: contain;
+            filter: grayscale(100%) brightness(0.7);
+            transition: filter 0.3s, transform 0.3s;
         }
 
         .partner-logo:hover {
-            filter: grayscale(0%);
-            transform: scale(1.05);
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.08);
+        }
+
+        /* ── ANIMATIONS ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 680px) {
+            .owner-section {
+                grid-template-columns: 1fr;
+                padding: 36px 28px;
+                gap: 32px;
+                text-align: center;
+            }
+
+            .owner-photo-wrap {
+                margin: 0 auto;
+            }
+
+            .owner-divider { margin: 20px auto; }
+
+            .mission-block { padding: 32px 24px; }
         }
     </style>
-
 </head>
 
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+<body>
 
     <!-- Header -->
-    <header class="bg-primary-dark shadow-lg p-4 sticky top-0 z-10">
-        <div class="max-w-7xl mx-auto flex justify-center">
-            <img src="Assest/company.png" alt="RedTrex Logo" class="h-16 object-contain" />
+    <header>
+        <div style="max-width:1080px; margin:0 auto; padding:0 24px; height:72px; display:flex; align-items:center; justify-content:center;">
+            <img src="Assest/company.png" alt="RedTrex Logo" style="height:44px; object-fit:contain;" />
         </div>
     </header>
 
-    <!-- Main -->
-    <main class="flex-grow max-w-5xl mx-auto w-full px-4 sm:px-6 py-10">
-        <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl">
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-tag">Who We Are</div>
+        <h1>Built for the<br>Digital Era</h1>
+        <p>RedTrex Technologies delivers reliable, affordable, and scalable IT solutions — crafted with precision and powered by expertise.</p>
+    </section>
 
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-primary-dark text-center mb-8 border-b pb-3">
-                About RedTrex Technologies
-            </h1>
+    <!-- Main Content -->
+    <div class="section-wrap">
 
-            <!-- Mission -->
-            <section class="mb-10">
-                <h2 class="text-2xl font-semibold text-primary-dark mb-4 flex items-center gap-2">
-                    <span class="text-3xl text-accent-blue">🚀</span> Our Mission
-                </h2>
-                <p class="text-gray-700 leading-relaxed mb-4">
+        <!-- Mission -->
+        <div class="fade-up">
+            <div class="section-label">Our Purpose</div>
+            <div class="section-title">A Mission That Drives<br>Everything We Do</div>
+
+            <div class="mission-block">
+                <p style="color:var(--muted); font-size:1rem; line-height:1.8;">
                     RedTrex Technologies was built on the vision of making advanced technology accessible, practical, and results-driven. We specialize in delivering reliable, affordable, and scalable IT solutions — from web design and hosting to security systems, genuine software, and PC services.
                 </p>
-
-                <p class="text-gray-700 leading-relaxed italic bg-gray-50 p-4 rounded-lg">
+                <blockquote>
                     "Driving digital transformation through expertise and dedication."
-                </p>
-            </section>
-
-            <!-- Values -->
-            <section class="mb-10">
-                <h2 class="text-2xl font-semibold text-primary-dark mb-4 flex items-center gap-2">
-                    <span class="text-3xl text-accent-blue">⭐</span> Core Values
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="p-4 border border-gray-200 rounded-lg">
-                        <h3 class="font-bold text-lg text-primary-dark mb-2">Innovation</h3>
-                        <p class="text-sm text-gray-600">We explore new technologies to deliver future-proof solutions.</p>
-                    </div>
-
-                    <div class="p-4 border border-gray-200 rounded-lg">
-                        <h3 class="font-bold text-lg text-primary-dark mb-2">Integrity</h3>
-                        <p class="text-sm text-gray-600">Transparency guides every decision we make.</p>
-                    </div>
-
-                    <div class="p-4 border border-gray-200 rounded-lg">
-                        <h3 class="font-bold text-lg text-primary-dark mb-2">Customer Focus</h3>
-                        <p class="text-sm text-gray-600">We tailor solutions to your unique challenges.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- History -->
-            <section class="mb-4">
-                <h2 class="text-2xl font-semibold text-primary-dark mb-4 flex items-center gap-2">
-                    <span class="text-3xl text-accent-blue">📅</span> Our Journey
-                </h2>
-                <p class="text-gray-700 leading-relaxed mb-4">
-                    Founded in 2024 in Negombo, Sri Lanka, RedTrex Technologies began as a one-man initiative focused on delivering practical and affordable digital solutions. What started with web design and IT support has expanded into a full-service operation offering hosting, CCTV, security software, and PC hardware solutions.
-                </p>
-            </section>
-
-            <!-- CTA -->
-            <section class="mt-8 text-center bg-accent-blue/10 p-6 rounded-xl">
-                <p class="text-xl font-medium text-primary-dark mb-4">
-                    Ready to transform your digital landscape?
-                </p>
-                <a href="https://wa.me/94712622012"
-                    target="_blank" rel="noopener noreferrer"
-                    class="inline-block px-8 py-3 bg-accent-blue text-primary-dark font-bold rounded-full shadow-lg hover:bg-opacity-80 transition">
-                    Get in Touch Today
-                </a>
-            </section>
-
+                </blockquote>
+            </div>
         </div>
-    </main>
+
+        <!-- Values -->
+        <div class="fade-up">
+            <div class="section-label">What We Stand For</div>
+            <div class="section-title">Core Values</div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <img src="Assest/icons8-innovation.gif" alt="Innovation" class="value-gif" />
+                    <h3>Innovation</h3>
+                    <p>We explore emerging technologies to deliver future-proof solutions that keep your business ahead of the curve.</p>
+                </div>
+                <div class="value-card">
+                    <img src="Assest/icons8-integrity.gif" alt="Integrity" class="value-gif" />
+                    <h3>Integrity</h3>
+                    <p>Transparency and honesty guide every decision we make — from pricing to the products we recommend.</p>
+                </div>
+                <div class="value-card">
+                    <img src="Assest/icons8-customer.gif" alt="Customer Focus" class="value-gif" />
+                    <h3>Customer Focus</h3>
+                    <p>We tailor every solution to your unique challenges, never applying one-size-fits-all approaches.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journey -->
+        <div class="fade-up">
+            <div class="section-label">Our Story</div>
+            <div class="section-title">The RedTrex Journey</div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2024 — Founded</div>
+                    <h3>From a Single Vision</h3>
+                    <p>RedTrex Technologies launched in Negombo, Sri Lanka — a one-man initiative focused on practical, affordable digital solutions for local businesses and individuals.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025 — Growth</div>
+                    <h3>Expanding the Portfolio</h3>
+                    <p>What began with web design and IT support quickly evolved into a full-service operation — adding hosting, CCTV, licensed software, and PC hardware solutions.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2026 – Present</div>
+                    <h3>Trusted & Growing</h3>
+                    <p>Now a Microsoft CSP & EaseUS partner with a 5-star Google/Trustpilot rating, RedTrex continues to scale — serving clients across Sri Lanka and beyond with quality and reliability.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Owner -->
+        <div class="fade-up">
+            <div class="section-label">Meet the Founder</div>
+
+            <div class="owner-section">
+                <div class="owner-photo-wrap">
+                    <img src="Assest/1749906311223.jpg" alt="W. Dilanka Yohan Fernando" />
+                </div>
+                <div class="owner-info">
+                    <span class="role-tag">Founder & Director</span>
+                    <h2>W. Dilanka Yohan Fernando</h2>
+                    <div class="owner-divider"></div>
+                    <p>
+                        Dilanka is the founder of RedTrex Technologies, built with a simple goal — make high-quality, enterprise-level digital solutions accessible without the usual barriers.
+
+                        He takes a hands-on approach to everything, focusing on what actually works instead of overcomplicating things. From licensed software to solid IT setups, the priority is always the same: reliability, trust, and long-term value.
+
+                        No shortcuts, no gimmicks — just technology that does its job properly.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="fade-up">
+            <div class="cta-block">
+                <h2>Ready to Transform<br>Your Digital Landscape?</h2>
+                <p>Let's build something great together. Reach out today.</p>
+                <a href="https://wa.me/94712622012" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Get in Touch on WhatsApp
+                </a>
+            </div>
+        </div>
+
+    </div>
 
     <!-- Footer -->
-    <footer class="glass-footer mt-auto py-10 px-4 sm:px-6 lg:px-8 text-white bg-primary-dark/80">
-        <div class="max-w-7xl mx-auto">
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-grid">
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-
-                <!-- Company Info -->
-                <div class="space-y-3">
-                    <h3 class="text-xl font-bold text-accent-blue mb-4">RedTrex Technologies</h3>
-
-                    <p class="text-sm flex items-start">
-                        <span class="footer-icon"></span> 74, Katuwapitiya Road, Negombo, Sri-Lanka, 11500.
-                    </p>
-
-                    <p class="text-sm flex items-center"><span class="footer-icon"></span>
-                        <a href="tel:+94712622012" class="hover:underline">+94 71 262 2012</a>
-                    </p>
-
-                    <p class="text-sm flex items-center"><span class="footer-icon"></span>
-                        <a href="tel:+94722692012" class="hover:underline">+94 72 269 2012</a>
-                    </p>
-
-                    <p class="text-sm flex items-center"><span class="footer-icon"></span>
-                        <a href="tel:+12055884201" class="hover:underline">+1 205 588 4201 (TOLL-FREE)</a>
-                    </p>
-
-                    <p class="text-sm flex items-center"><span class="footer-icon"></span>
-                        <a href="mailto:redtrex@technologist.com" class="hover:underline">redtrex@technologist.com</a>
-                    </p>
+                <div class="footer-col">
+                    <h4>RedTrex Technologies</h4>
+                    <p>74, Katuwapitiya Road,<br>Negombo, Sri Lanka, 11500.</p>
+                    <br>
+                    <p><a href="tel:+94712622012">+94 71 262 2012</a></p>
+                    <p><a href="tel:+94722692012">+94 72 269 2012</a></p>
+                    <p><a href="tel:+12055884201">+1 205 588 4201 (Toll-Free)</a></p>
+                    <p><a href="mailto:redtrex@technologist.com">redtrex@technologist.com</a></p>
                 </div>
 
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Quick Links</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="index.html" class="hover:text-accent-blue">Home</a></li>
-                        <li><a href="services.html" class="hover:text-accent-blue">Services</a></li>
-                        <li><a href="about.html" class="text-accent-blue font-bold">About Us</a></li>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="about.html" style="color:var(--accent);">About Us</a></li>
                     </ul>
                 </div>
 
-                <!-- Legal -->
-                <div>
-                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Legal</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="terms.html" class="hover:text-accent-blue">Terms & Conditions</a></li>
-                        <li><a href="privacy.html" class="hover:text-accent-blue">Privacy Policy</a></li>
-                        <li><a href="refund.html" class="hover:text-accent-blue">Refund Policy</a></li>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="refund.html">Refund Policy</a></li>
                     </ul>
                 </div>
 
-                <!-- Partners & Reviews -->
-                <div class="space-y-4 text-center">
-
-                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Partners & Reviews</h4>
-
-                    <div class="flex justify-center items-center gap-4 flex-wrap">
+                <div class="footer-col">
+                    <h4>Partners</h4>
+                    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-bottom:20px;">
                         <a href="https://microsoft.na3.adobesign.com/verifier?tx=CBJCHBCAABAAauszPdDOshbJePrkX7hheXImt4sGfbZj" target="_blank">
                             <img src="Assest/m-csp.png" class="partner-logo" alt="Microsoft Partner" />
                         </a>
-
                         <a href="https://www.bybit.com/" target="_blank">
-                            <img src="assetphy/Bybit-Logo.png" class="partner-logo" alt="Bybit Partner" />
+                            <img src="assetphy/Bybit-Logo.png" class="partner-logo" alt="Bybit" />
                         </a>
-
                         <a href="https://anydesk.com/en/partners" target="_blank">
-                            <img src="Assest/anydesk.png" class="partner-logo" alt="Anydesk Partner" />
+                            <img src="Assest/anydesk.png" class="partner-logo" alt="Anydesk" />
                         </a>
-
                         <a href="https://www.directpay.lk/" target="_blank">
-                            <img src="https://res.cloudinary.com/directpay/image/upload/v1621411813/logo-bckp-min_tvuf38.png" class="partner-logo" alt="DirectPay Partner" />
+                            <img src="https://res.cloudinary.com/directpay/image/upload/v1621411813/logo-bckp-min_tvuf38.png" class="partner-logo" alt="DirectPay" />
                         </a>
                     </div>
-
-
-                    <div class="text-sm space-y-1">
-                        <div class="flex justify-center items-center text-yellow-400">
-                            <span class="text-xl">★★★★★</span>
-                            <span class="ml-2 text-white font-medium">5.0 / 5.0</span>
-                        </div>
-
-                        <p class="text-gray-400">
-                            <a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank" class="hover:text-accent-blue text-xs">
-                                (5 Google Reviews)
-                            </a>
-                        </p>
-                    </div>
-
+                    <div style="color:#f5c518; font-size:1rem; margin-bottom:4px;">★★★★★ <span style="color:var(--muted); font-size:0.85rem;">5.0 / 5.0</span></div>
+                    <a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank" style="font-size:0.78rem; color:var(--muted);">5 Google Reviews ↗</a>
                 </div>
 
             </div>
 
-            <div class="mt-8 pt-6 border-t border-gray-700 text-center">
-                <p class="text-sm text-gray-400">&copy; 2026 RedTrex Technologies. All Rights Reserved.</p>
-                <p class="text-xs text-gray-500 mt-4 max-w-3xl mx-auto leading-relaxed">
-                    Redtrex.store is a digital-only marketplace specializing in software keys. We do not sell or ship physical products. We are not affiliated with any toy manufacturers or retail brands selling physical 'Red T-Rex' merchandise.
+            <div class="footer-bottom">
+                <p>&copy; 2026 RedTrex Technologies. All Rights Reserved.</p>
+                <p style="margin-top:10px; max-width:600px; margin-left:auto; margin-right:auto;">
                 </p>
             </div>
-
         </div>
     </footer>
+
+    <script>
+        // Fade-up on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
 
 </body>
 </html>
