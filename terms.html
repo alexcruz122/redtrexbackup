@@ -1,67 +1,250 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="transition-colors duration-500 ease-in-out">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RedTrex Technologies - Terms & Conditions</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body { font-family: 'Arial', sans-serif; line-height: 1.6; margin: 0; padding: 0; background: #f7f7f7; color: #333; }
-    header { background-color: #000; padding: 10px 20px; text-align: center; }
-    header img { height: 50px; }
-    main { max-width: 900px; margin: 30px auto; background: #fff; padding: 25px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    main h1 { text-align: center; font-size: 28px; margin-bottom: 20px; color: #000; }
-    main h2 { font-size: 20px; margin-top: 25px; display: flex; align-items: center; gap: 10px; color: #000; }
-    main h2::before { content: "⚖️"; }
-    main p, main li { font-size: 16px; margin: 10px 0; }
-    main ul { padding-left: 20px; }
-    a { color: #007bff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    footer { text-align: center; background: #111; color: #fff; padding: 20px 10px; margin-top: 40px; }
-    footer a { color: #00d4ff; }
-    @media (max-width: 600px) { main { margin: 20px 10px; padding: 20px 15px; } main h1 { font-size: 24px; } main h2 { font-size: 18px; } }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RedTrex Technologies — Terms & Conditions</title>
+    <meta name="description" content="The terms governing your use of RedTrex Technologies' website and services." />
+    <link rel="icon" type="image/png" href="Assest/company.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { 'primary-dark': '#1a1a2e', 'primary-light': '#ffffff', 'accent-blue': '#00d4ff' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        * { transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
+
+        .hero-bg {
+            background:
+                radial-gradient(circle at 15% 30%, rgba(0, 212, 255, 0.22), transparent 45%),
+                radial-gradient(circle at 85% 70%, rgba(120, 80, 255, 0.22), transparent 50%),
+                linear-gradient(135deg, #0f0f1f 0%, #1a1a2e 60%, #16213e 100%);
+        }
+
+        .dotted { background-image: radial-gradient(rgba(0, 212, 255, 0.25) 1px, transparent 1px); background-size: 22px 22px; }
+
+        .policy-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .policy-card {
+            background: rgba(26, 26, 46, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .section-card { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .section-card:hover { border-left-color: #00d4ff; transform: translateX(4px); }
+
+        .section-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 44px; height: 44px; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(120, 80, 255, 0.15));
+            color: #00d4ff; flex-shrink: 0;
+        }
+
+        .glass-footer { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.15); }
+        .footer-icon { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.6rem; background: #00d4ff; box-shadow: 0 0 8px rgba(0, 212, 255, 0.6); }
+        .partner-logo { width: 90px; height: auto; object-fit: contain; filter: grayscale(100%) brightness(1.4); opacity: 0.75; transition: all 0.3s ease; }
+        .partner-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.08); }
+
+        #theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 50; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 9999px; padding: 0.6rem; border: 1px solid rgba(255, 255, 255, 0.15); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); }
+        #theme-toggle:hover { transform: scale(1.08); background: rgba(255, 255, 255, 0.2); }
+        #theme-toggle svg { width: 22px; height: 22px; color: #00d4ff; }
+        .dark #theme-toggle svg { color: #ffd700; }
+        .sun-icon, .moon-icon { display: none; }
+        .dark .sun-icon { display: block; }
+        :not(.dark) .moon-icon { display: block; }
+
+        .toc-link { transition: all 0.2s ease; border-left: 2px solid transparent; padding-left: 0.75rem; }
+        .toc-link:hover { border-left-color: #00d4ff; color: #00d4ff; transform: translateX(2px); }
+    </style>
 </head>
-<body>
-  <header>
-    <img src="Assest/company.png" alt="RedTrex Logo" />
-  </header>
 
-  <main>
-    <h1>Terms & Conditions</h1>
+<body class="bg-gray-50 text-gray-900 dark:bg-primary-dark dark:text-primary-light font-sans min-h-screen flex flex-col">
 
-    <p>Welcome to RedTrex Technologies. By accessing or using our website and services, you agree to comply with these Terms & Conditions. Please read them carefully.</p>
+    <button id="theme-toggle" aria-label="Toggle theme">
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z"/></svg>
+    </button>
 
-    <h2>Use of Services</h2>
-    <p>You may use our products and services only for lawful purposes. You must not misuse our website or attempt unauthorized access to our systems.</p>
+    <header class="bg-primary-dark dark:bg-gray-900 shadow-lg p-4 sticky top-0 z-40 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto flex justify-center">
+            <a href="index.html"><img src="Assest/company.png" alt="RedTrex Logo" class="h-16 object-contain" /></a>
+        </div>
+    </header>
 
-    <h2>Product Information</h2>
-    <p>We strive to provide accurate product information. However, prices, specifications, and availability are subject to change without notice.</p>
+    <main class="flex-grow">
 
-    <h2>Payment & Delivery</h2>
-    <p>Payments must be completed before delivery. Digital products are delivered via WhatsApp or email after confirmation. Physical products are shipped as described.</p>
+        <section class="hero-bg text-white relative overflow-hidden">
+            <div class="absolute inset-0 dotted opacity-30"></div>
+            <div class="max-w-5xl mx-auto px-6 py-16 sm:py-20 relative z-10 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent-blue/15 border border-accent-blue/30 mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 0 0 6.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 0 0 6.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+                </div>
+                <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Terms & Conditions</h1>
+                <p class="text-gray-300 max-w-2xl mx-auto">By accessing or using our website and services, you agree to comply with these Terms & Conditions. Please read them carefully.</p>
+                <p class="text-xs text-gray-400 mt-4 tracking-wider uppercase">Last updated: May 2026</p>
+            </div>
+        </section>
 
-    <h2>Refunds & Returns</h2>
-    <p>Please refer to our <a href="refund.html">Refund Policy</a> for detailed information regarding refunds, replacements, and returns.</p>
+        <section class="py-12 px-4 sm:px-6">
+            <div class="max-w-5xl mx-auto grid lg:grid-cols-4 gap-8">
 
-    <h2>Limitation of Liability</h2>
-    <p>RedTrex Technologies is not liable for any indirect, incidental, or consequential damages resulting from the use of our products or website.</p>
+                <aside class="lg:col-span-1 hidden lg:block">
+                    <div class="sticky top-28">
+                        <h3 class="text-xs font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-4">On This Page</h3>
+                        <nav class="space-y-2 text-sm">
+                            <a href="#use" class="toc-link block text-gray-700 dark:text-gray-300">Use of Services</a>
+                            <a href="#info" class="toc-link block text-gray-700 dark:text-gray-300">Product Information</a>
+                            <a href="#payment" class="toc-link block text-gray-700 dark:text-gray-300">Payment & Delivery</a>
+                            <a href="#refunds" class="toc-link block text-gray-700 dark:text-gray-300">Refunds & Returns</a>
+                            <a href="#liability" class="toc-link block text-gray-700 dark:text-gray-300">Limitation of Liability</a>
+                            <a href="#changes" class="toc-link block text-gray-700 dark:text-gray-300">Changes to Terms</a>
+                        </nav>
+                    </div>
+                </aside>
 
-    <h2>Changes to Terms</h2>
-    <p>We may update these Terms & Conditions periodically. Continued use of our website constitutes acceptance of the updated terms.</p>
-  </main>
+                <div class="lg:col-span-3 policy-card rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
 
-  <footer>
-    <p>© 2026 RedTrex Technologies. All Rights Reserved.</p>
-    <p style="font-size: 0.75rem; opacity: 0.7; max-width: 600px; margin: 10px auto; line-height: 1.4;">
-      Redtrex.store is a digital-only marketplace specializing in software keys. We do not sell or ship physical products. We are not affiliated with any toy manufacturers or retail brands selling physical 'Red T-Rex' merchandise.
-    </p>
-    <p>Contact us: <a href="mailto:redtrex@technologist.com">redtrex@technologist.com</a> | <a href="tel:+94712622012">+94-71-262-2012</a></p>
-    <p>
-      <a href="terms.html">Terms & Conditions</a> | 
-      <a href="privacy.html">Privacy Policy</a> | 
-      <a href="refund.html">Refund Policy</a>
-    </p>
-  </footer>
+                    <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                        Welcome to RedTrex Technologies. These terms set out the rules and conditions for using our website, products, and services.
+                    </p>
+
+                    <div id="use" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Use of Services</h2>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">You may use our products and services only for lawful purposes. You must not misuse our website or attempt unauthorized access to our systems.</p>
+                    </div>
+
+                    <div id="info" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Product Information</h2>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">We strive to provide accurate product information. However, prices, specifications, and availability are subject to change without notice.</p>
+                    </div>
+
+                    <div id="payment" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Payment & Delivery</h2>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">Payments must be completed before delivery. Digital products (software keys and licenses) are delivered via WhatsApp or email immediately after order confirmation. Physical products (hardware, CCTV equipment, and accessories) are dispatched within the timeframe stated at checkout and shipped to the address provided.</p>
+                    </div>
+
+                    <div id="refunds" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 0 1 8 8v2M3 10l6 6m-6-6l6-6"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Refunds & Returns</h2>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">Please refer to our <a href="refund.html" class="text-accent-blue font-semibold hover:underline">Refund Policy</a> for detailed information regarding refunds, replacements, and returns.</p>
+                    </div>
+
+                    <div id="liability" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Limitation of Liability</h2>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">RedTrex Technologies is not liable for any indirect, incidental, or consequential damages resulting from the use of our products or website.</p>
+                    </div>
+
+                    <div id="changes" class="section-card pl-5 py-2">
+                        <div class="flex items-start gap-4 mb-3">
+                            <div class="section-icon"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg></div>
+                            <h2 class="text-2xl font-bold text-primary-dark dark:text-primary-light pt-2">Changes to Terms</h2>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">We may update these Terms & Conditions periodically. Continued use of our website constitutes acceptance of the updated terms.</p>
+                    </div>
+
+                    <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-accent-blue/10 to-purple-500/10 border border-accent-blue/20 flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-primary-dark dark:text-primary-light">Have a question about these terms?</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">We're online and ready to help.</p>
+                        </div>
+                        <a href="https://wa.me/94712622012" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-accent-blue text-primary-dark font-semibold rounded-full hover:scale-105 transition transform shadow-md">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer mt-auto py-12 px-4 sm:px-6 lg:px-8 text-white bg-primary-dark dark:bg-gray-900 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-accent-blue mb-4">RedTrex Technologies</h3>
+                    <p class="text-sm flex items-start"><span class="footer-icon mt-1.5"></span>74, Katuwapitiya Road, Negombo, Sri-Lanka, 11500.</p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+94712622012" class="hover:text-accent-blue transition">+94 71 262 2012</a></p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+94722692012" class="hover:text-accent-blue transition">+94 72 269 2012</a></p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="tel:+12055884201" class="hover:text-accent-blue transition">+1 205 588 4201 (TOLL-FREE)</a></p>
+                    <p class="text-sm flex items-center"><span class="footer-icon"></span><a href="mailto:redtrex@technologist.com" class="hover:text-accent-blue transition">redtrex@technologist.com</a></p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:text-accent-blue transition">Home</a></li>
+                        <li><a href="services.html" class="hover:text-accent-blue transition">Services</a></li>
+                        <li><a href="about.html" class="hover:text-accent-blue transition">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-accent-blue transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="terms.html" class="text-accent-blue font-bold">Terms & Conditions</a></li>
+                        <li><a href="privacy.html" class="hover:text-accent-blue transition">Privacy Policy</a></li>
+                        <li><a href="refund.html" class="hover:text-accent-blue transition">Refund Policy</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4 text-center">
+                    <h4 class="text-lg font-semibold mb-4 text-gray-200">Partners & Reviews</h4>
+                    <div class="flex justify-center items-center gap-4 flex-wrap">
+                        <a href="https://microsoft.na3.adobesign.com/verifier?tx=CBJCHBCAABAAauszPdDOshbJePrkX7hheXImt4sGfbZj" target="_blank"><img src="Assest/m-csp.png" class="partner-logo" alt="Microsoft Partner" /></a>
+                        <a href="https://www.bybit.com/" target="_blank"><img src="assetphy/Bybit-Logo.png" class="partner-logo" alt="Bybit Partner" /></a>
+                        <a href="https://anydesk.com/en/partners" target="_blank"><img src="Assest/anydesk.png" class="partner-logo" alt="Anydesk Partner" /></a>
+                        <a href="https://www.directpay.lk/" target="_blank"><img src="https://res.cloudinary.com/directpay/image/upload/v1621411813/logo-bckp-min_tvuf38.png" class="partner-logo" alt="DirectPay Partner" /></a>
+                    </div>
+                    <div class="text-sm space-y-1">
+                        <div class="flex justify-center items-center text-yellow-400">
+                            <span class="text-xl">★★★★★</span>
+                            <span class="ml-2 text-white font-medium">5.0 / 5.0</span>
+                        </div>
+                        <p class="text-gray-400"><a href="https://g.page/r/CUoC5lP8xkydEBM/review" target="_blank" class="hover:text-accent-blue text-xs">(5 Google Reviews)</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-10 pt-6 border-t border-white/10 text-center">
+                <p class="text-sm text-gray-400">&copy; 2026 RedTrex Technologies. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const html = document.documentElement;
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) html.classList.add('dark');
+            const btn = document.getElementById('theme-toggle');
+            btn && btn.addEventListener('click', () => { html.classList.toggle('dark'); localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light'; });
+        })();
+    </script>
 </body>
 </html>
