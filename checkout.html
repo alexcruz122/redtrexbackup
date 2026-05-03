@@ -469,6 +469,43 @@
 
       <div class="product-info" id="productInfo">Loading product...</div>
 
+      <!-- ===== Coupon Code ===== -->
+      <div class="section-title">Coupon Code <span style="font-weight:400; color:var(--text-tertiary); font-size:12px;">(optional)</span></div>
+      <div class="form-group" id="couponGroup">
+        <div class="input-wrapper" style="display:flex; gap:8px;">
+          <input
+            type="text"
+            id="couponInput"
+            placeholder="Enter coupon code"
+            autocomplete="off"
+            style="flex:1; text-transform:uppercase; letter-spacing:0.5px;"
+          />
+          <button type="button" id="applyCouponBtn"
+                  style="padding:0 16px; background:var(--brand, #DC2626); color:#fff; border:none; border-radius:10px; font-weight:600; cursor:pointer; min-width:90px;">
+            Apply
+          </button>
+        </div>
+        <div id="couponMessage" style="margin-top:8px; font-size:13px; display:none;"></div>
+        <div id="couponSummary" style="margin-top:10px; font-size:13px; display:none; padding:10px 12px; background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.3); border-radius:10px;">
+          <div style="display:flex; justify-content:space-between; color:var(--text-secondary);">
+            <span>Subtotal:</span>
+            <span id="couponSubtotal">—</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; color:#22c55e; font-weight:600; margin-top:4px;">
+            <span>Discount (<span id="couponAppliedCode">—</span>):</span>
+            <span id="couponDiscount">—</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; color:var(--text-primary); font-weight:700; margin-top:6px; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.15);">
+            <span>New total:</span>
+            <span id="couponNewTotal">—</span>
+          </div>
+          <button type="button" id="removeCouponBtn"
+                  style="margin-top:8px; background:none; border:none; color:var(--text-tertiary); font-size:12px; cursor:pointer; text-decoration:underline; padding:0;">
+            Remove coupon
+          </button>
+        </div>
+      </div>
+
       <div class="section-title">Payment Amount</div>
       <div class="form-group">
         <label for="amount">Amount (LKR) <span class="required">*</span></label>
@@ -798,6 +835,121 @@
         }
 
         document.getElementById('amount').value = totalAmount.toFixed(2);
+
+      // ====== Coupon System (Cloudflare Worker backend) ======
+      const COUPON_API = "https://redtrex-coupons.projectmmdoffcialdev.workers.dev";
+
+      var subtotalAmount = totalAmount; // pre-coupon total
+      var appliedCoupon = null;         // { code, discountAmount, finalAmount, token }
+
+      var couponInput = document.getElementById('couponInput');
+      var applyBtn = document.getElementById('applyCouponBtn');
+      var removeBtn = document.getElementById('removeCouponBtn');
+      var couponMsg = document.getElementById('couponMessage');
+      var couponSummary = document.getElementById('couponSummary');
+      var amountInput = document.getElementById('amount');
+
+      function fmtLKR(n) {
+        return Number(Number(n).toFixed(2)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      function showCouponMsg(text, kind) {
+        couponMsg.style.display = 'block';
+        couponMsg.textContent = text;
+        couponMsg.style.color = kind === 'error' ? '#ef4444' : kind === 'success' ? '#22c55e' : 'var(--text-secondary)';
+      }
+      function clearCouponMsg() { couponMsg.style.display = 'none'; couponMsg.textContent = ''; }
+
+      function applyDiscountedTotal(coupon) {
+        appliedCoupon = coupon;
+        amountInput.value = coupon.finalAmount.toFixed(2);
+        document.getElementById('couponSubtotal').textContent = 'LKR ' + fmtLKR(subtotalAmount);
+        document.getElementById('couponDiscount').textContent = '− LKR ' + fmtLKR(coupon.discountAmount);
+        document.getElementById('couponAppliedCode').textContent = coupon.code;
+        document.getElementById('couponNewTotal').textContent = 'LKR ' + fmtLKR(coupon.finalAmount);
+        couponSummary.style.display = 'block';
+        couponInput.value = coupon.code;
+        couponInput.disabled = true;
+        applyBtn.disabled = true;
+        applyBtn.style.opacity = '0.55';
+        // Re-trigger USD equivalent if that listener exists
+        amountInput.dispatchEvent(new Event('input'));
+        // Re-render the order summary table footer with discount info if it's showing
+        var pi = document.getElementById('productInfo');
+        if (pi && pi.querySelector('table')) {
+          var existing = pi.querySelector('.coupon-line');
+          if (existing) existing.remove();
+          var note = document.createElement('div');
+          note.className = 'coupon-line';
+          note.style.cssText = 'margin-top:6px; font-size:12px; color:#22c55e; font-weight:600; text-align:right;';
+          note.textContent = 'Coupon ' + coupon.code + ' applied: − LKR ' + fmtLKR(coupon.discountAmount);
+          pi.appendChild(note);
+        }
+      }
+
+      function removeCoupon() {
+        appliedCoupon = null;
+        amountInput.value = subtotalAmount.toFixed(2);
+        couponSummary.style.display = 'none';
+        couponInput.disabled = false;
+        couponInput.value = '';
+        applyBtn.disabled = false;
+        applyBtn.style.opacity = '1';
+        clearCouponMsg();
+        amountInput.dispatchEvent(new Event('input'));
+        var pi = document.getElementById('productInfo');
+        if (pi) {
+          var existing = pi.querySelector('.coupon-line');
+          if (existing) existing.remove();
+        }
+      }
+
+      async function applyCoupon() {
+        var code = (couponInput.value || '').trim().toUpperCase();
+        if (!code) { showCouponMsg('Enter a coupon code first.', 'error'); return; }
+        if (!subtotalAmount || subtotalAmount <= 0) { showCouponMsg('Cart total not loaded yet.', 'error'); return; }
+        if (COUPON_API.includes('YOUR-SUBDOMAIN')) {
+          showCouponMsg('Coupon system not configured yet. (Admin: deploy the Cloudflare Worker.)', 'error');
+          return;
+        }
+
+        applyBtn.disabled = true;
+        var originalLabel = applyBtn.textContent;
+        applyBtn.textContent = 'Checking...';
+        clearCouponMsg();
+
+        try {
+          var resp = await fetch(COUPON_API + '/coupon/validate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code, cartTotal: subtotalAmount })
+          });
+          var data = await resp.json();
+          if (!resp.ok || !data.valid) {
+            showCouponMsg(data.error || 'Invalid coupon code.', 'error');
+            applyBtn.disabled = false;
+            applyBtn.textContent = originalLabel;
+            return;
+          }
+          applyDiscountedTotal({
+            code: data.code,
+            discountAmount: Number(data.discountAmount),
+            finalAmount: Number(data.finalAmount),
+            token: data.token
+          });
+          showCouponMsg('Coupon applied successfully!', 'success');
+          applyBtn.textContent = 'Applied';
+        } catch (err) {
+          showCouponMsg('Could not reach coupon service. Please try again.', 'error');
+          applyBtn.disabled = false;
+          applyBtn.textContent = originalLabel;
+        }
+      }
+
+      applyBtn.addEventListener('click', applyCoupon);
+      couponInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); }
+      });
+      removeBtn.addEventListener('click', removeCoupon);
 
       // ====== Form Validation ======
       function validateForm() {
