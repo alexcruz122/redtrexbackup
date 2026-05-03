@@ -978,6 +978,7 @@
         <small class="purchase-note">Safe Checkout – T&C Apply</small>
         <a href="https://wa.me/94712622012" target="_blank" class="contact-sale-btn">Contact Sale</a>
       </div>
+
   </section>
 
   <section id="digital" class="category">
@@ -2960,6 +2961,22 @@
       showSlides();
     }
 
+    /* ============== TIME-LIMITED PROMO REMOVAL ==============
+       Removes any product card whose data-expires (ISO UTC) is in the past.
+       Bundle deal expires May 26, 2026 at 12:00 AM SLT (UTC+5:30) = 2026-05-25T18:30:00Z. */
+    (function () {
+      function purgeExpired() {
+        var now = Date.now();
+        document.querySelectorAll('.product-card[data-expires]').forEach(function (card) {
+          var ts = Date.parse(card.getAttribute('data-expires'));
+          if (!isNaN(ts) && now >= ts) card.remove();
+        });
+      }
+      purgeExpired();
+      // Re-check every minute so the card disappears live if a user keeps the page open past the cutoff
+      setInterval(purgeExpired, 60000);
+    })();
+
     /* ============== REVIEWS MARQUEE — manual nav with glass arrows ============== */
     (function () {
       const wrap = document.querySelector('.reviews-track-wrap');
@@ -2997,8 +3014,13 @@
       function pauseTrack() {
         if (reviewsPaused) return;
         const x = getTranslateX();
+        // Snap to current position with no transition so we don't animate from a stale value
+        track.style.transition = 'none';
         track.style.animation = 'none';
         track.style.transform = 'translateX(' + x + 'px)';
+        // Force reflow, then restore the transition so manual shifts glide
+        void track.offsetWidth;
+        track.style.transition = '';
         reviewsPaused = true;
       }
 
@@ -3007,9 +3029,19 @@
         const x = getTranslateX();
         const half = getHalfWidth();
         const fraction = half ? Math.min(Math.max(Math.abs(x) / half, 0), 1) : 0;
+        // Kill the transition while we hand control back to the CSS animation —
+        // otherwise the browser tries to interpolate between inline transform
+        // and the animated transform, which causes a visible jitter on mobile.
+        track.style.transition = 'none';
         track.style.transform = '';
+        track.style.animation = 'none';
+        void track.offsetWidth; // reflow so the reset is committed
         track.style.animation = '';
         track.style.animationDelay = (-fraction * ANIM_DURATION) + 's';
+        // Restore transition on the next frame for future manual shifts
+        requestAnimationFrame(function () {
+          track.style.transition = '';
+        });
         reviewsPaused = false;
       }
 
