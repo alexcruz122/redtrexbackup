@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request a Service — RedTrex Technologies</title>
+<meta name="description" content="Request IT support, software installation, data recovery, or PC repair from RedTrex Technologies. Get a tracking ID instantly.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="Assest/company.png">
+<style>
+  :root {
+    --bg: #080808;
+    --card: #111;
+    --card-2: #181818;
+    --border: rgba(255,255,255,0.08);
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #DC2626;
+    --accent-2: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; }
+  .topbar { background: #0f0f0f; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 14px; }
+  .topbar a { color: var(--accent-2); text-decoration: none; font-weight: 600; font-size: 14px; }
+  .topbar a:hover { text-decoration: underline; }
+  .container { max-width: 760px; margin: 40px auto; padding: 0 20px; }
+  h1 { font-size: 28px; margin: 0 0 8px; color: var(--accent-2); }
+  .subtitle { color: var(--muted); margin: 0 0 28px; font-size: 14px; line-height: 1.5; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 18px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 14px 0 6px; }
+  label:first-child { margin-top: 0; }
+  label .req { color: var(--accent-2); }
+  input[type=text], input[type=email], input[type=tel], input[type=date], select, textarea {
+    width: 100%; padding: 12px 14px; background: #0a0a0a; border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color .15s;
+  }
+  textarea { min-height: 110px; resize: vertical; font-family: inherit; }
+  select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%239ca3af'><path d='M7 10l5 5 5-5z'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent-2); }
+  .row2 { display: flex; gap: 10px; }
+  .row2 > div { flex: 1; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  button.primary { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; font-family: inherit; margin-top: 18px; }
+  button.primary:hover { background: #b91c1c; }
+  button.primary:disabled { opacity: 0.6; cursor: wait; }
+  .err { background: #7f1d1d; color: #fee2e2; padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 13px; }
+  .ok-card { background: linear-gradient(135deg, rgba(22,163,74,0.1), rgba(22,163,74,0.02)); border: 1px solid rgba(22,163,74,0.35); }
+  .ok-card h2 { color: #4ade80; margin: 0 0 10px; font-size: 20px; }
+  .ref-box { background: #0a0a0a; border: 1px dashed rgba(74,222,128,0.4); border-radius: 8px; padding: 14px 16px; margin: 12px 0 16px; }
+  .ref-box .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .ref-box .ref { font-family: 'DM Mono', monospace; font-size: 22px; color: #4ade80; font-weight: 700; word-break: break-all; margin-top: 4px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .copy-btn { background: var(--accent); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+  .copy-btn:hover { background: #b91c1c; }
+  .copy-btn.copied { background: #16a34a; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .btn-secondary { display: inline-block; padding: 11px 18px; background: transparent; border: 1px solid var(--accent-2); color: var(--accent-2); border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; }
+  .btn-secondary:hover { background: rgba(220,38,38,0.1); }
+  .btn-wa { background: #25d366; color: #fff !important; border: none; }
+  .btn-wa:hover { background: #1ebe5b; }
+  .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; }
+  @media (max-width: 600px) {
+    .container { margin: 20px auto; }
+    h1 { font-size: 22px; }
+    .row2 { flex-direction: column; gap: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/">← Back to RedTrex</a>
+  <span style="color:var(--muted);font-size:13px;margin-left:auto">Already have a request? <a href="/track-service.html">Track here →</a></span>
+</div>
+
+<div class="container">
+  <h1>Request a Service</h1>
+  <p class="subtitle">Tell us what you need help with — software installation, activation, data recovery, repairs, or general IT support. We'll get back to you within 1 business day with next steps.</p>
+
+  <div class="card" id="formCard">
+    <form id="serviceForm">
+      <div id="errorBox"></div>
+
+      <label>Your Name <span class="req">*</span></label>
+      <div class="row2">
+        <div><input type="text" id="firstName" placeholder="First name" required maxlength="40" autocomplete="given-name"></div>
+        <div><input type="text" id="lastName"  placeholder="Last name"  required maxlength="40" autocomplete="family-name"></div>
+      </div>
+
+      <label>Email Address <span class="req">*</span></label>
+      <input type="email" id="email" placeholder="you@example.com" required maxlength="120" autocomplete="email">
+      <div class="hint">We'll use this to send updates and as your tracking lookup.</div>
+
+      <label>Phone (WhatsApp preferred) <span class="req">*</span></label>
+      <input type="tel" id="phone" placeholder="+94 71 234 5678" required maxlength="20" autocomplete="tel">
+
+      <label>Service Type <span class="req">*</span></label>
+      <select id="serviceType" required>
+        <option value="">— Select a service —</option>
+        <option value="Software Installation">Software Installation (Windows, Office, etc.)</option>
+        <option value="Activation Help">Activation Help (existing key)</option>
+        <option value="Data Recovery">Data Recovery (lost / deleted files)</option>
+        <option value="IT Support">General IT Support / Troubleshooting</option>
+        <option value="PC Repair">PC / Laptop Repair</option>
+        <option value="Network Setup">Network / Wi-Fi Setup</option>
+        <option value="Custom">Custom / Other</option>
+      </select>
+
+      <label>Describe what you need <span class="req">*</span></label>
+      <textarea id="description" placeholder="e.g. My laptop won't boot after a Windows update. It shows a blue screen with error code 0x000007B. Dell Inspiron 15, running Windows 11..." required maxlength="2000"></textarea>
+      <div class="hint">The more detail (device model, error messages, what you've tried), the faster we can help.</div>
+
+      <label>Preferred Date / Time <span style="color:var(--muted);font-weight:400;text-transform:none">(optional)</span></label>
+      <input type="text" id="preferredDate" placeholder="e.g. Saturday afternoon, or 2026-05-10 evening" maxlength="100">
+
+      <label>Service Location <span style="color:var(--muted);font-weight:400;text-transform:none">(optional — for on-site work)</span></label>
+      <input type="text" id="location" placeholder="e.g. Negombo, or Remote / Online" maxlength="200">
+
+      <!-- Honeypot for bot protection -->
+      <div class="honeypot"><input type="text" id="website" tabindex="-1" autocomplete="off"></div>
+
+      <button type="submit" class="primary" id="submitBtn">Submit Service Request</button>
+    </form>
+  </div>
+
+  <div id="resultArea"></div>
+</div>
+
+<script>
+  const WORKER_URL = "https://redtrex-coupons.projectmmdoffcialdev.workers.dev";
+
+  const form = document.getElementById("serviceForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const errorBox = document.getElementById("errorBox");
+  const resultArea = document.getElementById("resultArea");
+  const formCard = document.getElementById("formCard");
+
+  function showError(msg) { errorBox.innerHTML = `<div class="err">${msg}</div>`; window.scrollTo({ top: 0, behavior: "smooth" }); }
+  function clearError() { errorBox.innerHTML = ""; }
+  function escapeHtml(s) { return String(s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearError();
+
+    const payload = {
+      first_name: document.getElementById("firstName").value.trim(),
+      last_name: document.getElementById("lastName").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      service_type: document.getElementById("serviceType").value,
+      description: document.getElementById("description").value.trim(),
+      preferred_date: document.getElementById("preferredDate").value.trim(),
+      location: document.getElementById("location").value.trim(),
+      website: document.getElementById("website").value.trim() // honeypot
+    };
+
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!payload.first_name || !payload.last_name) return showError("Please enter your first and last name.");
+    if (!emailRe.test(payload.email)) return showError("Please enter a valid email address.");
+    if (!payload.phone || payload.phone.length < 7) return showError("Please enter a valid phone number.");
+    if (!payload.service_type) return showError("Please choose a service type.");
+    if (!payload.description || payload.description.length < 15) return showError("Please describe what you need (at least 15 characters).");
+
+    submitBtn.disabled = true;
+    const orig = submitBtn.textContent;
+    submitBtn.textContent = "Submitting...";
+
+    try {
+      const res = await fetch(`${WORKER_URL}/services/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.created) {
+        showError(data.error || "Could not submit your request. Please try again or message us on WhatsApp.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = orig;
+        return;
+      }
+
+      // Success — show confirmation card
+      const sid = data.service_id;
+      const trackUrl = `/track-service.html?email=${encodeURIComponent(payload.email)}&service_id=${encodeURIComponent(sid)}`;
+      const waMsg = encodeURIComponent(`Hi RedTrex, I just submitted a service request. Reference: ${sid}`);
+
+      formCard.style.display = "none";
+      resultArea.innerHTML = `
+        <div class="card ok-card">
+          <h2>✓ Request Submitted</h2>
+          <p style="margin:0;color:var(--muted);line-height:1.6">
+            Thanks ${escapeHtml(payload.first_name)}! Your request is logged and our team will review it within 1 business day.
+            We'll contact you on <strong style="color:var(--text)">${escapeHtml(payload.email)}</strong>
+            or <strong style="color:var(--text)">${escapeHtml(payload.phone)}</strong>.
+          </p>
+          <div class="ref-box">
+            <div class="label">Your Service Reference</div>
+            <div class="ref">
+              <span>${escapeHtml(sid)}</span>
+              <button type="button" class="copy-btn" id="copyRef">Copy</button>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--muted);margin:0">
+            Save this reference — you'll need it to track your request status. We've also displayed it above.
+          </p>
+          <div class="actions">
+            <a href="${trackUrl}" class="btn-secondary">📋 Track This Request</a>
+            <a href="https://wa.me/94712622012?text=${waMsg}" target="_blank" class="btn-secondary btn-wa">💬 Notify on WhatsApp</a>
+          </div>
+        </div>`;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      document.getElementById("copyRef").addEventListener("click", async (ev) => {
+        try {
+          await navigator.clipboard.writeText(sid);
+          ev.target.textContent = "✓ Copied";
+          ev.target.classList.add("copied");
+          setTimeout(() => { ev.target.textContent = "Copy"; ev.target.classList.remove("copied"); }, 1500);
+        } catch(_) {}
+      });
+    } catch (err) {
+      showError("Connection error. Please check your internet and try again.");
+      submitBtn.disabled = false;
+      submitBtn.textContent = orig;
+    }
+  });
+</script>
+
+</body>
+</html>
