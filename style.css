@@ -537,6 +537,44 @@ nav {
 }
 .product-card:hover img { transform: scale(1.04); }
 
+/* Bundle promo card – two product images side-by-side */
+.product-card .bundle-images {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10px;
+  margin-bottom: 14px;
+  box-sizing: border-box;
+}
+.product-card .bundle-images img {
+  flex: 1 1 0;
+  width: auto;
+  height: 100%;
+  max-width: 45%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 8px;
+}
+.product-card .bundle-images .bundle-plus {
+  flex: 0 0 auto;
+  font-size: 26px;
+  font-weight: 700;
+  color: #00d4ff;
+  text-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
+  user-select: none;
+}
+.product-card:hover .bundle-images img { transform: scale(1.06); }
+@media (max-width: 480px) {
+  .product-card .bundle-images { height: 150px; gap: 4px; }
+  .product-card .bundle-images .bundle-plus { font-size: 22px; }
+}
+
 .product-card h2 {
   font-size: 0.98rem;
   font-weight: 600;
@@ -572,8 +610,7 @@ nav {
 .product-card .qty-controls {
   margin: 10px auto 12px;
 }
-.product-card .purchase-btn,
-.product-card .contact-sale-btn {
+.product-card .purchase-btn {
   margin-top: auto;
 }
 
@@ -1202,7 +1239,7 @@ nav {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin-top: 10px;
+    margin-top: auto;
     padding: 5px 14px;
     background: rgba(255, 60, 60, 0.08);
     border: 1px solid rgba(255, 80, 80, 0.2);
@@ -1569,7 +1606,6 @@ nav {
   will-change: transform;
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.reviews-track[style*="animation: none"] { transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
 
 /* Glass-effect manual nav arrows for reviews marquee */
 .reviews-arrow {
@@ -1581,23 +1617,24 @@ nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.12);
-  -webkit-backdrop-filter: blur(14px);
-          backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(15, 23, 42, 0.78);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.85);
   border-radius: 9999px;
   color: #ffffff;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
-  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.25);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   user-select: none;
   padding: 0;
 }
 .reviews-arrow:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.45);
-  transform: translateY(-50%) scale(1.08);
+  background: var(--brand, #e11d2a);
+  border-color: #ffffff;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 8px 28px rgba(225, 29, 42, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.3);
 }
 .reviews-arrow:active { transform: translateY(-50%) scale(0.94); }
 .reviews-arrow svg { width: 20px; height: 20px; }
@@ -1609,7 +1646,9 @@ nav {
   .reviews-arrow.next { right: 8px; }
   .reviews-arrow svg { width: 16px; height: 16px; }
 }
-.reviews-marquee:hover .reviews-track { animation-play-state: paused; }
+@media (hover: hover) {
+  .reviews-marquee:hover .reviews-track { animation-play-state: paused; }
+}
 @keyframes reviewsScroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
