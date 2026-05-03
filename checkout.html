@@ -476,7 +476,7 @@
           <input
             type="text"
             id="couponInput"
-            placeholder="Enter coupon code"
+            placeholder="You have a coupon code?"
             autocomplete="off"
             style="flex:1; text-transform:uppercase; letter-spacing:0.5px;"
           />
@@ -787,27 +787,80 @@
         var params = new URLSearchParams(window.location.search);
         var totalAmount = 0;
         var productInfoEl = document.getElementById('productInfo');
+        var currentCart = []; // mutable cart so items can be removed
 
         function renderCartTable(cartItems) {
+          currentCart = cartItems.slice();
           var html = '<strong style="display:block;margin-bottom:8px;font-size:14px;">Order Summary</strong>';
           html += '<table style="width:100%;font-size:13px;border-collapse:collapse;">';
-          html += '<tr style="border-bottom:1px solid var(--border-color);"><th style="text-align:left;padding:4px 2px;color:var(--brand);">Product</th><th style="text-align:center;color:var(--brand);white-space:nowrap;">Qty</th><th style="text-align:right;color:var(--brand);white-space:nowrap;">Price (LKR)</th></tr>';
+          var showRemove = currentCart.length > 1;
+          html += '<tr style="border-bottom:1px solid var(--border-color);">'
+            + '<th style="text-align:left;padding:4px 2px;color:var(--brand);">Product</th>'
+            + '<th style="text-align:center;color:var(--brand);white-space:nowrap;">Qty</th>'
+            + '<th style="text-align:right;color:var(--brand);white-space:nowrap;">Price (LKR)</th>'
+            + (showRemove ? '<th style="width:24px;"></th>' : '')
+            + '</tr>';
           var runningTotal = 0;
-          cartItems.forEach(function(item) {
+          currentCart.forEach(function(item, idx) {
             var lineTotal = item.unitPrice * item.qty;
             runningTotal += lineTotal;
             html += '<tr style="border-bottom:1px solid var(--border-color);">'
               + '<td style="padding:6px 2px;text-align:left;font-size:12px;font-weight:500;color:var(--text-primary);">' + item.name + '</td>'
               + '<td style="text-align:center;padding:6px 4px;color:var(--text-secondary);">×' + item.qty + '</td>'
               + '<td style="text-align:right;padding:6px 2px;font-weight:600;color:var(--text-primary);">' + Number(lineTotal.toFixed(2)).toLocaleString() + '</td>'
+              + (showRemove
+                  ? '<td style="text-align:center;padding:6px 2px;">'
+                    + '<button type="button" class="remove-cart-item" data-idx="' + idx + '" title="Remove this item" '
+                    + 'style="background:transparent;border:1px solid var(--border-color);color:#ef4444;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:inline-flex;align-items:center;justify-content:center;padding:0;">×</button>'
+                    + '</td>'
+                  : '')
               + '</tr>';
           });
-          html += '<tr><td colspan="2" style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;">Total:</td>'
+          var totalColspan = showRemove ? 3 : 2;
+          html += '<tr><td colspan="' + totalColspan + '" style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;">Total:</td>'
             + '<td style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;">' + Number(runningTotal.toFixed(2)).toLocaleString() + '</td></tr>';
           html += '</table>';
           totalAmount = runningTotal;
           productInfoEl.style.textAlign = 'left';
           productInfoEl.innerHTML = html;
+
+          // Wire remove buttons
+          productInfoEl.querySelectorAll('.remove-cart-item').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              var i = parseInt(btn.getAttribute('data-idx'), 10);
+              if (isNaN(i)) return;
+              var next = currentCart.slice();
+              next.splice(i, 1);
+              if (next.length === 0) {
+                if (!confirm('This will empty your cart. Continue?')) return;
+                window.location.href = 'index.html';
+                return;
+              }
+              renderCartTable(next);
+              try { localStorage.setItem('redtrex_pending_checkout', JSON.stringify(next)); } catch(e) {}
+              onCartTotalChanged();
+            });
+          });
+        }
+
+        // Called whenever the cart total changes (item removed). Updates the
+        // amount field and re-validates any applied coupon against the new total.
+        function onCartTotalChanged() {
+          if (typeof subtotalAmount !== 'undefined') {
+            subtotalAmount = totalAmount;
+          }
+          var amtEl = document.getElementById('amount');
+          if (appliedCoupon) {
+            // Re-validate coupon against the new lower total
+            var codeToReapply = appliedCoupon.code;
+            if (typeof removeCoupon === 'function') removeCoupon();
+            var inp = document.getElementById('couponInput');
+            if (inp) inp.value = codeToReapply;
+            if (typeof applyCoupon === 'function') applyCoupon();
+          } else {
+            if (amtEl) amtEl.value = totalAmount.toFixed(2);
+            if (amtEl) amtEl.dispatchEvent(new Event('input'));
+          }
         }
 
         if (params.get('multi') === '1') {
@@ -816,8 +869,8 @@
               || sessionStorage.getItem('redtrex_pending_checkout');
             if (pending) {
               renderCartTable(JSON.parse(pending));
-              try { localStorage.removeItem('redtrex_pending_checkout'); } catch(e) {}
-              try { sessionStorage.removeItem('redtrex_pending_checkout'); } catch(e) {}
+              // Keep the cart in localStorage so a page refresh preserves remaining items.
+              // It's cleared on successful payment redirect or when the user empties the cart.
             } else {
               productInfoEl.innerText = 'Multiple items (cart data not found)';
             }
@@ -841,6 +894,7 @@
 
       var subtotalAmount = totalAmount; // pre-coupon total
       var appliedCoupon = null;         // { code, discountAmount, finalAmount, token }
+      var couponRequestSeq = 0;         // incremented on each apply; stale responses are ignored
 
       var couponInput = document.getElementById('couponInput');
       var applyBtn = document.getElementById('applyCouponBtn');
@@ -894,6 +948,7 @@
         couponInput.value = '';
         applyBtn.disabled = false;
         applyBtn.style.opacity = '1';
+        applyBtn.textContent = 'Apply';
         clearCouponMsg();
         amountInput.dispatchEvent(new Event('input'));
         var pi = document.getElementById('productInfo');
@@ -912,8 +967,9 @@
           return;
         }
 
+        var mySeq = ++couponRequestSeq; // tag this request; later requests will invalidate it
+        var snapshotTotal = subtotalAmount;
         applyBtn.disabled = true;
-        var originalLabel = applyBtn.textContent;
         applyBtn.textContent = 'Checking...';
         clearCouponMsg();
 
@@ -921,13 +977,15 @@
           var resp = await fetch(COUPON_API + '/coupon/validate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code: code, cartTotal: subtotalAmount })
+            body: JSON.stringify({ code: code, cartTotal: snapshotTotal })
           });
           var data = await resp.json();
+          // Stale-response guard: a newer apply/remove has fired since we started; bail out.
+          if (mySeq !== couponRequestSeq) return;
           if (!resp.ok || !data.valid) {
             showCouponMsg(data.error || 'Invalid coupon code.', 'error');
             applyBtn.disabled = false;
-            applyBtn.textContent = originalLabel;
+            applyBtn.textContent = 'Apply';
             return;
           }
           applyDiscountedTotal({
@@ -939,9 +997,10 @@
           showCouponMsg('Coupon applied successfully!', 'success');
           applyBtn.textContent = 'Applied';
         } catch (err) {
+          if (mySeq !== couponRequestSeq) return;
           showCouponMsg('Could not reach coupon service. Please try again.', 'error');
           applyBtn.disabled = false;
-          applyBtn.textContent = originalLabel;
+          applyBtn.textContent = 'Apply';
         }
       }
 
