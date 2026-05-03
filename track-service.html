@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Service Request — RedTrex Technologies</title>
+<meta name="description" content="Check the status of your RedTrex service request. Enter your email and reference ID to view live updates.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="Assest/company.png">
+<style>
+  :root {
+    --bg: #080808; --card: #111; --card-2: #181818;
+    --border: rgba(255,255,255,0.08); --text: #f3f4f6; --muted: #9ca3af;
+    --accent: #DC2626; --accent-2: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; }
+  .topbar { background: #0f0f0f; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 14px; }
+  .topbar a { color: var(--accent-2); text-decoration: none; font-weight: 600; font-size: 14px; }
+  .topbar a:hover { text-decoration: underline; }
+  .container { max-width: 760px; margin: 40px auto; padding: 0 20px; }
+  h1 { font-size: 28px; margin: 0 0 8px; color: var(--accent-2); }
+  .subtitle { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 18px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  input[type=email], input[type=text] {
+    width: 100%; padding: 12px 14px; background: #0a0a0a; border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit;
+    margin-bottom: 14px; outline: none; transition: border-color .15s;
+  }
+  input:focus { border-color: var(--accent-2); }
+  button.primary { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; font-family: inherit; }
+  button.primary:hover { background: #b91c1c; }
+  button.primary:disabled { opacity: 0.6; cursor: wait; }
+  .err { background: #7f1d1d; color: #fee2e2; padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 13px; }
+  .order-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+  .order-head h2 { font-size: 18px; margin: 0 0 4px; font-family: 'DM Mono', monospace; color: var(--text); word-break: break-all; }
+  .order-head .meta { color: var(--muted); font-size: 13px; }
+  .badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .badge-pending     { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+  .badge-reviewing   { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+  .badge-scheduled   { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+  .badge-progress    { background: rgba(14,165,233,0.15); color: #38bdf8; border: 1px solid rgba(14,165,233,0.3); }
+  .badge-completed   { background: rgba(22,163,74,0.15);  color: #4ade80; border: 1px solid rgba(22,163,74,0.3); }
+  .badge-cancelled   { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 18px 0 10px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; }
+  .info-grid .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+  .info-grid .val { font-size: 14px; color: var(--text); word-break: break-word; }
+  .desc-box { background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 14px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+  .timeline { position: relative; padding-left: 22px; margin-top: 8px; }
+  .timeline::before { content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .step { position: relative; padding: 0 0 14px 16px; }
+  .step::before { content: ""; position: absolute; left: -19px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #2a2a2a; border: 2px solid #0f0f0f; }
+  .step.done::before { background: #4ade80; }
+  .step.active::before { background: #fbbf24; box-shadow: 0 0 0 4px rgba(251,191,36,0.2); }
+  .step .step-title { font-size: 14px; font-weight: 600; }
+  .step .step-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .note-card { background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02)); border: 1px solid rgba(59,130,246,0.3); }
+  .quote-card { background: linear-gradient(135deg, rgba(22,163,74,0.08), rgba(22,163,74,0.02)); border: 1px solid rgba(22,163,74,0.3); }
+  .quote-amount { font-size: 28px; font-weight: 700; color: #4ade80; font-family: 'DM Mono', monospace; }
+  .help-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+  .help-row a { color: var(--accent-2); text-decoration: none; }
+  .help-row a:hover { text-decoration: underline; }
+  @media (max-width: 600px) {
+    .container { margin: 20px auto; }
+    h1 { font-size: 22px; }
+    .info-grid { grid-template-columns: 1fr; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/">← Back to RedTrex</a>
+  <span style="color:var(--muted);font-size:13px;margin-left:auto">Need a new request? <a href="/request-service.html">Submit one →</a></span>
+</div>
+
+<div class="container">
+  <h1>Track Your Service Request</h1>
+  <p class="subtitle">Enter the email you used and your service reference ID (e.g. <code style="color:var(--accent-2)">SVC-20260503-A7K9</code>) to see live status.</p>
+
+  <div class="card" id="lookupCard">
+    <form id="lookupForm">
+      <div id="errorBox"></div>
+      <label for="email">Email Address</label>
+      <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+
+      <label for="serviceId">Service Reference ID</label>
+      <input type="text" id="serviceId" required autocomplete="off" placeholder="SVC-20260503-A7K9" spellcheck="false">
+
+      <button type="submit" class="primary" id="submitBtn">Look Up Request</button>
+    </form>
+  </div>
+
+  <div id="resultArea"></div>
+</div>
+
+<script>
+  const WORKER_URL = "https://redtrex-coupons.projectmmdoffcialdev.workers.dev";
+
+  const STATUS_FLOW = ["Pending", "Reviewing", "Scheduled", "In Progress", "Completed"];
+
+  const form = document.getElementById("lookupForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const errorBox = document.getElementById("errorBox");
+  const resultArea = document.getElementById("resultArea");
+
+  function showError(msg) { errorBox.innerHTML = `<div class="err">${msg}</div>`; }
+  function clearError() { errorBox.innerHTML = ""; }
+  function escapeHtml(s) { return String(s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+  function statusBadge(status) {
+    const s = (status || "Pending").toLowerCase();
+    if (s === "completed")     return `<span class="badge badge-completed">Completed</span>`;
+    if (s === "cancelled" || s === "canceled") return `<span class="badge badge-cancelled">Cancelled</span>`;
+    if (s === "in progress")   return `<span class="badge badge-progress">In Progress</span>`;
+    if (s === "scheduled")     return `<span class="badge badge-scheduled">Scheduled</span>`;
+    if (s === "reviewing")     return `<span class="badge badge-reviewing">Reviewing</span>`;
+    return `<span class="badge badge-pending">Pending</span>`;
+  }
+
+  function renderTimeline(currentStatus) {
+    const cs = (currentStatus || "Pending").toLowerCase();
+    if (cs === "cancelled" || cs === "canceled") {
+      return `<div class="timeline"><div class="step active" style="--c:#f87171"><div class="step-title" style="color:#f87171">Cancelled</div><div class="step-desc">This request was cancelled. Contact us if this is an error.</div></div></div>`;
+    }
+    const idx = STATUS_FLOW.findIndex(s => s.toLowerCase() === cs);
+    const descMap = {
+      "Pending":     "We've received your request and will review it shortly.",
+      "Reviewing":   "Our team is looking into the details and gathering information.",
+      "Scheduled":   "A date and time has been agreed with you.",
+      "In Progress": "Work has started on your request.",
+      "Completed":   "All done! See any final notes from our team below."
+    };
+    return `<div class="timeline">${STATUS_FLOW.map((s, i) => {
+      const cls = i < idx ? "done" : (i === idx ? "active" : "");
+      return `<div class="step ${cls}"><div class="step-title">${s}</div><div class="step-desc">${descMap[s]}</div></div>`;
+    }).join("")}</div>`;
+  }
+
+  function renderService(svc) {
+    const status = svc.status || "Pending";
+    const placedDate = svc.ts ? new Date(svc.ts).toLocaleString() : "—";
+    const updatedDate = svc.updated_at ? new Date(svc.updated_at).toLocaleString() : "—";
+    const fullName = `${escapeHtml(svc.customer?.first_name || "")} ${escapeHtml(svc.customer?.last_name || "")}`.trim();
+
+    const adminNoteSection = svc.admin_note ? `
+      <div class="card note-card">
+        <div class="section-title" style="color:#60a5fa;margin-top:0">📝 Note from RedTrex Team</div>
+        <div class="desc-box" style="background:rgba(0,0,0,0.3);border-color:rgba(59,130,246,0.2)">${escapeHtml(svc.admin_note)}</div>
+      </div>` : "";
+
+    const quoteSection = (svc.quote_amount && Number(svc.quote_amount) > 0) ? `
+      <div class="card quote-card">
+        <div class="section-title" style="color:#4ade80;margin-top:0">💰 Quote</div>
+        <div class="quote-amount">LKR ${Number(svc.quote_amount).toLocaleString()}</div>
+        <p style="color:var(--muted);font-size:13px;margin:8px 0 0">This is the estimated cost for the work. Reply via WhatsApp or email to confirm.</p>
+      </div>` : "";
+
+    const scheduledSection = svc.scheduled_for ? `
+      <div style="margin:14px 0 0;padding:12px 14px;background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.25);border-radius:8px;color:#c084fc;font-size:14px">
+        📅 <strong>Scheduled:</strong> ${escapeHtml(svc.scheduled_for)}
+      </div>` : "";
+
+    resultArea.innerHTML = `
+      <div class="card">
+        <div class="order-head">
+          <div>
+            <div class="section-title" style="margin:0 0 4px">Service Reference</div>
+            <h2>${escapeHtml(svc.service_id)}</h2>
+            <div class="meta">Submitted: ${escapeHtml(placedDate)}</div>
+            <div class="meta">Last update: ${escapeHtml(updatedDate)}</div>
+          </div>
+          ${statusBadge(status)}
+        </div>
+
+        <div class="section-title">Progress</div>
+        ${renderTimeline(status)}
+        ${scheduledSection}
+
+        <div class="section-title">Request Details</div>
+        <div class="info-grid">
+          <div><div class="lbl">Customer</div><div class="val">${fullName || "—"}</div></div>
+          <div><div class="lbl">Service Type</div><div class="val">${escapeHtml(svc.service_type || "—")}</div></div>
+          ${svc.preferred_date ? `<div><div class="lbl">Preferred Date</div><div class="val">${escapeHtml(svc.preferred_date)}</div></div>` : ""}
+          ${svc.location ? `<div><div class="lbl">Location</div><div class="val">${escapeHtml(svc.location)}</div></div>` : ""}
+        </div>
+
+        <div class="section-title">Description</div>
+        <div class="desc-box">${escapeHtml(svc.description || "—")}</div>
+
+        <div class="help-row">
+          <span>Need help? <a href="/contact.html">Contact support</a> · <a href="https://wa.me/94712622012" target="_blank">WhatsApp</a></span>
+          <a href="#" onclick="document.location.reload(); return false;">↻ Refresh</a>
+        </div>
+      </div>
+      ${quoteSection}
+      ${adminNoteSection}
+    `;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearError();
+    resultArea.innerHTML = "";
+
+    const email = document.getElementById("email").value.trim();
+    const serviceId = document.getElementById("serviceId").value.trim();
+
+    if (!email || !serviceId) { showError("Please fill in both fields."); return; }
+
+    submitBtn.disabled = true;
+    const orig = submitBtn.textContent;
+    submitBtn.textContent = "Looking up...";
+
+    try {
+      const res = await fetch(`${WORKER_URL}/services/lookup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, service_id: serviceId })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.found) {
+        showError(data.error || "Request not found. Please double-check your email and reference ID.");
+        return;
+      }
+      renderService(data.service);
+      document.getElementById("lookupCard").style.display = "none";
+    } catch (err) {
+      showError("Connection error. Please try again in a moment.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = orig;
+    }
+  });
+
+  // Auto-fill from URL: /track-service?email=...&service_id=...
+  (function autoFill() {
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
+    const sid = params.get("service_id") || params.get("serviceId");
+    if (email) document.getElementById("email").value = email;
+    if (sid) document.getElementById("serviceId").value = sid;
+    if (email && sid) form.dispatchEvent(new Event("submit", { cancelable: true }));
+  })();
+</script>
+
+</body>
+</html>
