@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order — RedTrex Technologies</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080808;
+    --card: #111;
+    --card-2: #181818;
+    --border: rgba(255,255,255,0.08);
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #DC2626;
+    --accent-2: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .topbar {
+    background: #0f0f0f;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .topbar a {
+    color: var(--accent-2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .topbar a:hover { text-decoration: underline; }
+  .container {
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  h1 {
+    font-size: 28px;
+    margin: 0 0 8px;
+    color: var(--accent-2);
+  }
+  .subtitle {
+    color: var(--muted);
+    margin: 0 0 28px;
+    font-size: 14px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 18px;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  input[type=email], input[type=text] {
+    width: 100%;
+    padding: 12px 14px;
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 14px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  input:focus { border-color: var(--accent-2); }
+  button.primary {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+  }
+  button.primary:hover { background: #b91c1c; }
+  button.primary:disabled { opacity: 0.6; cursor: wait; }
+
+  .err {
+    background: #7f1d1d;
+    color: #fee2e2;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 13px;
+  }
+  .order-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .order-head h2 {
+    font-size: 18px;
+    margin: 0 0 4px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text);
+    word-break: break-all;
+  }
+  .order-head .meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .badge-pending   { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+  .badge-completed { background: rgba(22,163,74,0.15);  color: #4ade80; border: 1px solid rgba(22,163,74,0.3); }
+  .badge-cancelled { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .badge-refunded  { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 18px 0 10px;
+  }
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+    gap: 12px;
+  }
+  .item-row:last-child { border-bottom: none; }
+  .item-name { font-weight: 500; }
+  .item-qty { color: var(--muted); font-size: 13px; }
+  .totals {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 14px;
+    margin-top: 6px;
+    border-top: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .keys-card {
+    background: linear-gradient(135deg, rgba(22,163,74,0.08), rgba(22,163,74,0.02));
+    border: 1px solid rgba(22,163,74,0.3);
+  }
+  .key-block {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    word-break: break-all;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .copy-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: #b91c1c; }
+  .copy-btn.copied { background: #16a34a; }
+
+  .pending-note {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    color: #fcd34d;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .help-row {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .help-row a { color: var(--accent-2); text-decoration: none; }
+  .help-row a:hover { text-decoration: underline; }
+  @media (max-width: 600px) {
+    .container { margin: 20px auto; }
+    h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/">← Back to RedTrex</a>
+</div>
+
+<div class="container">
+  <h1>Track Your Order</h1>
+  <p class="subtitle">Enter the email address you used at checkout and your Order ID to view your order.</p>
+
+  <div class="card" id="lookupCard">
+    <form id="lookupForm">
+      <div id="errorBox"></div>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
+
+      <label for="orderId">Order ID</label>
+      <input type="text" id="orderId" name="orderId" required autocomplete="off"
+        placeholder="ORD-WIN11PRO-..." spellcheck="false">
+
+      <button type="submit" class="primary" id="submitBtn">Look Up Order</button>
+    </form>
+  </div>
+
+  <div id="resultArea"></div>
+</div>
+
+<script>
+  const WORKER_URL = "https://redtrex-coupons.projectmmdoffcialdev.workers.dev";
+
+  const form = document.getElementById("lookupForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const errorBox = document.getElementById("errorBox");
+  const resultArea = document.getElementById("resultArea");
+
+  function showError(msg) {
+    errorBox.innerHTML = `<div class="err">${msg}</div>`;
+  }
+  function clearError() { errorBox.innerHTML = ""; }
+
+  function escapeHtml(s) {
+    return String(s || "").replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  function statusBadge(status) {
+    const s = (status || "Pending").toLowerCase();
+    let cls = "badge-pending", label = "Pending";
+    if (s === "completed") { cls = "badge-completed"; label = "Completed"; }
+    else if (s === "cancelled" || s === "canceled" || s === "failed") { cls = "badge-cancelled"; label = "Cancelled"; }
+    else if (s === "refunded") { cls = "badge-refunded"; label = "Refunded"; }
+    return `<span class="badge ${cls}">${label}</span>`;
+  }
+
+  function renderOrder(order) {
+    const items = (order.items || []).map(it => `
+      <div class="item-row">
+        <div class="item-name">${escapeHtml(it.name)}</div>
+        <div class="item-qty">×${it.quantity || it.qty || 1}</div>
+      </div>
+    `).join("");
+
+    const status = (order.status || "Pending");
+    const statusLow = status.toLowerCase();
+
+    const keys = Array.isArray(order.product_keys) ? order.product_keys : [];
+
+    let keysSection = "";
+    if (statusLow === "completed" && keys.length > 0) {
+      keysSection = `
+        <div class="card keys-card">
+          <div class="section-title" style="color:#4ade80">🔑 Your Product Key${keys.length > 1 ? "s" : ""}</div>
+          ${keys.map((k, i) => `
+            <div class="key-block">
+              <span>${escapeHtml(k)}</span>
+              <button class="copy-btn" data-key="${escapeHtml(k)}">Copy</button>
+            </div>
+          `).join("")}
+          <p style="color:var(--muted);font-size:13px;margin:8px 0 0">
+            Save these keys somewhere safe. For activation help, see our
+            <a href="/activation-guide" style="color:var(--accent-2)">Activation Guide</a>.
+          </p>
+        </div>`;
+    } else if (statusLow === "pending") {
+      keysSection = `
+        <div class="card">
+          <div class="pending-note">
+            ⏳ Your order is being processed. We'll deliver your product key${(order.items || []).length > 1 ? "s" : ""}
+            to <strong>${escapeHtml(order.customer?.first_name || "your email")}</strong> shortly.
+            Refresh this page to check for updates.
+          </div>
+        </div>`;
+    } else if (statusLow === "cancelled" || statusLow === "canceled") {
+      keysSection = `
+        <div class="card">
+          <div class="err" style="margin:0">
+            This order was cancelled. If you believe this is an error,
+            please <a href="/contact" style="color:#fee2e2;text-decoration:underline">contact us</a>.
+          </div>
+        </div>`;
+    } else if (statusLow === "refunded") {
+      keysSection = `
+        <div class="card">
+          <div class="pending-note" style="background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.25);color:#a5b4fc">
+            💸 This order has been refunded. The amount has been returned to your original payment method.
+          </div>
+        </div>`;
+    }
+
+    const placedDate = order.ts ? new Date(order.ts).toLocaleString() : "—";
+
+    resultArea.innerHTML = `
+      <div class="card">
+        <div class="order-head">
+          <div>
+            <div class="section-title" style="margin:0 0 4px">Order ID</div>
+            <h2>${escapeHtml(order.order_id)}</h2>
+            <div class="meta">Placed: ${escapeHtml(placedDate)}</div>
+          </div>
+          ${statusBadge(status)}
+        </div>
+
+        <div class="section-title">Items</div>
+        ${items}
+
+        <div class="totals">
+          <span>Total</span>
+          <span>LKR ${Number(order.amount || 0).toLocaleString()}</span>
+        </div>
+
+        ${order.coupon_code ? `
+          <p style="color:var(--muted);font-size:13px;margin:10px 0 0">
+            Coupon applied: <strong style="color:var(--accent-2)">${escapeHtml(order.coupon_code)}</strong>
+          </p>` : ""}
+
+        <div class="help-row">
+          <span>Need help? <a href="/contact">Contact support</a></span>
+          <a href="#" onclick="document.location.reload(); return false;">↻ Refresh</a>
+        </div>
+      </div>
+      ${keysSection}
+    `;
+
+    // Wire copy buttons
+    resultArea.querySelectorAll(".copy-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.key);
+          const orig = btn.textContent;
+          btn.textContent = "✓ Copied";
+          btn.classList.add("copied");
+          setTimeout(() => { btn.textContent = orig; btn.classList.remove("copied"); }, 1500);
+        } catch (e) { /* ignore */ }
+      });
+    });
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearError();
+    resultArea.innerHTML = "";
+
+    const email = document.getElementById("email").value.trim();
+    const orderId = document.getElementById("orderId").value.trim();
+
+    if (!email || !orderId) {
+      showError("Please fill in both fields.");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    const origText = submitBtn.textContent;
+    submitBtn.textContent = "Looking up...";
+
+    try {
+      const res = await fetch(`${WORKER_URL}/orders/lookup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, order_id: orderId })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.found) {
+        showError(data.error || "Order not found. Please check your email and order ID.");
+        return;
+      }
+      renderOrder(data.order);
+      // Hide the lookup form to focus on the result
+      document.getElementById("lookupCard").style.display = "none";
+    } catch (err) {
+      showError("Connection error. Please try again in a moment.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = origText;
+    }
+  });
+
+  // Auto-fill from URL: /track-order?email=...&order_id=...
+  (function autoFill() {
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
+    const orderId = params.get("order_id") || params.get("orderId");
+    if (email) document.getElementById("email").value = email;
+    if (orderId) document.getElementById("orderId").value = orderId;
+    if (email && orderId) {
+      // Auto-submit if both are pre-filled (e.g., from email link)
+      form.dispatchEvent(new Event("submit", { cancelable: true }));
+    }
+  })();
+</script>
+
+</body>
+</html>
