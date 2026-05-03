@@ -438,7 +438,21 @@
           .pm-note { margin-top: 10px; padding: 10px; background: rgba(255,195,0,0.1); border-left: 3px solid #ffc300; border-radius: 6px; font-size: 12px; color: var(--text-secondary); }
           .pm-cta { display: inline-block; margin-top: 10px; padding: 9px 16px; background: #25d366; color: #fff !important; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 12px; }
           .pm-cta:hover { background: #1ebe5b; }
+          .pm-group-title { display: flex; align-items: center; gap: 10px; margin: 18px 0 10px; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-secondary); }
+          .pm-group-title:first-child { margin-top: 0; }
+          .pm-group-title::before, .pm-group-title::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+          .pm-group-title .pm-group-icon { font-size: 14px; }
+          .pm-group-title.fast { color: #16a34a; }
+          .pm-group-title.manual { color: #d97706; }
+          .token-block { margin-top: 14px; padding: 12px 14px; background: rgba(220,38,38,0.07); border: 1px dashed rgba(220,38,38,0.4); border-radius: 8px; }
+          .token-block strong { color: var(--text-primary); display: block; margin-bottom: 4px; font-size: 13px; }
+          .token-block p { font-size: 12px; color: var(--text-secondary); margin: 0 0 10px; line-height: 1.5; }
+          .token-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; background: #DC2626; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; text-decoration: none; }
+          .token-btn:hover { background: #b91c1c; }
+          .token-btn.done { background: #16a34a; }
+          .token-ref { display: inline-block; margin-left: 10px; font-family: 'Courier New', monospace; font-size: 12px; color: var(--text-secondary); }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   </head>
   <body>
     <div class="checkout-container">
@@ -472,22 +486,24 @@
 
       <div class="product-info" id="productInfo">Loading product...</div>
 
-      <!-- ===== Customer Details ===== -->
-      <div class="section-title">Your Details</div>
-      <div class="form-group">
-        <div class="input-wrapper" style="display:flex; gap:8px;">
-          <input type="text" id="firstName" placeholder="First name *" autocomplete="given-name" maxlength="40" style="flex:1;" />
-          <input type="text" id="lastName"  placeholder="Last name *"  autocomplete="family-name" maxlength="40" style="flex:1;" />
-        </div>
-        <div class="input-wrapper" style="margin-top:8px;">
-          <input type="email" id="email" placeholder="Email address *" autocomplete="email" maxlength="120" />
-        </div>
-        <div class="input-wrapper" style="margin-top:8px;">
-          <input type="tel" id="phone" placeholder="Phone (optional)" autocomplete="tel" maxlength="20" />
-        </div>
-        <div class="error" id="customerError">Please fill in your name and a valid email</div>
-        <div style="margin-top:6px; font-size:12px; color:var(--text-tertiary);">
-          Your email is required so you can track your order and receive your product key.
+      <!-- ===== Customer Details (only required for card payments) ===== -->
+      <div id="customerDetailsSection">
+        <div class="section-title">Your Details</div>
+        <div class="form-group">
+          <div class="input-wrapper" style="display:flex; gap:8px;">
+            <input type="text" id="firstName" placeholder="First name *" autocomplete="given-name" maxlength="40" style="flex:1;" />
+            <input type="text" id="lastName"  placeholder="Last name *"  autocomplete="family-name" maxlength="40" style="flex:1;" />
+          </div>
+          <div class="input-wrapper" style="margin-top:8px;">
+            <input type="email" id="email" placeholder="Email address *" autocomplete="email" maxlength="120" />
+          </div>
+          <div class="input-wrapper" style="margin-top:8px;">
+            <input type="tel" id="phone" placeholder="Phone (optional)" autocomplete="tel" maxlength="20" />
+          </div>
+          <div class="error" id="customerError">Please fill in your name and a valid email</div>
+          <div style="margin-top:6px; font-size:12px; color:var(--text-tertiary);">
+            Your email is required so you can track your order and receive your product key.
+          </div>
         </div>
       </div>
 
@@ -555,6 +571,27 @@
       <div class="section-title">Choose Payment Method</div>
       <div class="payment-methods" id="paymentMethods">
 
+        <!-- ===== GROUP A: AI / Fast Order Validation ===== -->
+        <div class="pm-group-title fast"><span class="pm-group-icon"></span><span>AI / Fast Order Validation</span><span class="pm-group-icon"></span></div>
+
+        <!-- Visa / Debit / Credit Card (DirectPay) -->
+        <div class="pm-option active" data-method="card">
+          <div class="pm-radio"></div>
+          <div class="pm-content">
+            <div class="pm-header">
+              <span class="pm-name">Visa / Debit / Credit Card</span>
+              <span class="pm-badge">Recommended</span>
+            </div>
+            <div class="pm-desc">Pay securely with any Visa, Mastercard or American Express card via DirectPay — Sri Lanka's PCI-DSS compliant payment gateway. Order is validated and confirmed automatically within seconds.</div>
+          </div>
+        </div>
+
+        <!-- ===== GROUP B: Manual / Delayed Order Validation ===== -->
+        <div class="pm-group-title manual"><span class="pm-group-icon"></span><span>Manual / Delayed Order Validation</span><span class="pm-group-icon"></span></div>
+        <div style="font-size:12px; color:var(--text-tertiary); margin:-4px 0 10px; text-align:center;">
+          These methods require manual confirmation by our team after you send the payment receipt. Allow up to 1 business day (LKR) or 2–5 business days (USD/EUR/Crypto).
+        </div>
+
         <!-- 1. QR Pay -->
         <div class="pm-option" data-method="qr">
           <div class="pm-radio"></div>
@@ -580,7 +617,12 @@
           <div class="pm-row"><strong>Merchant:</strong><span>RedTrex Technologies</span></div>
           <div class="pm-row"><strong>Network:</strong><span>LankaQR / LankaPay</span></div>
           <div class="pm-note">After payment, send us the receipt screenshot via WhatsApp to confirm your order.</div>
-          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20QR%20payment%20for%20my%20order." target="_blank" class="pm-cta">I've Paid — Notify on WhatsApp</a>
+          <div class="token-block">
+            <strong>Step 1 — Download your Payment Token</strong>
+            <p>Required. This PDF contains your order reference, items, total, and applied coupon. Attach it when you message us so we can match your payment to your order.</p>
+            <button type="button" class="token-btn" onclick="downloadPaymentToken('qr', this)">⬇ Download Payment Token (PDF)</button>
+          </div>
+          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20QR%20payment%20for%20my%20order.%20Payment%20token%20attached." target="_blank" class="pm-cta">Step 2 — Notify on WhatsApp</a>
         </div>
 
         <!-- 2. Local Bank Transfer -->
@@ -612,7 +654,12 @@
           <div class="pm-row"><strong>BIC: </strong><span>BCIRLULL</span></div>
           <div class="pm-note">Please share the deposit slip or wire confirmation via WhatsApp once the transfer is sent.</div>
           <div class="pm-note">Please note that USD/EUR payment confirmations may take 2–5 business days. Orders will be fulfilled only after the payment has been successfully confirmed. LKR Payments will be confirmed on same day</div>
-          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20bank%20transfer%20for%20my%20order." target="_blank" class="pm-cta">I've Paid — Notify on WhatsApp</a>
+          <div class="token-block">
+            <strong>Step 1 — Download your Payment Token</strong>
+            <p>Required. This PDF contains your order reference, items, total, and applied coupon. Attach it with your deposit slip / wire confirmation when you message us.</p>
+            <button type="button" class="token-btn" onclick="downloadPaymentToken('bank', this)">⬇ Download Payment Token (PDF)</button>
+          </div>
+          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20bank%20transfer%20for%20my%20order.%20Payment%20token%20attached." target="_blank" class="pm-cta">Step 2 — Notify on WhatsApp</a>
         </div>
 
         <!-- 3. Bybit / Binance Pay -->
@@ -636,19 +683,12 @@
           <h4>Preferred Coin</h4>
           <div class="pm-row"><strong>Asset:</strong><span>USDT (TRC20 / BEP20)</span></div>
           <div class="pm-note">Send screenshot of the transfer (TXID + amount) via WhatsApp to receive your product key.</div>
-          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20crypto%20payment%20(Binance%2FBybit)%20for%20my%20order." target="_blank" class="pm-cta">I've Paid — Notify on WhatsApp</a>
-        </div>
-
-        <!-- 4. Visa / Debit / Credit Card (DirectPay - original) -->
-        <div class="pm-option active" data-method="card">
-          <div class="pm-radio"></div>
-          <div class="pm-content">
-            <div class="pm-header">
-              <span class="pm-name">Visa / Debit / Credit Card</span>
-              <span class="pm-badge">Recommended</span>
-            </div>
-            <div class="pm-desc">Pay securely with any Visa, Mastercard or American Express card via DirectPay — Sri Lanka's PCI-DSS compliant payment gateway. Instant order confirmation.</div>
+          <div class="token-block">
+            <strong>Step 1 — Download your Payment Token</strong>
+            <p>Required. This PDF contains your order reference, items, total, and applied coupon. Attach it together with your TXID screenshot when you message us.</p>
+            <button type="button" class="token-btn" onclick="downloadPaymentToken('crypto', this)">⬇ Download Payment Token (PDF)</button>
           </div>
+          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20crypto%20payment%20(Binance%2FBybit)%20for%20my%20order.%20Payment%20token%20attached." target="_blank" class="pm-cta">Step 2 — Notify on WhatsApp</a>
         </div>
 
       </div>
@@ -778,7 +818,7 @@
       </div>
     </div>
 
-    <div class="version-tag">LKNG2026MAYDTRX519410BV</div>
+    <div class="version-tag">LKNG2026MAYDTRX425879BV</div>
 
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
 
@@ -1126,6 +1166,8 @@
         if (securityBadges) securityBadges.style.display = isCard ? "" : "none";
         const termsSection = document.querySelector(".terms-section");
         if (termsSection) termsSection.style.display = isCard ? "" : "none";
+        const customerSection = document.getElementById("customerDetailsSection");
+        if (customerSection) customerSection.style.display = isCard ? "" : "none";
         updateCardLimitState();
       }
       document.querySelectorAll(".pm-option").forEach(opt => {
@@ -1264,6 +1306,174 @@
           resetButton();
         }
       };
+
+      // ====== Payment Token PDF (for QR / Bank / Crypto manual flows) ======
+      function generateTokenRef() {
+        var d = new Date();
+        var ymd = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+        var hms = String(d.getHours()).padStart(2,'0') + String(d.getMinutes()).padStart(2,'0') + String(d.getSeconds()).padStart(2,'0');
+        var rand = Math.random().toString(36).slice(2,6).toUpperCase();
+        return 'RT-' + ymd + '-' + hms + '-' + rand;
+      }
+
+      function downloadPaymentToken(method, btn) {
+        try {
+          if (!window.jspdf || !window.jspdf.jsPDF) {
+            alert('PDF library still loading — please try again in a second.');
+            return;
+          }
+          var jsPDF = window.jspdf.jsPDF;
+          var doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+          var ref = generateTokenRef();
+          var now = new Date();
+          var stamp = now.toLocaleString();
+          var methodLabel = method === 'qr' ? 'QR Pay (LankaQR)'
+                          : method === 'bank' ? 'Bank Transfer'
+                          : method === 'crypto' ? 'Bybit / Binance Pay (Crypto)'
+                          : method;
+
+          var items = (typeof currentCart !== 'undefined' && currentCart && currentCart.length)
+            ? currentCart.slice()
+            : [];
+          var subtotal = (typeof subtotalAmount === 'number' && subtotalAmount > 0)
+            ? subtotalAmount
+            : (parseFloat(document.getElementById('amount').value) || 0);
+          var coupon = (typeof appliedCoupon !== 'undefined') ? appliedCoupon : null;
+          var finalTotal = coupon ? coupon.finalAmount : subtotal;
+
+          // ===== Header =====
+          doc.setFillColor(220, 38, 38);
+          doc.rect(0, 0, 595, 90, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(22);
+          doc.text('RedTrex Technologies', 40, 45);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(11);
+          doc.text('Payment Token / Order Reference', 40, 65);
+          doc.setFontSize(9);
+          doc.text('redtrex.com.lk  |  redtrex@technologist.com  |  Negombo, Sri Lanka', 40, 80);
+
+          // ===== Reference box =====
+          doc.setTextColor(30, 30, 30);
+          doc.setFillColor(245, 245, 245);
+          doc.rect(40, 110, 515, 60, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(10);
+          doc.setTextColor(120, 120, 120);
+          doc.text('PAYMENT REFERENCE', 55, 130);
+          doc.setFontSize(18);
+          doc.setTextColor(220, 38, 38);
+          doc.text(ref, 55, 153);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(100, 100, 100);
+          doc.text('Issued: ' + stamp, 380, 130);
+          doc.text('Method: ' + methodLabel, 380, 145);
+          doc.text('Status: AWAITING PAYMENT', 380, 160);
+
+          // ===== Items =====
+          var y = 200;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(12);
+          doc.setTextColor(30, 30, 30);
+          doc.text('Order Details', 40, y);
+          y += 8;
+          doc.setDrawColor(220, 220, 220);
+          doc.line(40, y, 555, y);
+          y += 18;
+
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(10);
+          doc.setTextColor(120, 120, 120);
+          doc.text('ITEM', 45, y);
+          doc.text('QTY', 380, y, { align: 'right' });
+          doc.text('LINE TOTAL (LKR)', 550, y, { align: 'right' });
+          y += 6;
+          doc.line(40, y, 555, y);
+          y += 14;
+
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(11);
+          doc.setTextColor(30, 30, 30);
+          if (items.length === 0) {
+            doc.setTextColor(150, 150, 150);
+            doc.text('(No itemised cart — total only)', 45, y);
+            y += 18;
+            doc.setTextColor(30, 30, 30);
+          } else {
+            items.forEach(function(it) {
+              var name = (it.name || it.product_name || 'Item').toString();
+              var qty = it.quantity || it.qty || 1;
+              var unit = Number(it.price || it.unitPrice || 0);
+              var line = unit ? (unit * qty) : '';
+              if (name.length > 60) name = name.slice(0, 57) + '...';
+              doc.text(name, 45, y);
+              doc.text(String(qty), 380, y, { align: 'right' });
+              doc.text(line ? line.toLocaleString('en-LK', { minimumFractionDigits: 2 }) : '—', 550, y, { align: 'right' });
+              y += 16;
+              if (y > 720) { doc.addPage(); y = 60; }
+            });
+          }
+
+          // ===== Totals =====
+          y += 10;
+          doc.setDrawColor(220, 220, 220);
+          doc.line(350, y, 555, y);
+          y += 16;
+          doc.setFontSize(10);
+          doc.setTextColor(80, 80, 80);
+          doc.text('Subtotal', 360, y);
+          doc.text('LKR ' + Number(subtotal).toLocaleString('en-LK', { minimumFractionDigits: 2 }), 550, y, { align: 'right' });
+          y += 16;
+          if (coupon) {
+            doc.setTextColor(22, 163, 74);
+            doc.text('Coupon (' + coupon.code + ')', 360, y);
+            doc.text('− LKR ' + Number(coupon.discountAmount).toLocaleString('en-LK', { minimumFractionDigits: 2 }), 550, y, { align: 'right' });
+            y += 16;
+          }
+          doc.setDrawColor(220, 38, 38);
+          doc.line(350, y, 555, y);
+          y += 18;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(13);
+          doc.setTextColor(220, 38, 38);
+          doc.text('TOTAL DUE', 360, y);
+          doc.text('LKR ' + Number(finalTotal).toLocaleString('en-LK', { minimumFractionDigits: 2 }), 550, y, { align: 'right' });
+
+          // ===== Instructions =====
+          y += 40;
+          doc.setFillColor(255, 247, 224);
+          doc.rect(40, y - 14, 515, 70, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(10);
+          doc.setTextColor(133, 100, 4);
+          doc.text('Next Steps', 50, y);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(80, 80, 80);
+          doc.text('1. Complete your ' + methodLabel + ' payment of LKR ' + Number(finalTotal).toLocaleString('en-LK', { minimumFractionDigits: 2 }) + '.', 50, y + 16);
+          doc.text('2. WhatsApp this PDF + your payment receipt / TXID to +94 71 262 2012.', 50, y + 30);
+          doc.text('3. Quote reference ' + ref + ' so we can match your payment to this order.', 50, y + 44);
+
+          // ===== Footer =====
+          doc.setFontSize(8);
+          doc.setTextColor(150, 150, 150);
+          doc.text('This is not a tax invoice. A receipt with product keys will be emailed once payment is confirmed.', 40, 800);
+          doc.text('Reference: ' + ref + '  |  Generated: ' + stamp, 40, 815);
+
+          doc.save('RedTrex-PaymentToken-' + ref + '.pdf');
+
+          if (btn) {
+            btn.classList.add('done');
+            btn.innerHTML = '✓ Downloaded — Ref: ' + ref;
+          }
+        } catch (e) {
+          console.error('PDF generation failed:', e);
+          alert('Could not generate the PDF. Please refresh the page and try again.');
+        }
+      }
     </script>
   </body>
 </html>
