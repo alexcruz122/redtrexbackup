@@ -190,6 +190,36 @@
     padding: 24px 28px 28px;
   }
 
+  /* ── Contact fields ──────────────────── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .contact-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+  }
+  .contact-input::placeholder { color: var(--text-muted); font-weight: 400; }
+  .contact-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99,91,255,0.12);
+    background: #fff;
+  }
+  .contact-input.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(229,72,77,0.1);
+  }
+
   .amount-label {
     font-size: 11px;
     font-weight: 600;
@@ -795,6 +825,15 @@
 
     <!-- Body -->
     <div class="card-body">
+      <!-- Customer details (required for order tracking) -->
+      <div class="amount-label">Your details</div>
+      <div class="contact-grid">
+        <input class="contact-input" id="firstName" type="text" placeholder="First name" autocomplete="given-name" maxlength="40" />
+        <input class="contact-input" id="lastName"  type="text" placeholder="Last name"  autocomplete="family-name" maxlength="40" />
+      </div>
+      <input class="contact-input" id="email" type="email" placeholder="Email address" autocomplete="email" maxlength="120" style="margin-top:8px" />
+      <input class="contact-input" id="phone" type="tel"   placeholder="Phone (optional)" autocomplete="tel" maxlength="20" style="margin-top:8px;margin-bottom:18px" />
+
       <div class="amount-label">Payment amount</div>
       <div class="input-wrap">
         <span class="currency-prefix">LKR</span>
@@ -808,7 +847,7 @@
           autocomplete="off"
         />
       </div>
-      <div class="hint" id="hint">Minimum payment is LKR 10</div>
+      <div class="hint" id="hint">Enter your details and amount to continue</div>
 
       <div class="quick-label">Quick select</div>
       <div class="quick-amounts">
@@ -984,12 +1023,39 @@
     setTimeout(() => toastEl.classList.remove('show'), 3500);
   }
 
+  const firstNameEl = document.getElementById('firstName');
+  const lastNameEl  = document.getElementById('lastName');
+  const emailEl     = document.getElementById('email');
+  const phoneEl     = document.getElementById('phone');
+
+  function isValidEmail(s) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+  }
+
   function validate(val) {
     const num = parseFloat(val);
+    const fn = (firstNameEl.value || '').trim();
+    const ln = (lastNameEl.value  || '').trim();
+    const em = (emailEl.value     || '').trim();
+
+    if (!fn)               return { ok: false, msg: 'Enter your first name' };
+    if (!ln)               return { ok: false, msg: 'Enter your last name' };
+    if (!em)               return { ok: false, msg: 'Enter your email address' };
+    if (!isValidEmail(em)) return { ok: false, msg: 'Enter a valid email address' };
     if (!val || isNaN(num)) return { ok: false, msg: 'Enter an amount to continue' };
     if (num < 10)           return { ok: false, msg: 'Minimum payment is LKR 10' };
     return { ok: true, msg: `You will be charged LKR ${num.toLocaleString('en-LK', {minimumFractionDigits:2, maximumFractionDigits:2})}` };
   }
+
+  // Re-validate whenever a contact field changes
+  [firstNameEl, lastNameEl, emailEl].forEach(el => {
+    el.addEventListener('input', () => {
+      const { ok, msg } = validate(amountEl.value);
+      hintEl.textContent = msg;
+      hintEl.classList.toggle('err', !ok);
+      payBtn.disabled = !ok;
+    });
+  });
 
   function openModal() {
     const num = parseFloat(amountEl.value);
@@ -1010,7 +1076,16 @@
     setStep(0);
     await delay(900);
 
-    const payload = { order_id: 'PAY_' + Date.now(), amount: amountEl.value };
+    const payload = {
+      order_id: 'PAY_' + Date.now(),
+      amount: amountEl.value,
+      first_name: (firstNameEl.value || '').trim(),
+      last_name:  (lastNameEl.value  || '').trim(),
+      email:      (emailEl.value     || '').trim(),
+      phone:      (phoneEl.value     || '').trim(),
+      product_name: 'RedTrex Pay (Quick Payment)',
+      qty: 1
+    };
 
     try {
       setStep(1);
