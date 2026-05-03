@@ -1144,13 +1144,34 @@
         }, 2000);
 
         try {
+          // Build a descriptive order_id so the DirectPay dashboard shows
+          // what was purchased (DirectPay only displays order_id + amount).
+          function makeOrderId(name, q, cart) {
+            var label;
+            if (cart && cart.length > 1) {
+              label = cart.length + 'ITEMS';
+            } else {
+              label = String(name || 'ORDER')
+                .toUpperCase()
+                .replace(/[^A-Z0-9]+/g, '')
+                .slice(0, 14);
+            }
+            return 'ORD-' + label + '-' + Date.now();
+          }
+          var cartForId = (typeof currentCart !== 'undefined') ? currentCart : [];
+          var itemsForServer = (cartForId && cartForId.length > 0)
+            ? cartForId.map(function(it){ return { name: it.name, quantity: it.qty, price: it.unitPrice }; })
+            : [{ name: productName, quantity: qty, price: parseFloat(document.getElementById("amount").value) / (qty || 1) }];
+
           const orderData = {
             amount: parseFloat(document.getElementById("amount").value),
             currency: "LKR",
-            order_id: "ORD" + Date.now(),
+            order_id: makeOrderId(productName, qty, cartForId),
             type: "SALE",
             product_name: productName,
             qty: qty,
+            items: itemsForServer,
+            coupon_code: appliedCoupon ? appliedCoupon.code : null,
             return_url: "https://www.redtrex.store/payment-success"
           };
 
@@ -1173,6 +1194,19 @@
           dp.doInAppCheckout()
             .then(result => {
               console.log("Payment result:", result);
+              // Redeem the coupon reservation only if payment succeeded
+              try {
+                var paid = result && (result.status === 'SUCCESS' || result.status === 'success' || result.success === true);
+                if (paid && appliedCoupon && appliedCoupon.token) {
+                  fetch(COUPON_API + '/coupon/redeem', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: appliedCoupon.token })
+                  }).catch(function(){});
+                  // Clear stored cart now that payment is complete
+                  try { localStorage.removeItem('redtrex_pending_checkout'); } catch(e) {}
+                }
+              } catch(e) {}
               resetButton();
             })
             .catch(error => {
