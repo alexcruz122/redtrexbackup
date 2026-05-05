@@ -70,6 +70,20 @@
           body.dark-mode::before {
             background: linear-gradient(135deg, rgba(15,17,21,0.78), rgba(15,17,21,0.55));
           }
+          /* ===== WATERMARK (tiled across full page background) ===== */
+          body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='160' viewBox='0 0 420 160'><text x='210' y='90' font-family='monospace' font-size='15' font-weight='700' letter-spacing='2' fill='%23dc2626' fill-opacity='0.10' text-anchor='middle' transform='rotate(-22 210 90)'>LKNG2026MAYDTRX425880BV(ENFORCED)</text></svg>");
+            background-repeat: repeat;
+            background-size: 420px 160px;
+          }
+          body.dark-mode::after {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='160' viewBox='0 0 420 160'><text x='210' y='90' font-family='monospace' font-size='15' font-weight='700' letter-spacing='2' fill='%23f87171' fill-opacity='0.13' text-anchor='middle' transform='rotate(-22 210 90)'>LKNG2026MAYDTRX425880BV(ENFORCED)</text></svg>");
+          }
 
           .checkout-container {
             background: rgba(255, 255, 255, 0.78);
@@ -451,6 +465,31 @@
           .token-btn:hover { background: #b91c1c; }
           .token-btn.done { background: #16a34a; }
           .token-ref { display: inline-block; margin-left: 10px; font-family: 'Courier New', monospace; font-size: 12px; color: var(--text-secondary); }
+      .qty-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: var(--bg-secondary, #f8fafc);
+        border: 1px solid var(--border-color, #e5e7eb);
+        border-radius: 6px;
+        padding: 2px;
+      }
+      .qty-controls button {
+        width: 22px; height: 22px;
+        border: none; background: transparent;
+        color: var(--brand, #dc2626);
+        font-weight: 700; font-size: 14px; line-height: 1;
+        cursor: pointer; border-radius: 4px;
+        display: inline-flex; align-items: center; justify-content: center;
+        padding: 0;
+      }
+      .qty-controls button:hover:not(:disabled) { background: rgba(220,38,38,0.1); }
+      .qty-controls button:disabled { opacity: 0.35; cursor: not-allowed; }
+      .qty-controls .qty-val {
+        min-width: 22px; text-align: center;
+        font-weight: 600; font-size: 13px;
+        color: var(--text-primary, #111);
+      }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   </head>
@@ -762,7 +801,7 @@
       <button class="pay-btn" id="payBtn">
         <span class="btn-main-text">Pay Now</span>
       </button>
-      <div class="secure-badge">DirectPay Secure Payment Gateway</div>
+      <div class="secure-badge">Your payment is processed through a secure, encrypted gateway. We (REDTREX) do not store your card details.</div>
 
       <div class="security-badges">
         <a href="https://www.pcisecuritystandards.org/" target="_blank" class="security-badge-item" title="PCI-DSS Compliant">
@@ -818,7 +857,7 @@
       </div>
     </div>
 
-    <div class="version-tag">LKNG2026MAYDTRX425879BV</div>
+    <div class="version-tag">LKNG2026MAYDTRX425880BV(ENFORCED)</div>
 
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
 
@@ -868,7 +907,13 @@
             runningTotal += lineTotal;
             html += '<tr style="border-bottom:1px solid var(--border-color);">'
               + '<td style="padding:6px 2px;text-align:left;font-size:12px;font-weight:500;color:var(--text-primary);">' + item.name + '</td>'
-              + '<td style="text-align:center;padding:6px 4px;color:var(--text-secondary);">×' + item.qty + '</td>'
+              + '<td style="text-align:center;padding:6px 4px;">'
+                + '<span class="qty-controls">'
+                  + '<button type="button" class="qty-dec" data-idx="' + idx + '" title="Decrease"' + (item.qty <= 1 ? ' disabled' : '') + '>−</button>'
+                  + '<span class="qty-val">' + item.qty + '</span>'
+                  + '<button type="button" class="qty-inc" data-idx="' + idx + '" title="Increase"' + (item.qty >= 100 ? ' disabled' : '') + '>+</button>'
+                + '</span>'
+              + '</td>'
               + '<td style="text-align:right;padding:6px 2px;font-weight:600;color:var(--text-primary);">' + Number(lineTotal.toFixed(2)).toLocaleString() + '</td>'
               + (showRemove
                   ? '<td style="text-align:center;padding:6px 2px;">'
@@ -902,6 +947,23 @@
               try { localStorage.setItem('redtrex_pending_checkout', JSON.stringify(next)); } catch(e) {}
               onCartTotalChanged();
             });
+          });
+
+          // Wire qty +/- buttons
+          function changeQty(idx, delta) {
+            var next = currentCart.slice();
+            var newQty = Math.max(1, Math.min(100, (next[idx].qty || 1) + delta));
+            if (newQty === next[idx].qty) return;
+            next[idx] = Object.assign({}, next[idx], { qty: newQty });
+            renderCartTable(next);
+            try { localStorage.setItem('redtrex_pending_checkout', JSON.stringify(next)); } catch(e) {}
+            onCartTotalChanged();
+          }
+          productInfoEl.querySelectorAll('.qty-inc').forEach(function(btn) {
+            btn.addEventListener('click', function() { changeQty(parseInt(btn.getAttribute('data-idx'), 10), +1); });
+          });
+          productInfoEl.querySelectorAll('.qty-dec').forEach(function(btn) {
+            btn.addEventListener('click', function() { changeQty(parseInt(btn.getAttribute('data-idx'), 10), -1); });
           });
         }
 
@@ -945,8 +1007,14 @@
           var productName = params.get('product') || 'Product';
           var unitPrice = parseFloat(params.get('price') || 0);
           var qty = parseInt(params.get('qty') || 1);
-          totalAmount = unitPrice * qty;
-          productInfoEl.innerText = productName + ' × ' + qty;
+          // Render single-product purchases through the same cart table so
+          // the user gets +/- qty controls and a live-updating total.
+          if (unitPrice > 0) {
+            renderCartTable([{ name: productName, unitPrice: unitPrice, qty: qty }]);
+          } else {
+            totalAmount = unitPrice * qty;
+            productInfoEl.innerText = productName + ' × ' + qty;
+          }
         }
 
         document.getElementById('amount').value = totalAmount.toFixed(2);
