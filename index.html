@@ -123,14 +123,79 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    #bg-video {
+    /* Animated gradient background (replaces #bg-video) */
+    #bg-gradient {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      object-fit: cover;
       z-index: -1;
+      background: linear-gradient(
+        130deg,
+        #0a0a14 0%,
+        #1a0608 18%,
+        #3a0a12 35%,
+        #6b0f1a 52%,
+        #3a0a12 70%,
+        #1a0608 85%,
+        #0a0a14 100%
+      );
+      background-size: 400% 400%;
+      animation: bgShift 22s ease-in-out infinite;
+    }
+
+    /* Soft glowing red orbs drifting behind content */
+    #bg-gradient::before,
+    #bg-gradient::after {
+      content: '';
+      position: absolute;
+      width: 60vw;
+      height: 60vw;
+      max-width: 800px;
+      max-height: 800px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.55;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    #bg-gradient::before {
+      background: radial-gradient(circle, #ff2a3d 0%, transparent 65%);
+      top: -10%;
+      left: -10%;
+      animation: orbDrift1 18s ease-in-out infinite;
+    }
+    #bg-gradient::after {
+      background: radial-gradient(circle, #ff6a3d 0%, transparent 65%);
+      bottom: -15%;
+      right: -10%;
+      animation: orbDrift2 26s ease-in-out infinite;
+    }
+
+    @keyframes bgShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes orbDrift1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%      { transform: translate(15vw, 10vh) scale(1.15); }
+      66%      { transform: translate(-8vw, 18vh) scale(0.9); }
+    }
+    @keyframes orbDrift2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%      { transform: translate(-12vw, -8vh) scale(0.85); }
+      66%      { transform: translate(10vw, -16vh) scale(1.2); }
+    }
+
+    /* Respect users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      #bg-gradient,
+      #bg-gradient::before,
+      #bg-gradient::after {
+        animation: none;
+      }
     }
 
     /* Quantity Controls */
@@ -538,7 +603,7 @@
       <div class="ls-bar"><div class="ls-bar-fill"></div></div>
       <div class="ls-versions">
         <span class="ls-ver-pill">AI API VER : v1.0.6</span>
-        <span class="ls-ver-pill">SITE VER : v7.3.3</span>
+        <span class="ls-ver-pill">SITE VER : v7.3.4</span>
       </div>
     </div>
   </div>
@@ -667,7 +732,7 @@
     position: relative;
     z-index: 9999;
   ">
-    <span style="margin-right:6px;" aria-hidden="true"></span>
+    <span style="margin-right:6px;" aria-hidden="true">🎉</span>
     <strong style="color:#a8c8ff;">We've moved!</strong>
     Welcome to our new home at <strong style="color:#fff;">www.redtrex.com.lk</strong> —
     same trusted RedTrex, fresh new address.
@@ -710,25 +775,50 @@
 
   <nav>
     <div class="nav-dropdown">
-      <button class="dropdown-toggle g2g-btn">Menu ▾</button>
+      <button class="dropdown-toggle g2g-btn" type="button" aria-haspopup="true" aria-expanded="false">Menu ▾</button>
       <div class="dropdown-content">
-        <a href="https://maps.app.goo.gl/YCUu4UEXES2juyQ5A">Our Location</a>
-        <a href="https://www.redtrex.com.lk/contact">Contact Us</a>
-        <a href="https://www.redtrex.com.lk/services">Our Services</a>
-        <a href="https://www.redtrex.com.lk/pay">RedTrex Pay</a>
-        <a href="https://www.redtrex.com.lk/downloads">Downloads</a>
-        <a href="/activation-guide">Activation Guide</a>
-        <a href="https://www.redtrex.com.lk/actptl">MS Product Activation Portal</a>
-        <a href="https://www.redtrex.com.lk/refund">Refund</a>
-        <a href="https://invoice.zohosecure.com/portal/redtrextechnologies/signin">Customer/Reseller Portal</a>
+        <div class="dropdown-submenu">
+          <button class="submenu-toggle" type="button">Shop <span class="submenu-arrow">▸</span></button>
+          <div class="submenu-content">
+            <a href="pay.html">RedTrex Pay</a>
+            <a href="https://tudo.lk/store/redtrex-technologies" target="_blank" rel="noopener">Buy From Tudo.lk</a>
+            <a href="https://www.redtrex.com.lk/downloads">Downloads</a>
+          </div>
+        </div>
+
+        <div class="dropdown-submenu">
+          <button class="submenu-toggle" type="button">Services <span class="submenu-arrow">▸</span></button>
+          <div class="submenu-content">
+            <a href="https://www.redtrex.com.lk/request-service">Service Request</a>
+            <a href="https://www.redtrex.com.lk/services">Our Services</a>
+            <a href="/activation-guide">Activation Guide</a>
+            <a href="https://www.redtrex.com.lk/actptl">MS Product Activation Portal</a>
+          </div>
+        </div>
+
+        <div class="dropdown-submenu">
+          <button class="submenu-toggle" type="button">Support <span class="submenu-arrow">▸</span></button>
+          <div class="submenu-content">
+            <a href="https://www.redtrex.com.lk/contact">Contact Us</a>
+            <a href="https://www.redtrex.com.lk/faq">FAQ</a>
+            <a href="https://www.redtrex.com.lk/about">About Us</a>
+            <a href="https://maps.app.goo.gl/YCUu4UEXES2juyQ5A" target="_blank" rel="noopener">Our Location</a>
+          </div>
+        </div>
+
+        <div class="dropdown-submenu">
+          <button class="submenu-toggle" type="button">Account<span class="submenu-arrow">▸</span></button>
+          <div class="submenu-content">
+            <a href="https://www.redtrex.com.lk/login">Sign In</a>
+            <a href="https://www.redtrex.com.lk/track-order">Orders/Payments Tracking</a>
+            <a href="https://www.redtrex.com.lk/track-service">Service Tracking</a>
+          </div>
+        </div>
+
         <hr class="dropdown-divider" />
-        <a href="https://www.redtrex.com.lk/faq">FAQ</a>
-        <a href="https://tudo.lk/store/redtrex-technologies" target="_blank">Buy From Tudo.lk</a>
         <a href="#" onclick="openDisclaimerPopup(); return false;">Disclaimer</a>
       </div>
     </div>
-    <a href="https://www.redtrex.com.lk/faq" class="g2g-btn customer-portal-btn">FAQ</a>
-     <a href="https://tudo.lk/store/redtrex-technologies" class="g2g-btn customer-portal-btn">Buy From Tudo.lk</a>
     
     <div class="disclaimer-container">
       <button class="disclaimer-btn" onclick="openDisclaimerPopup()">
@@ -772,6 +862,58 @@
   </nav>
 
   <script>
+    // ===== Categorized menu — click-to-toggle (works on every device) =====
+    (function () {
+      const navDropdown = document.querySelector('.nav-dropdown');
+      if (!navDropdown) return;
+      const navToggle = navDropdown.querySelector('.dropdown-toggle');
+      const submenus = navDropdown.querySelectorAll('.dropdown-submenu');
+
+      function closeAllSubmenus() {
+        submenus.forEach(s => s.classList.remove('open'));
+      }
+      function closeMenu() {
+        navDropdown.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        closeAllSubmenus();
+      }
+
+      // Main button: toggle the whole menu
+      navToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const isOpen = navDropdown.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (!isOpen) closeAllSubmenus();
+      });
+
+      // Each category button: toggle its submenu (close siblings)
+      submenus.forEach(function (sub) {
+        const subBtn = sub.querySelector('.submenu-toggle');
+        if (!subBtn) return;
+        subBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const wasOpen = sub.classList.contains('open');
+          closeAllSubmenus();
+          if (!wasOpen) sub.classList.add('open');
+        });
+      });
+
+      // Click outside → close everything
+      document.addEventListener('click', function (e) {
+        if (!navDropdown.contains(e.target)) closeMenu();
+      });
+
+      // Escape → close everything
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      // Clicking a real link inside should close the menu before navigating
+      navDropdown.querySelectorAll('.dropdown-content a, .submenu-content a').forEach(function (a) {
+        a.addEventListener('click', function () { closeMenu(); });
+      });
+    })();
+
     // Account button — reflects sign-in state from localStorage
     (function () {
       try {
@@ -1037,9 +1179,7 @@
       </div>
     </section>
 
-  <video autoplay muted loop id="bg-video" playsinline>
-    <source src="Assest/27725-365890983.mp4" type="video/mp4">
-  </video>
+  <div id="bg-gradient" aria-hidden="true"></div>
 
   <!-- ================= PROMOTIONS / DISCOUNTS ================= -->
   <section id="promotions" class="category">
@@ -2588,7 +2728,7 @@
 
     <div class="footer-bottom" id="site-disclaimer">
       <p>&nbsp;<span class="site-version">AI API VER : v1.0.6</span>
-      <span class="site-version">SITE VER : v7.3.3</span>
+      <span class="site-version">SITE VER : v7.3.4</span>
         <span class="site-version">SECURITY : LKNG2026MAYDTRX425880BV(ENFORCED)</span>
       </p>
       
