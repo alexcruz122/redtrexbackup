@@ -348,6 +348,17 @@
     return res.json().catch(() => ({ ok: false, error: "Network error" }));
   }
 
+  function formatRetryAfter(sec) {
+    sec = Math.max(0, Math.floor(sec || 0));
+    if (sec < 60) return `${sec} second${sec === 1 ? "" : "s"}`;
+    const m = Math.ceil(sec / 60);
+    return `${m} minute${m === 1 ? "" : "s"}`;
+  }
+  function rateLimitMessage(data) {
+    const wait = formatRetryAfter(data.retryAfterSeconds);
+    return `Too many code requests for this email. Please wait about ${wait} and try again, or check your inbox/spam folder for a code already sent.`;
+  }
+
   document.getElementById("emailForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     clearMsg(emailMsg);
@@ -360,6 +371,8 @@
     sendBtn.textContent = "Send me a code";
     if (data.ok) {
       goToCodeStep(email);
+    } else if (data.error === "rate_limited") {
+      showMsg(emailMsg, "err", rateLimitMessage(data));
     } else {
       showMsg(emailMsg, "err", data.error || "Couldn't send code. Try again.");
     }
@@ -374,6 +387,10 @@
     if (data.ok) {
       showMsg(codeMsg, "ok", "New code sent. Check your inbox.");
       startResendCooldown();
+    } else if (data.error === "rate_limited") {
+      showMsg(codeMsg, "err", rateLimitMessage(data));
+      resendBtn.disabled = false;
+      resendBtn.textContent = "Resend code";
     } else {
       showMsg(codeMsg, "err", data.error || "Couldn't resend. Try again in a moment.");
       resendBtn.disabled = false;
