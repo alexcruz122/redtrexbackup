@@ -218,6 +218,84 @@
       text-align: center;
     }
 
+    /* ── Account / Login button in Nav ── */
+    .account-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 7px 13px;
+      cursor: pointer;
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .account-btn:hover { background: rgba(220,38,38,0.35); border-color: rgba(255,150,150,0.5); }
+    .account-btn .ab-icon {
+      width: 18px; height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .account-btn .ab-label { line-height: 1; }
+    .account-btn.signed-in { background: rgba(220,38,38,0.25); border-color: rgba(248,113,113,0.5); }
+    .account-btn .ab-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 6px rgba(74,222,128,0.7);
+    }
+    /* Group login + cart together so they stay side-by-side on every screen */
+    .nav-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Push search + actions together to the right edge on desktop */
+    @media (min-width: 601px) {
+      nav .search-container { margin-left: auto; }
+    }
+    @media (max-width: 600px) {
+      /* Login + Cart stay together as a centered row at the bottom of the wrapped nav */
+      .nav-actions {
+        order: 101;
+        width: 100% !important;
+        margin: 6px 0 0 0 !important;
+        justify-content: center !important;
+        gap: 10px;
+      }
+      .account-btn {
+        padding: 0 !important;
+        font-size: 0 !important;
+        width: 42px; height: 42px;
+        justify-content: center; gap: 0;
+        flex: 0 0 auto !important;
+      }
+      .account-btn .ab-label { display: none; }
+      .account-btn .ab-icon { width: 20px; height: 20px; }
+      /* Override the global rule that forces cart to full-width on mobile */
+      nav .nav-actions .cart-icon-btn {
+        order: 0 !important;
+        width: 42px !important;
+        height: 42px;
+        padding: 0 !important;
+        font-size: 1.1rem !important;
+        margin: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 auto !important;
+      }
+      nav .nav-actions .cart-icon-btn .cart-badge { top: -4px; right: -4px; }
+    }
+
     /* ── Cart Icon in Nav ── */
     .cart-icon-btn {
       position: relative;
@@ -634,13 +712,12 @@
       <button class="dropdown-toggle g2g-btn">Menu ▾</button>
       <div class="dropdown-content">
         <a href="https://maps.app.goo.gl/YCUu4UEXES2juyQ5A">Our Location</a>
-         <a href="https://www.redtrex.com.lk/track-order">Order's & Payment Tracking</a>
-        <a href="https://www.redtrex.com.lk/request-service">Service Request</a>
         <a href="https://www.redtrex.com.lk/contact">Contact Us</a>
         <a href="https://www.redtrex.com.lk/services">Our Services</a>
         <a href="https://www.redtrex.com.lk/pay">RedTrex Pay</a>
         <a href="https://www.redtrex.com.lk/downloads">Downloads</a>
         <a href="/activation-guide">Activation Guide</a>
+        <a href="https://www.redtrex.com.lk/actptl">MS Product Activation Portal</a>
         <a href="https://www.redtrex.com.lk/refund">Refund</a>
         <a href="https://invoice.zohosecure.com/portal/redtrextechnologies/signin">Customer/Reseller Portal</a>
         <hr class="dropdown-divider" />
@@ -677,11 +754,40 @@
       <ul id="searchResults" class="search-results"></ul>
     </div>
 
-    <button class="cart-icon-btn" onclick="openCart()" title="View Cart">
-      🛒
-      <span class="cart-badge" id="cartBadge">0</span>
-    </button>
+    <div class="nav-actions">
+      <a href="https://www.redtrex.com.lk/login" class="account-btn" id="accountBtn" title="Sign in to your account">
+        <svg class="ab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span class="ab-label" id="accountBtnLabel">Login</span>
+      </a>
+
+      <button class="cart-icon-btn" onclick="openCart()" title="View Cart">
+        🛒
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
   </nav>
+
+  <script>
+    // Account button — reflects sign-in state from localStorage
+    (function () {
+      try {
+        const s = JSON.parse(localStorage.getItem("rtx_session") || "null");
+        const btn = document.getElementById("accountBtn");
+        const lbl = document.getElementById("accountBtnLabel");
+        if (s && s.token && s.expires && s.expires > Date.now()) {
+          btn.classList.add("signed-in");
+          btn.title = "View your account (" + (s.email || "signed in") + ")";
+          lbl.textContent = "My Account";
+        } else {
+          btn.title = "Sign in to your account";
+          lbl.textContent = "Login";
+        }
+      } catch {}
+    })();
+  </script>
 
   <!-- Cart Panel -->
   <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
@@ -1244,7 +1350,7 @@
 
       <div class="product-card" data-name="Microsoft Office 2024" data-unit-price="2807.22">
         <img src="Assest/office24.png" alt="Microsoft Office 2024 Product Key Image"/>
-        <h2>Microsoft Office Professional Plus [2024] [1PC]</h2>
+        <h2>Microsoft Office Professional Plus LTSC [2024] [1PC]</h2>
         <p class="price-lkr">2,807.22 LKR</p>
 
         <div class="qty-controls">
@@ -1267,7 +1373,7 @@
           
 
         <ul class="description">
-          <li>Official MS Office 2024 Pro Plus</li>
+          <li>Official MS Office 2024 LTSC Pro Plus</li>
           <li>One-time activation for 1 PC</li>
           <li>Non-transferable license</li>
           <li>24/7 Activation Support</li>
@@ -1278,7 +1384,7 @@
 
       <div class="product-card" data-name="Microsoft Office Professional Plus [2021] [1PC]" data-unit-price="1982.40">
         <img src="Assest/officepro21.png" alt="Microsoft Office Professional Plus [2021] [1PC] Product Key Image" />
-        <h2>Microsoft Office Professional Plus [2021] [1PC]</h2>
+        <h2>Microsoft Office Professional Plus Retail [2021] [1PC]</h2>
         <p class="price-lkr">1,982.40 LKR</p>
 
         <div class="qty-controls">
@@ -1301,7 +1407,7 @@
           
 
         <ul class="description">
-          <li>Official MS Office 2021 Pro Plus</li>
+          <li>Official MS Office 2021 Retail Pro Plus</li>
           <li>One-time activation for 1 PC</li>
           <li>Non-transferable license</li>
           <li>24/7 Activation Support</li>
@@ -1347,7 +1453,7 @@
         </div>
         <div class="product-card" data-name="Microsoft Office Professional Plus [2021] [5PC]" data-unit-price="11696.16">
           <img src="Assest/officepro21.png" alt="Microsoft Office Professional Plus [2021] [5PC] Product Key Image"/>
-          <h2>Microsoft Office Professional Plus [2021] [5PC]</h2>
+          <h2>Microsoft Office Professional Plus Retail [2021] [5PC]</h2>
           <p class="price-lkr">11,696.16 LKR</p>
 
           <div class="qty-controls">
@@ -1370,7 +1476,7 @@
           
 
           <ul class="description">
-            <li>Official MS Office 2021 Pro Plus</li>
+            <li>Official MS Office 2021 Retail Pro Plus</li>
             <li>One-time activation for 5 PC</li>
             <li>Non-transferable license</li>
             <li>24/7 Activation Support</li>
@@ -2482,6 +2588,7 @@
     <div class="footer-bottom" id="site-disclaimer">
       <p>&nbsp;<span class="site-version">AI API VER : v1.0.6</span>
       <span class="site-version">SITE VER : v7.3.1</span>
+        <span class="site-version">SECURITY : LKNG2026MAYDTRX425880BV(ENFORCED)</span>
       </p>
       
       <!-- TrustBox widget - Review Collector -->
@@ -2573,15 +2680,15 @@
       'Windows 11 Pro Product Key [OEM] [5PC] PROMO':                            0,
       'EaseUS Data Recovery Wizard Professional (Life-Time Upgrade) PROMO':       0,
       'Windows 11 Pro + Office 2024 Bundle [OEM] [1PC]':                         0,
-      'Windows 11 Pro OEM Key':                                                   578,
-      'Windows 11 Pro Retail Key':                                                10,
+      'Windows 11 Pro OEM Key':                                                   576,
+      'Windows 11 Pro Retail Key':                                                5,
       'Windows 11 Pro Product Key [OEM] [5PC]':                                  0,
       'Windows Server 2022 Standard [2PC]':                                       0,
       'Windows Server 2022 Datacenter [2PC]':                                     0,
       'Windows Server 2025 Standard [2PC]':                                       1,
       'Windows Server 2025 Datacenter [2PC]':                                     0,
-      'Microsoft Office 2024':                                                    69,
-      'Microsoft Office Professional Plus [2021] [1PC]':                         198,
+      'Microsoft Office 2024':                                                    65,
+      'Microsoft Office Professional Plus [2021] [1PC]':                         194,
       'Visio 2021 Professional [1PC]':                                            0,
       'Microsoft Office Professional Plus [2021] [5PC]':                         0,
       'Microsoft Office 365 A3 Subscription (5 Device/1Year)':                   3,
