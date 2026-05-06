@@ -7,6 +7,8 @@
     <link rel="icon" type="image/png" href="Assest/company.png" />
     <link rel="apple-touch-icon" href="Assest/company.png" />
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
+<!-- Cloudflare Turnstile (invisible bot check) -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady" async defer></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap"
       rel="stylesheet"
@@ -942,7 +944,10 @@
             <button class="quick-btn" data-val="5000">5,000</button>
           </div>
 
-          <button class="pay-btn" id="payBtn" disabled>
+          <!-- Turnstile invisible bot-check widget (token sent with payment request) -->
+      <div id="cf-turnstile" style="margin-bottom:14px;"></div>
+
+      <button class="pay-btn" id="payBtn" disabled>
             <div class="btn-content">
               <svg
                 width="16"
@@ -1278,6 +1283,8 @@
 
         try {
           setStep(1);
+          // Attach Turnstile token (worker silently ignores it if TURNSTILE_SECRET unset)
+          payload.cf_turnstile_token = window.turnstileToken || null;
           const fetchPromise = callPaymentBackend('/create-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1311,6 +1318,23 @@
       }
 
       function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+      // ---- Cloudflare Turnstile (invisible bot check) ----
+      // Replace TURNSTILE_SITE_KEY with the site key from your Cloudflare dashboard.
+      // Until then the widget renders nothing and no token is sent — the worker
+      // will skip verification (because TURNSTILE_SECRET also won't be set yet).
+      window.turnstileToken = null;
+      window.onTurnstileReady = function () {
+        if (typeof turnstile === 'undefined') return;
+        const SITE_KEY = '0x4AAAAAADKJD57mxiW3YWVk';
+        turnstile.render('#cf-turnstile', {
+          sitekey: SITE_KEY,
+          size: 'invisible',
+          callback: (token) => { window.turnstileToken = token; },
+          'error-callback': () => { window.turnstileToken = null; },
+          'expired-callback': () => { window.turnstileToken = null; }
+        });
+      };
 
       amountEl.addEventListener('input', () => {
         const { ok, msg } = validate(amountEl.value);
