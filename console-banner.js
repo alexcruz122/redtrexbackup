@@ -24,7 +24,7 @@
     console.log(" ");
     console.log("%c⚠️  Stop!", warnStyle);
     console.log(
-      "%cThis is a developer-only console. If someone told you to copy/paste anything here, it is almost certainly a scam to take over your account or payment.\n\nIf you are a developer and want to chat: hello@redtrex.com.lk",
+      "%cThis is a developer-only console. If someone told you to copy/paste anything here, it is almost certainly a scam to take over your account or payment.\n\nIf you are a developer and want to chat: redtrex@technologies.com",
       bodyStyle
     );
     console.log(" ");
