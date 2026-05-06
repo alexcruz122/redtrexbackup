@@ -500,12 +500,11 @@
       <div class="gateway-notice">
         <span class="gateway-notice-icon"></span>
         <div class="gateway-notice-body">
-          <div class="gateway-notice-title">Payment Gateway Notice For Debit/Credit Card Payments</div>
+          <div class="gateway-notice-title">We Updated Our Servers For Fast Card Payments</div>
           <div class="gateway-notice-text">
-            Our backend server is currently in a low-power standby state due to reduced traffic.
-            After clicking <strong>Pay Now</strong>, please allow up to <strong>25–30 seconds</strong>
-            for the payment gateway to initialize. Do not close or refresh this page during this time.
-            We appreciate your patience.
+            After clicking <strong>Pay Now</strong>, you'll be redirected to our secure DirectPay
+            gateway Server <strong>(RTS1)</strong> in just <strong>2–3 seconds</strong>. Please do not close or refresh this page
+            during the redirect. If <strong>(RTS1)</strong> server fail you'll be redirected to our second server <strong>(RTSB1)<strong>.
           </div>
         </div>
       </div>
@@ -1225,7 +1224,7 @@
         const details = document.getElementById("pm-details-" + method);
         if (details) details.classList.add("show");
 
-        // Toggle card-specific UI: only the DirectPay flow uses payBtn + secure-badge + security-badges
+        // Toggle card-specific UI
         const isCard = method === "card";
         document.getElementById("payBtn").style.display = isCard ? "" : "none";
         const secureBadge = document.querySelector(".secure-badge");
@@ -1288,8 +1287,6 @@
         }, 2000);
 
         try {
-          // Build a descriptive order_id so the DirectPay dashboard shows
-          // what was purchased (DirectPay only displays order_id + amount).
           function makeOrderId(name, q, cart) {
             var label;
             if (cart && cart.length > 1) {
@@ -1320,14 +1317,10 @@
             last_name:  (document.getElementById("lastName").value  || "").trim(),
             email:      (document.getElementById("email").value     || "").trim(),
             phone:      (document.getElementById("phone").value     || "").trim(),
-            return_url: "https://www.redtrex.store/payment-success"
+            return_url: "https://www.redtrex.com.lk/payment-success"
           };
 
-          // Payment backend with automatic failover: Cloudflare Worker (primary,
-          // fast, zero cold start) → Render (backup). Customer never sees failover.
-          // Only fails over on network/timeout/5xx — 4xx (validation) returns
-          // immediately to avoid creating duplicate orders when one backend
-          // already processed the request.
+    
           async function callPaymentBackend(path, options) {
             const endpoints = [
               "https://redtrex-payment.projectmmdoffcialdev.workers.dev",
