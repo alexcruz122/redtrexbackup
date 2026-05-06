@@ -164,6 +164,31 @@
     border: 1px solid var(--border);
   }
   .resend-row button:disabled { color: var(--muted); }
+  .info-note {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(248,113,113,0.08), rgba(248,113,113,0.03));
+    border: 1px solid rgba(248,113,113,0.22);
+    border-radius: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--accent-2);
+  }
+  .info-note strong { color: #fff; display: block; margin-bottom: 2px; font-size: 13.5px; }
+  .info-note-icon {
+    flex: 0 0 auto;
+    width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(248,113,113,0.18);
+    color: #fca5a5;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 1px;
+  }
   .email-pill {
     display: inline-block;
     background: #0a0a0a;
@@ -179,7 +204,7 @@
 <body>
 
 <div class="topbar">
-  <a href="/">← Back to RedTrex</a>
+  <a href="/">Back to RedTrex</a>
   <span style="color:#444">|</span>
   <a href="/track-order.html">Track an order without signing in</a>
 </div>
@@ -197,7 +222,7 @@
     <!-- Step 1: enter email -->
     <div class="step active" id="stepEmail">
       <h1>Sign in to your account</h1>
-      <p class="sub">Enter your email and we'll send you a 6-digit code,No password needed.</p>
+      <p class="sub">Enter your email and we'll send you a 6-digit code , No password needed.</p>
 
       <form id="emailForm" autocomplete="on">
         <label for="email">Email address</label>
@@ -205,6 +230,14 @@
         <button type="submit" id="sendBtn">Send me a code</button>
       </form>
       <div class="msg" id="emailMsg"></div>
+
+      <div class="info-note" role="note" aria-label="Account information">
+        <span class="info-note-icon" aria-hidden="true">&#9432;</span>
+        <div>
+          <strong>No sign-up required.</strong>
+          You don't need to create an account before placing an order , Just sign in here whenever you'd like to view your orders or service requests.
+        </div>
+      </div>
     </div>
 
     <!-- Step 2: enter code -->
