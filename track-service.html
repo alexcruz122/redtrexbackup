@@ -72,7 +72,8 @@
 <body>
 
 <div class="topbar">
-  <a href="/">← Back to RedTrex</a>
+  <a href="/" id="topbarHome">Back to RedTrex</a>
+  <a href="/account.html" id="backToAccount" style="display:none">Back to My Account</a>
   <span style="color:var(--muted);font-size:13px;margin-left:auto">Need a new request? <a href="/request-service.html">Submit one →</a></span>
 </div>
 
@@ -98,6 +99,19 @@
 
 <script>
   const WORKER_URL = "https://redtrex-coupons.projectmmdoffcialdev.workers.dev";
+
+  // Show "Back to My Account" link if a valid signed-in session exists
+  (function showBackToAccount() {
+    try {
+      const s = JSON.parse(localStorage.getItem("rtx_session") || "null");
+      if (s && s.token && s.expires && s.expires > Date.now()) {
+        const link = document.getElementById("backToAccount");
+        const home = document.getElementById("topbarHome");
+        if (link) link.style.display = "";
+        if (home) home.textContent = "← Home";
+      }
+    } catch {}
+  })();
 
   const STATUS_FLOW = ["Pending", "Reviewing", "Scheduled", "In Progress", "Completed"];
 
