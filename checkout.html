@@ -867,9 +867,9 @@
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
     <script>
       // ---- Cloudflare Turnstile (invisible bot check) ----
-      // Replace TURNSTILE_SITE_KEY with the site key from your Cloudflare dashboard.
-      // Until then the widget renders nothing and no token is sent — the worker
-      // will skip verification (because TURNSTILE_SECRET also won't be set yet).
+      // Cloudflare Turnstile invisible bot check.
+      // TURNSTILE_SECRET is required on both backends — no bypass exists.
+      // A null token from this widget will block the payment request.
       window.turnstileToken = null;
       window.turnstileWidgetId = null;
       window._tsResolve = null;
@@ -892,15 +892,35 @@
       };
       window.getTurnstileToken = function () {
         if (window.turnstileToken) return Promise.resolve(window.turnstileToken);
-        if (typeof turnstile === "undefined" || window.turnstileWidgetId === null) {
-          return Promise.resolve(null);
-        }
         return new Promise(function (resolve) {
-          window._tsResolve = resolve;
-          try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
+          function doExecute() {
+            if (typeof turnstile === "undefined" || window.turnstileWidgetId === null) {
+              resolve(null);
+              return;
+            }
+            window._tsResolve = resolve;
+            try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
+          }
+          if (window.turnstileWidgetId !== null) {
+            doExecute();
+          } else {
+            // Widget not ready yet — poll up to 5 s for it to initialise
+            var waited = 0;
+            var poll = setInterval(function () {
+              waited += 100;
+              if (window.turnstileWidgetId !== null) {
+                clearInterval(poll);
+                doExecute();
+              } else if (waited >= 5000) {
+                clearInterval(poll);
+                resolve(null);
+              }
+            }, 100);
+          }
+          // Hard cap: 15 s total
           setTimeout(function () {
             if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
-          }, 10000);
+          }, 15000);
         });
       };
     </script>
@@ -1389,6 +1409,7 @@
                   else console.warn("[checkout] failed over to Render backup");
                   return r;
                 }
+                // 4xx = client/validation/security error — don't fail over, return as-is
                 if (r.status >= 400 && r.status < 500) {
                   console.warn("[checkout] " + base + " returned " + r.status + " (no failover)");
                   return r;
@@ -1404,8 +1425,11 @@
             throw lastErr || new Error("All payment backends unavailable");
           }
 
-          // Attach Cloudflare Turnstile token (silently ignored by worker if not configured)
+          // Attach Cloudflare Turnstile token — abort early if widget failed to produce one
           orderData.cf_turnstile_token = await window.getTurnstileToken();
+          if (!orderData.cf_turnstile_token) {
+            throw new Error("Security check could not be completed. Please refresh the page and try again.");
+          }
           const response = await callPaymentBackend("/create-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -1413,6 +1437,12 @@
           });
 
           clearInterval(msgInterval);
+
+          if (!response.ok) {
+            let errMsg = "Payment failed. Please try again.";
+            try { const j = await response.json(); if (j && j.error) errMsg = j.error; } catch(e) {}
+            throw new Error(errMsg);
+          }
 
           const { signature, dataString } = await response.json();
 
