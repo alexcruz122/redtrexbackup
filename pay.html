@@ -8,7 +8,6 @@
     <link rel="apple-touch-icon" href="Assest/company.png" />
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
 <!-- Cloudflare Turnstile (invisible bot check) -->
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady" async defer></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap"
       rel="stylesheet"
@@ -1260,7 +1259,7 @@
                 else console.warn('[pay] failed over to Render backup');
                 return res;
               }
-              // 4xx = client/validation error — don't fail over, return as-is
+              // 4xx = client/validation/security error — don't fail over, return as-is
               if (res.status >= 400 && res.status < 500) {
                 console.warn('[pay] ' + base + ' returned ' + res.status + ' (no failover)');
                 return res;
@@ -1278,8 +1277,11 @@
 
         try {
           setStep(1);
-          // Attach Turnstile token (worker silently ignores it if TURNSTILE_SECRET unset)
+          // Attach Turnstile token — abort early if widget failed to produce one
           payload.cf_turnstile_token = await window.getTurnstileToken();
+          if (!payload.cf_turnstile_token) {
+            throw new Error("Security check could not be completed. Please refresh the page and try again.");
+          }
           const fetchPromise = callPaymentBackend('/create-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1290,7 +1292,11 @@
           setStep(2);
 
           const res = await fetchPromise;
-          if (!res.ok) throw new Error('Server error');
+          if (!res.ok) {
+            let errMsg = 'Payment failed. Please try again.';
+            try { const j = await res.json(); if (j && j.error) errMsg = j.error; } catch (e) {}
+            throw new Error(errMsg);
+          }
 
           const { signature, dataString } = await res.json();
 
@@ -1315,9 +1321,9 @@
       function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
       // ---- Cloudflare Turnstile (invisible bot check) ----
-      // Replace TURNSTILE_SITE_KEY with the site key from your Cloudflare dashboard.
-      // Until then the widget renders nothing and no token is sent — the worker
-      // will skip verification (because TURNSTILE_SECRET also won't be set yet).
+      // Cloudflare Turnstile invisible bot check.
+      // TURNSTILE_SECRET is required on both backends — no bypass exists.
+      // A null token from this widget will block the payment request.
       window.turnstileToken = null;
       window.turnstileWidgetId = null;
       window._tsResolve = null;
@@ -1340,18 +1346,42 @@
       };
       window.getTurnstileToken = function () {
         if (window.turnstileToken) return Promise.resolve(window.turnstileToken);
-        if (typeof turnstile === 'undefined' || window.turnstileWidgetId === null) {
-          return Promise.resolve(null);
-        }
         return new Promise((resolve) => {
-          window._tsResolve = resolve;
-          try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
+          function doExecute() {
+            if (typeof turnstile === 'undefined' || window.turnstileWidgetId === null) {
+              resolve(null);
+              return;
+            }
+            window._tsResolve = resolve;
+            try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
+          }
+          if (window.turnstileWidgetId !== null) {
+            doExecute();
+          } else {
+            // Widget not ready yet — poll up to 5 s for it to initialise
+            let waited = 0;
+            const poll = setInterval(() => {
+              waited += 100;
+              if (window.turnstileWidgetId !== null) {
+                clearInterval(poll);
+                doExecute();
+              } else if (waited >= 5000) {
+                clearInterval(poll);
+                resolve(null);
+              }
+            }, 100);
+          }
+          // Hard cap: 15 s total
           setTimeout(() => {
             if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
-          }, 10000);
+          }, 15000);
         });
       };
 
+    </script>
+    <!-- Turnstile API loads AFTER onTurnstileReady is defined above -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady" defer></script>
+    <script>
       amountEl.addEventListener('input', () => {
         const { ok, msg } = validate(amountEl.value);
         hintEl.textContent = msg;
