@@ -870,15 +870,36 @@
       // Until then the widget renders nothing and no token is sent — the worker
       // will skip verification (because TURNSTILE_SECRET also won't be set yet).
       window.turnstileToken = null;
+      window.turnstileWidgetId = null;
+      window._tsResolve = null;
       window.onTurnstileReady = function () {
         if (typeof turnstile === "undefined") return;
         var SITE_KEY = "0x4AAAAAADKJD57mxiW3YWVk";
-        turnstile.render("#cf-turnstile", {
+        window.turnstileWidgetId = turnstile.render("#cf-turnstile", {
           sitekey: SITE_KEY,
           size: "invisible",
-          callback: function (token) { window.turnstileToken = token; },
-          "error-callback": function () { window.turnstileToken = null; },
+          callback: function (token) {
+            window.turnstileToken = token;
+            if (window._tsResolve) { window._tsResolve(token); window._tsResolve = null; }
+          },
+          "error-callback": function () {
+            window.turnstileToken = null;
+            if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
+          },
           "expired-callback": function () { window.turnstileToken = null; }
+        });
+      };
+      window.getTurnstileToken = function () {
+        if (window.turnstileToken) return Promise.resolve(window.turnstileToken);
+        if (typeof turnstile === "undefined" || window.turnstileWidgetId === null) {
+          return Promise.resolve(null);
+        }
+        return new Promise(function (resolve) {
+          window._tsResolve = resolve;
+          try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
+          setTimeout(function () {
+            if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
+          }, 10000);
         });
       };
     </script>
@@ -1383,7 +1404,7 @@
           }
 
           // Attach Cloudflare Turnstile token (silently ignored by worker if not configured)
-          orderData.cf_turnstile_token = window.turnstileToken || null;
+          orderData.cf_turnstile_token = await window.getTurnstileToken();
           const response = await callPaymentBackend("/create-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
