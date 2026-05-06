@@ -854,13 +854,7 @@
           </div>
           <div class="brand-info">
             <div class="brand-wordmark">
-              <img
-                src="YOUR_WORDMARK.png"
-                alt="Brand name"
-                class="brand-wordmark-img"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-              />
-              <h1 style="display:none">Secure Payment</h1>
+              <h1>Secure Payment</h1>
             </div>
             <p>Powered by DirectPay.lk</p>
           </div>
@@ -1284,7 +1278,7 @@
         try {
           setStep(1);
           // Attach Turnstile token (worker silently ignores it if TURNSTILE_SECRET unset)
-          payload.cf_turnstile_token = window.turnstileToken || null;
+          payload.cf_turnstile_token = await window.getTurnstileToken();
           const fetchPromise = callPaymentBackend('/create-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1324,15 +1318,36 @@
       // Until then the widget renders nothing and no token is sent — the worker
       // will skip verification (because TURNSTILE_SECRET also won't be set yet).
       window.turnstileToken = null;
+      window.turnstileWidgetId = null;
+      window._tsResolve = null;
       window.onTurnstileReady = function () {
         if (typeof turnstile === 'undefined') return;
         const SITE_KEY = '0x4AAAAAADKJD57mxiW3YWVk';
-        turnstile.render('#cf-turnstile', {
+        window.turnstileWidgetId = turnstile.render('#cf-turnstile', {
           sitekey: SITE_KEY,
           size: 'invisible',
-          callback: (token) => { window.turnstileToken = token; },
-          'error-callback': () => { window.turnstileToken = null; },
+          callback: (token) => {
+            window.turnstileToken = token;
+            if (window._tsResolve) { window._tsResolve(token); window._tsResolve = null; }
+          },
+          'error-callback': () => {
+            window.turnstileToken = null;
+            if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
+          },
           'expired-callback': () => { window.turnstileToken = null; }
+        });
+      };
+      window.getTurnstileToken = function () {
+        if (window.turnstileToken) return Promise.resolve(window.turnstileToken);
+        if (typeof turnstile === 'undefined' || window.turnstileWidgetId === null) {
+          return Promise.resolve(null);
+        }
+        return new Promise((resolve) => {
+          window._tsResolve = resolve;
+          try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
+          setTimeout(() => {
+            if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
+          }, 10000);
         });
       };
 
