@@ -492,6 +492,8 @@
       }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Cloudflare Turnstile (invisible bot check for DirectPay flow) -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady" async defer></script>
   </head>
   <body>
     <div class="checkout-container">
@@ -500,11 +502,11 @@
       <div class="gateway-notice">
         <span class="gateway-notice-icon"></span>
         <div class="gateway-notice-body">
-          <div class="gateway-notice-title">We Updated Our Servers For Fast Card Payments</div>
+          <div class="gateway-notice-title">Payment Gateway Notice For Debit/Credit Card Payments</div>
           <div class="gateway-notice-text">
             After clicking <strong>Pay Now</strong>, you'll be redirected to our secure DirectPay
-            gateway Server <strong>(RTS1)</strong> in just <strong>2–3 seconds</strong>. Please do not close or refresh this page
-            during the redirect. If <strong>(RTS1)</strong> server fail you'll be redirected to our second server <strong>(RTSB1)<strong>.
+            gateway in just <strong>2–3 seconds</strong>. Please do not close or refresh this page
+            during the redirect.
           </div>
         </div>
       </div>
@@ -797,6 +799,9 @@
         Visa / Debit / Credit Card payments are limited to a maximum of <strong>LKR 49,000</strong> (~ USD 154.20) per transaction. For higher amounts, please choose <strong>Local Bank Transfer</strong>, <strong>Bybit / Binance Pay</strong>, or <strong>QR Pay</strong> above.
       </div>
 
+      <!-- Turnstile invisible bot-check widget (token sent with payment request) -->
+      <div id="cf-turnstile" style="margin-bottom:14px;"></div>
+
       <button class="pay-btn" id="payBtn">
         <span class="btn-main-text">Pay Now</span>
       </button>
@@ -859,6 +864,24 @@
     <div class="version-tag">LKNG2026MAYDTRX425880BV(ENFORCED)</div>
 
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
+    <script>
+      // ---- Cloudflare Turnstile (invisible bot check) ----
+      // Replace TURNSTILE_SITE_KEY with the site key from your Cloudflare dashboard.
+      // Until then the widget renders nothing and no token is sent — the worker
+      // will skip verification (because TURNSTILE_SECRET also won't be set yet).
+      window.turnstileToken = null;
+      window.onTurnstileReady = function () {
+        if (typeof turnstile === "undefined") return;
+        var SITE_KEY = "0x4AAAAAADKJD57mxiW3YWVk";
+        turnstile.render("#cf-turnstile", {
+          sitekey: SITE_KEY,
+          size: "invisible",
+          callback: function (token) { window.turnstileToken = token; },
+          "error-callback": function () { window.turnstileToken = null; },
+          "expired-callback": function () { window.turnstileToken = null; }
+        });
+      };
+    </script>
 
     <script>
       // ====== Dark Mode Toggle ======
@@ -1224,7 +1247,7 @@
         const details = document.getElementById("pm-details-" + method);
         if (details) details.classList.add("show");
 
-        // Toggle card-specific UI
+        // Toggle card-specific UI: only the DirectPay flow uses payBtn + secure-badge + security-badges
         const isCard = method === "card";
         document.getElementById("payBtn").style.display = isCard ? "" : "none";
         const secureBadge = document.querySelector(".secure-badge");
@@ -1287,6 +1310,8 @@
         }, 2000);
 
         try {
+          // Build a descriptive order_id so the DirectPay dashboard shows
+          // what was purchased (DirectPay only displays order_id + amount).
           function makeOrderId(name, q, cart) {
             var label;
             if (cart && cart.length > 1) {
@@ -1320,7 +1345,11 @@
             return_url: "https://www.redtrex.com.lk/payment-success"
           };
 
-    
+          // Payment backend with automatic failover: Cloudflare Worker (primary,
+          // fast, zero cold start) → Render (backup). Customer never sees failover.
+          // Only fails over on network/timeout/5xx — 4xx (validation) returns
+          // immediately to avoid creating duplicate orders when one backend
+          // already processed the request.
           async function callPaymentBackend(path, options) {
             const endpoints = [
               "https://redtrex-payment.projectmmdoffcialdev.workers.dev",
@@ -1353,6 +1382,8 @@
             throw lastErr || new Error("All payment backends unavailable");
           }
 
+          // Attach Cloudflare Turnstile token (silently ignored by worker if not configured)
+          orderData.cf_turnstile_token = window.turnstileToken || null;
           const response = await callPaymentBackend("/create-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
