@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — RedTrex Technologies</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="Assest/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080808;
+    --card: #111;
+    --card-2: #181818;
+    --border: rgba(255,255,255,0.08);
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #DC2626;
+    --accent-2: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .topbar {
+    background: #0f0f0f;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .topbar a, .topbar button.linklike {
+    color: var(--accent-2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+  }
+  .topbar a:hover, .topbar button.linklike:hover { text-decoration: underline; }
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .brand-link img {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    background: #fff;
+    padding: 3px;
+    object-fit: contain;
+  }
+  .brand-link span { color: var(--text); font-weight: 700; font-size: 14px; }
+  .topbar .right { margin-left: auto; display: flex; gap: 18px; align-items: center; }
+  .who {
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+  }
+  .container {
+    max-width: 980px;
+    margin: 36px auto;
+    padding: 0 20px;
+  }
+  h1 { font-size: 28px; margin: 0 0 6px; color: var(--accent-2); }
+  .subtitle { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 22px;
+  }
+  .tab {
+    padding: 11px 18px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .tab.active { color: var(--accent-2); border-bottom-color: var(--accent); }
+  .tab .count {
+    display: inline-block;
+    background: rgba(248,113,113,0.15);
+    color: var(--accent-2);
+    border-radius: 999px;
+    padding: 1px 8px;
+    font-size: 11px;
+    margin-left: 6px;
+  }
+
+  .pane { display: none; }
+  .pane.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .row1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .id-line {
+    font-family: 'DM Mono', monospace;
+    color: var(--accent-2);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .meta {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+  }
+  .b-pending { background: rgba(245,158,11,0.10); color: #fbbf24; border-color: rgba(245,158,11,0.30); }
+  .b-paid, .b-completed { background: rgba(22,163,74,0.10); color: #4ade80; border-color: rgba(22,163,74,0.30); }
+  .b-progress { background: rgba(14,165,233,0.10); color: #38bdf8; border-color: rgba(14,165,233,0.30); }
+  .b-reviewing { background: rgba(59,130,246,0.10); color: #60a5fa; border-color: rgba(59,130,246,0.30); }
+  .b-scheduled { background: rgba(168,85,247,0.10); color: #c084fc; border-color: rgba(168,85,247,0.30); }
+  .b-cancelled, .b-failed { background: rgba(239,68,68,0.10); color: #f87171; border-color: rgba(239,68,68,0.30); }
+
+  .items {
+    margin: 12px 0 0;
+    color: #d1d5db;
+    font-size: 14px;
+  }
+  .items div { padding: 4px 0; }
+  .amount {
+    margin-top: 10px;
+    font-weight: 700;
+    color: var(--text);
+    font-size: 15px;
+  }
+  .amount span { color: var(--muted); font-weight: 400; font-size: 12px; margin-right: 6px; }
+
+  .keys {
+    margin-top: 10px;
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .keys .k {
+    font-family: 'DM Mono', monospace;
+    color: #4ade80;
+    font-size: 13px;
+    word-break: break-all;
+    padding: 3px 0;
+  }
+  .keys .label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--muted);
+  }
+  .empty h3 { color: var(--text); margin: 0 0 8px; font-size: 17px; }
+  .empty p { margin: 0 0 16px; font-size: 14px; }
+  .empty a {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .empty a:hover { background: #b91c1c; }
+
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .actions a, .actions button {
+    background: transparent;
+    color: var(--accent-2);
+    border: 1px solid var(--border);
+    padding: 7px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .actions a:hover, .actions button:hover { background: rgba(248,113,113,0.08); }
+
+  .desc {
+    margin-top: 10px;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .note {
+    margin-top: 10px;
+    background: rgba(59,130,246,0.08);
+    border-left: 3px solid #3b82f6;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #bfdbfe;
+  }
+  .note strong { color: #60a5fa; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/" class="brand-link" title="Back to RedTrex">
+    <img src="Assest/company.png" alt="RedTrex" onerror="this.style.display='none'">
+    <span>RedTrex</span>
+  </a>
+  <a href="/track-order.html">Track Order</a>
+  <a href="/track-service.html">Track Service</a>
+  <a href="/request-service.html">New Service Request</a>
+  <div class="right">
+    <span class="who" id="whoEmail">…</span>
+    <button class="linklike" id="logoutBtn">Sign out</button>
+  </div>
+</div>
+
+<div class="container">
+  <h1>My Account</h1>
+  <p class="subtitle">All your orders and service requests in one place. We auto-find anything you've ever placed with this email address.</p>
+
+  <div class="tabs">
+    <button class="tab active" data-pane="orders">My Orders <span class="count" id="ordersCount">…</span></button>
+    <button class="tab" data-pane="services">My Service Requests <span class="count" id="servicesCount">…</span></button>
+  </div>
+
+  <div class="pane active" id="paneOrders">
+    <div class="loading" id="ordersLoading">Loading your orders…</div>
+    <div id="ordersList"></div>
+  </div>
+
+  <div class="pane" id="paneServices">
+    <div class="loading" id="servicesLoading">Loading your service requests…</div>
+    <div id="servicesList"></div>
+  </div>
+</div>
+
+<script>
+  const WORKER_URL = "https://redtrex-coupons.projectmmdoffcialdev.workers.dev";
+  const STORAGE_KEY = "rtx_session";
+
+  // ==== Auth gate ====
+  function getSession() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (s && s.token && (!s.expires || s.expires > Date.now())) return s;
+    } catch {}
+    return null;
+  }
+
+  const session = getSession();
+  if (!session) {
+    location.replace("login.html?next=" + encodeURIComponent("account.html"));
+    throw new Error("redirecting");
+  }
+
+  document.getElementById("whoEmail").textContent = session.email || "";
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    if (!confirm("Sign out of your account?")) return;
+    try {
+      await fetch(`${WORKER_URL}/auth/logout`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+    } catch {}
+    localStorage.removeItem(STORAGE_KEY);
+    location.replace("login.html");
+  });
+
+  // ==== Tabs ====
+  document.querySelectorAll(".tab").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+      document.querySelectorAll(".pane").forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      document.getElementById("pane" + t.dataset.pane[0].toUpperCase() + t.dataset.pane.slice(1)).classList.add("active");
+    });
+  });
+
+  // ==== Helpers ====
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmtDate = (ts) => ts ? new Date(ts).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "—";
+  const fmtMoney = (n) => n != null ? Number(n).toLocaleString("en-LK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0.00";
+
+  function badge(status) {
+    const s = (status || "Pending").toLowerCase();
+    let cls = "b-pending";
+    if (s === "paid" || s === "completed") cls = "b-paid";
+    else if (s === "in progress") cls = "b-progress";
+    else if (s === "reviewing") cls = "b-reviewing";
+    else if (s === "scheduled") cls = "b-scheduled";
+    else if (s === "cancelled" || s === "failed") cls = "b-cancelled";
+    return `<span class="badge ${cls}">${esc(status || "Pending")}</span>`;
+  }
+
+  async function authedFetch(path) {
+    const res = await fetch(`${WORKER_URL}${path}`, {
+      headers: { Authorization: `Bearer ${session.token}` }
+    });
+    if (res.status === 401) {
+      localStorage.removeItem(STORAGE_KEY);
+      location.replace("login.html");
+      throw new Error("session expired");
+    }
+    return res.json();
+  }
+
+  // ==== Render orders ====
+  function renderOrders(orders) {
+    const list = document.getElementById("ordersList");
+    document.getElementById("ordersLoading").style.display = "none";
+    document.getElementById("ordersCount").textContent = orders.length;
+
+    if (orders.length === 0) {
+      list.innerHTML = `
+        <div class="empty">
+          <h3>No orders yet</h3>
+          <p>When you buy a product key, it'll show up here.</p>
+          <a href="/">Browse products</a>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = orders.map(o => {
+      const items = (o.items || []).map(it => `<div>• ${esc(it.name)} <span style="color:var(--muted)">×${it.quantity || 1}</span></div>`).join("");
+      const keys = (o.product_keys || []).filter(Boolean);
+      const keysHtml = keys.length ? `
+        <div class="keys">
+          <div class="label">🔑 Product Key${keys.length > 1 ? "s" : ""}</div>
+          ${keys.map(k => `<div class="k">${esc(k)}</div>`).join("")}
+        </div>` : "";
+      return `
+        <div class="card">
+          <div class="row1">
+            <div>
+              <div class="id-line">${esc(o.order_id)}</div>
+              <div class="meta">Placed ${fmtDate(o.ts)}${o.coupon_code ? ` · Coupon <strong style="color:#cbd5e1">${esc(o.coupon_code)}</strong>` : ""}</div>
+            </div>
+            ${badge(o.status)}
+          </div>
+          <div class="items">${items}</div>
+          <div class="amount"><span>Amount:</span>LKR ${fmtMoney(o.amount)}${o.paid_amount ? ` <span style="margin-left:10px">Paid:</span>LKR ${fmtMoney(o.paid_amount)}` : ""}</div>
+          ${keysHtml}
+          <div class="actions">
+            <a href="/track-order.html?email=${encodeURIComponent(session.email)}&order_id=${encodeURIComponent(o.order_id)}">View full details →</a>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  // ==== Render services ====
+  function renderServices(services) {
+    const list = document.getElementById("servicesList");
+    document.getElementById("servicesLoading").style.display = "none";
+    document.getElementById("servicesCount").textContent = services.length;
+
+    if (services.length === 0) {
+      list.innerHTML = `
+        <div class="empty">
+          <h3>No service requests yet</h3>
+          <p>Need help? Submit a service request and we'll get back to you.</p>
+          <a href="/request-service.html">Request a service</a>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = services.map(s => {
+      const desc = s.description ? `<div class="desc">${esc(s.description.slice(0, 280))}${s.description.length > 280 ? "…" : ""}</div>` : "";
+      const note = s.admin_note ? `<div class="note"><strong>Note from RedTrex:</strong><br>${esc(s.admin_note)}</div>` : "";
+      const sched = s.scheduled_for ? ` · Scheduled <strong style="color:#cbd5e1">${esc(s.scheduled_for)}</strong>` : "";
+      const quote = s.quote_amount > 0 ? `<div class="amount"><span>Estimated cost:</span>LKR ${fmtMoney(s.quote_amount)}</div>` : "";
+      return `
+        <div class="card">
+          <div class="row1">
+            <div>
+              <div class="id-line">${esc(s.service_id)}</div>
+              <div class="meta">${esc(s.service_type || "Service")} · Created ${fmtDate(s.ts)}${sched}</div>
+            </div>
+            ${badge(s.status)}
+          </div>
+          ${desc}
+          ${quote}
+          ${note}
+          <div class="actions">
+            <a href="/track-service.html?email=${encodeURIComponent(session.email)}&service_id=${encodeURIComponent(s.service_id)}">View full timeline →</a>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  // ==== Load both in parallel ====
+  (async function load() {
+    try {
+      const [ord, svc] = await Promise.all([
+        authedFetch("/auth/my-orders").catch(e => ({ ok: false, orders: [] })),
+        authedFetch("/auth/my-services").catch(e => ({ ok: false, services: [] }))
+      ]);
+      renderOrders(Array.isArray(ord.orders) ? ord.orders : []);
+      renderServices(Array.isArray(svc.services) ? svc.services : []);
+    } catch (e) {
+      document.getElementById("ordersLoading").textContent = "Couldn't load your account. Please refresh.";
+      document.getElementById("servicesLoading").textContent = "";
+    }
+  })();
+</script>
+
+</body>
+</html>

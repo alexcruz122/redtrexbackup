@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — RedTrex Technologies</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="Assest/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080808;
+    --card: #111;
+    --card-2: #181818;
+    --border: rgba(255,255,255,0.08);
+    --text: #f3f4f6;
+    --muted: #9ca3af;
+    --accent: #DC2626;
+    --accent-2: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(circle at 20% 0%, rgba(220,38,38,0.10), transparent 55%), var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .topbar {
+    background: #0f0f0f;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .topbar a {
+    color: var(--accent-2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .topbar a:hover { text-decoration: underline; }
+  .wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .brand-logo {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: #fff;
+    padding: 5px;
+    object-fit: contain;
+    box-shadow: 0 2px 10px rgba(220,38,38,0.15);
+  }
+  h1 { font-size: 22px; margin: 0 0 6px; color: var(--accent-2); }
+  .sub { color: var(--muted); margin: 0 0 22px; font-size: 14px; line-height: 1.5; }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 14px 0 6px;
+  }
+  input[type=email], input[type=text] {
+    width: 100%;
+    padding: 13px 14px;
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+  }
+  input.code {
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    letter-spacing: 12px;
+    padding-left: 12px;
+  }
+  input:focus { outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(248,113,113,0.15); }
+  button {
+    width: 100%;
+    margin-top: 18px;
+    padding: 13px 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+  }
+  button:hover:not(:disabled) { background: #b91c1c; }
+  button:disabled { opacity: 0.55; cursor: not-allowed; }
+  button.ghost {
+    background: transparent;
+    color: var(--accent-2);
+    border: 1px solid var(--border);
+    margin-top: 10px;
+  }
+  button.ghost:hover:not(:disabled) { background: rgba(248,113,113,0.08); }
+  .msg {
+    margin-top: 14px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    display: none;
+  }
+  .msg.ok { display: block; background: rgba(34,197,94,0.10); color: #86efac; border: 1px solid rgba(34,197,94,0.25); }
+  .msg.err { display: block; background: rgba(220,38,38,0.10); color: #fca5a5; border: 1px solid rgba(220,38,38,0.25); }
+  .footnote {
+    margin-top: 18px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .footnote a { color: var(--accent-2); text-decoration: none; }
+  .footnote a:hover { text-decoration: underline; }
+  .step { display: none; }
+  .step.active { display: block; }
+  .resend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+  .resend-row button {
+    width: auto;
+    padding: 6px 10px;
+    margin: 0;
+    background: transparent;
+    color: var(--accent-2);
+    font-size: 12px;
+    border: 1px solid var(--border);
+  }
+  .resend-row button:disabled { color: var(--muted); }
+  .email-pill {
+    display: inline-block;
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    color: var(--accent-2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/">← Back to RedTrex</a>
+  <span style="color:#444">|</span>
+  <a href="/track-order.html">Track an order without signing in</a>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="brand">
+      <img src="Assest/company.png" alt="RedTrex Technologies" class="brand-logo" onerror="this.style.display='none'">
+      <div>
+        <div style="font-weight:700;font-size:15px">RedTrex Technologies</div>
+        <div style="color:var(--muted);font-size:12px">Customer Account</div>
+      </div>
+    </div>
+
+    <!-- Step 1: enter email -->
+    <div class="step active" id="stepEmail">
+      <h1>Sign in to your account</h1>
+      <p class="sub">Enter your email and we'll send you a 6-digit code,No password needed.</p>
+
+      <form id="emailForm" autocomplete="on">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+        <button type="submit" id="sendBtn">Send me a code</button>
+      </form>
+      <div class="msg" id="emailMsg"></div>
+    </div>
+
+    <!-- Step 2: enter code -->
+    <div class="step" id="stepCode">
+      <h1>Enter your code</h1>
+      <p class="sub">We sent a 6-digit code to <span class="email-pill" id="sentToPill"></span>. Check your inbox (and spam folder). Code expires in 10 minutes.</p>
+
+      <form id="codeForm" autocomplete="off">
+        <label for="code">6-digit code</label>
+        <input type="text" id="code" name="code" required inputmode="numeric" pattern="\d{6}" maxlength="6" class="code" placeholder="••••••" autocomplete="one-time-code" />
+        <button type="submit" id="verifyBtn">Verify &amp; sign in</button>
+      </form>
+
+      <div class="resend-row">
+        <span>Didn't get it?</span>
+        <button type="button" id="resendBtn">Resend code</button>
+      </div>
+
+      <button type="button" class="ghost" id="changeEmailBtn">← Use a different email</button>
+      <div class="msg" id="codeMsg"></div>
+    </div>
+
+    <div class="footnote">
+      Trouble signing in? <a href="https://wa.me/message/JDKR2AEH67JRM1">Message us on WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const WORKER_URL = "https://redtrex-coupons.projectmmdoffcialdev.workers.dev";
+  const STORAGE_KEY = "rtx_session";
+
+  // If already signed in, jump straight to the dashboard
+  (function checkExistingSession() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (s && s.token && s.expires && s.expires > Date.now()) {
+        location.replace("account.html");
+      }
+    } catch {}
+  })();
+
+  const stepEmail = document.getElementById("stepEmail");
+  const stepCode  = document.getElementById("stepCode");
+  const emailInput = document.getElementById("email");
+  const codeInput  = document.getElementById("code");
+  const sendBtn    = document.getElementById("sendBtn");
+  const verifyBtn  = document.getElementById("verifyBtn");
+  const resendBtn  = document.getElementById("resendBtn");
+  const changeBtn  = document.getElementById("changeEmailBtn");
+  const sentToPill = document.getElementById("sentToPill");
+  const emailMsg   = document.getElementById("emailMsg");
+  const codeMsg    = document.getElementById("codeMsg");
+
+  let currentEmail = "";
+  let resendTimer = 0;
+
+  // Pre-fill from URL ?email=
+  const qsEmail = new URLSearchParams(location.search).get("email");
+  if (qsEmail) emailInput.value = qsEmail;
+
+  function showMsg(el, type, text) {
+    el.className = "msg " + type;
+    el.textContent = text;
+  }
+  function clearMsg(el) { el.className = "msg"; el.textContent = ""; }
+
+  function goToCodeStep(email) {
+    currentEmail = email;
+    sentToPill.textContent = email;
+    stepEmail.classList.remove("active");
+    stepCode.classList.add("active");
+    codeInput.value = "";
+    codeInput.focus();
+    startResendCooldown();
+  }
+  function goToEmailStep() {
+    stepCode.classList.remove("active");
+    stepEmail.classList.add("active");
+    clearMsg(codeMsg);
+    emailInput.focus();
+  }
+
+  function startResendCooldown() {
+    resendTimer = 30;
+    resendBtn.disabled = true;
+    const tick = () => {
+      if (resendTimer <= 0) {
+        resendBtn.disabled = false;
+        resendBtn.textContent = "Resend code";
+        return;
+      }
+      resendBtn.textContent = `Resend (${resendTimer}s)`;
+      resendTimer--;
+      setTimeout(tick, 1000);
+    };
+    tick();
+  }
+
+  async function requestCode(email) {
+    const res = await fetch(`${WORKER_URL}/auth/request-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    return res.json().catch(() => ({ ok: false, error: "Network error" }));
+  }
+
+  document.getElementById("emailForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearMsg(emailMsg);
+    const email = emailInput.value.trim().toLowerCase();
+    if (!email) return;
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending…";
+    const data = await requestCode(email);
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Send me a code";
+    if (data.ok) {
+      goToCodeStep(email);
+    } else {
+      showMsg(emailMsg, "err", data.error || "Couldn't send code. Try again.");
+    }
+  });
+
+  resendBtn.addEventListener("click", async () => {
+    if (!currentEmail || resendBtn.disabled) return;
+    clearMsg(codeMsg);
+    resendBtn.disabled = true;
+    resendBtn.textContent = "Sending…";
+    const data = await requestCode(currentEmail);
+    if (data.ok) {
+      showMsg(codeMsg, "ok", "New code sent. Check your inbox.");
+      startResendCooldown();
+    } else {
+      showMsg(codeMsg, "err", data.error || "Couldn't resend. Try again in a moment.");
+      resendBtn.disabled = false;
+      resendBtn.textContent = "Resend code";
+    }
+  });
+
+  changeBtn.addEventListener("click", goToEmailStep);
+
+  document.getElementById("codeForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearMsg(codeMsg);
+    const code = codeInput.value.replace(/\D/g, "");
+    if (code.length !== 6) {
+      showMsg(codeMsg, "err", "Please enter the 6-digit code.");
+      return;
+    }
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = "Verifying…";
+    try {
+      const res = await fetch(`${WORKER_URL}/auth/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: currentEmail, code })
+      });
+      const data = await res.json().catch(() => ({ ok: false, error: "Network error" }));
+      if (data.ok && data.token) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          token: data.token,
+          email: data.email,
+          expires: data.expires
+        }));
+        showMsg(codeMsg, "ok", "Signed in! Loading your account…");
+        // Only allow same-origin relative paths from a small allowlist (prevents open-redirect)
+        const ALLOWED_NEXT = ["account.html", "track-order.html", "track-service.html", "request-service.html"];
+        const rawNext = (new URLSearchParams(location.search).get("next") || "").replace(/^\/+/, "");
+        const safeNext = ALLOWED_NEXT.includes(rawNext.split("?")[0]) ? rawNext : "account.html";
+        setTimeout(() => location.replace(safeNext), 500);
+      } else {
+        showMsg(codeMsg, "err", data.error || "That code didn't match.");
+      }
+    } catch {
+      showMsg(codeMsg, "err", "Network error. Please try again.");
+    }
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = "Verify & sign in";
+  });
+
+  // Auto-submit when 6 digits typed/pasted
+  codeInput.addEventListener("input", () => {
+    const v = codeInput.value.replace(/\D/g, "").slice(0, 6);
+    codeInput.value = v;
+    if (v.length === 6) document.getElementById("codeForm").requestSubmit();
+  });
+</script>
+
+</body>
+</html>
