@@ -260,6 +260,11 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
+    .card-header .badge-warning {
+      background: rgba(245,158,11,0.15);
+      border: 1px solid rgba(245,158,11,0.3);
+      color: #fbbf24;
+    }
 
     /* ── STEPS ── */
     .steps { list-style: none; }
@@ -582,6 +587,66 @@
         <div class="info-box">
           <span class="info-icon"><img src="icons/warning.png" alt="Warning"></span>
           <span>If activation fails with error <strong>0xC004F074</strong>, your PC may be offline or blocked by a firewall. Try again with a stable internet connection or contact our support.</span>
+        </div>
+      </div>
+
+      <div class="section-divider">Troubleshooting</div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <span class="card-icon"><img src="icons/cmd.png" alt="Command Prompt"></span>
+          <h2>Windows 11 Phone Activation Fix</h2>
+          <span class="badge badge-warning">Legacy UI Missing</span>
+        </div>
+        <div class="info-box" style="margin-bottom:18px">
+          <span class="info-icon">⚠️</span>
+          <span>Some newer builds of Windows 11 (including <strong>24H2 / 25H2</strong>) no longer display the classic blue phone activation window (<code>slui 4</code>). Instead, Windows may redirect to the modern Settings app and show:<br><br><strong>"Can't activate via phone. Contact your administrator."</strong><br><br>This is caused by Microsoft deprecating the legacy activation interface on newer builds.</span>
+        </div>
+        <p style="margin-bottom:16px;color:var(--text-secondary, #555);font-size:14px;">If you already have your <strong>Confirmation ID</strong> from Microsoft phone activation, you can manually apply it using Command Prompt.</p>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <strong>Open Command Prompt as Administrator</strong>
+              <p>Press <kbd>Start</kbd>, search for <strong>CMD</strong>, right-click <strong>Command Prompt</strong> and select <strong>Run as administrator</strong>.</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <strong>Apply your Confirmation ID</strong>
+              <p>Run the following command, replacing <strong>YOUR-CONFIRMATION-ID</strong> with the ID provided by Microsoft:</p>
+              <code>slmgr /atp YOUR-CONFIRMATION-ID</code>
+              <p style="margin-top:10px;font-size:13px;color:var(--text-secondary, #555);">Example:</p>
+              <code>slmgr /atp 123456-123456-123456-123456-123456-123456-123456-123456</code>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <strong>Finalize Activation</strong>
+              <p>Run the following command to complete the activation process:</p>
+              <code>slmgr /ato</code>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <strong>Verify Activation Status</strong>
+              <p>Confirm activation was successful by running:</p>
+              <code>slmgr /xpr</code>
+              <p style="margin-top:10px;font-size:13px;color:var(--text-secondary, #555);">If successful, Windows will display: <strong>"The machine is permanently activated."</strong></p>
+            </div>
+          </li>
+        </ol>
+        <div class="info-box">
+          <span class="info-icon"><img src="icons/warning.png" alt="Note"></span>
+          <span>
+            <strong>Additional Notes:</strong><br>
+            • This issue mainly affects newer Windows 11 builds where Microsoft deprecated the legacy activation wizard.<br>
+            • The activation backend still functions normally even if the old UI is unavailable.<br>
+            • This method works only with valid Confirmation IDs obtained through official Microsoft phone activation.
+          </span>
         </div>
       </div>
 
