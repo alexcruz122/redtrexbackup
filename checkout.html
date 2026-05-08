@@ -885,7 +885,17 @@
             window.turnstileToken = null;
             if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
           },
-          "expired-callback": function () { window.turnstileToken = null; }
+          "timeout-callback": function () {
+            window.turnstileToken = null;
+            if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
+          },
+          "retry-callback": function () {
+            window.turnstileToken = null;
+          },
+          "expired-callback": function () {
+            window.turnstileToken = null;
+            if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
+          }
         });
       };
       window.getTurnstileToken = function () {
@@ -1428,7 +1438,7 @@
           // Attach Cloudflare Turnstile token — abort early if widget failed to produce one
           orderData.cf_turnstile_token = await window.getTurnstileToken();
           if (!orderData.cf_turnstile_token) {
-            throw new Error("Security check could not be completed. Please refresh the page and try again.");
+            throw new Error("Security check failed. Please refresh the page and try again. If the problem persists, try in a private/incognito window or disable browser extensions.");
           }
           const response = await callPaymentBackend("/create-payment", {
             method: "POST",
@@ -1482,7 +1492,7 @@
           clearInterval(msgInterval);
           console.error("Frontend error:", err);
           const errEl = document.getElementById("amountError");
-          errEl.innerText = "Something went wrong. Please try again.";
+          errEl.innerText = err.message || "Something went wrong. Please try again.";
           errEl.classList.add("show");
           resetButton();
         }
