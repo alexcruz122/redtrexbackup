@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RedTrex Coupon Codes</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: #060816;
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glow-1,
+    .glow-2 {
+      position: fixed;
+      width: 320px;
+      height: 320px;
+      border-radius: 9999px;
+      filter: blur(120px);
+      z-index: 0;
+    }
+
+    .glow-1 {
+      background: rgba(34, 211, 238, 0.18);
+      top: -100px;
+      left: -100px;
+    }
+
+    .glow-2 {
+      background: rgba(168, 85, 247, 0.18);
+      bottom: -100px;
+      right: -100px;
+    }
+
+    .copy-btn {
+      transition: all 0.25s ease;
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .copy-btn:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen flex flex-col relative">
+
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+
+  <!-- Header -->
+  <header class="relative z-10 px-5 py-10 text-center">
+    <div class="flex flex-col items-center justify-center mb-6">
+      <img
+        src="https://www.redtrex.com.lk/Assest/company.png"
+        alt="RedTrex Technologies"
+        class="w-24 h-24 rounded-3xl object-cover border border-white/10 shadow-2xl mb-4"
+      />
+
+      <h2 class="text-xl font-semibold tracking-wide">
+        RedTrex Technologies
+      </h2>
+    </div>
+
+    <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent leading-tight">
+      Exclusive Coupon Codes
+    </h1>
+
+    <p class="text-gray-400 mt-4 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+      Unlock discounts instantly. Tap any coupon below to copy and use it on your next order.
+    </p>
+  </header>
+
+  <!-- Coupons -->
+  <main class="relative z-10 px-4 md:px-8 pb-20 flex-1">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+
+      <!-- Coupon Card -->
+      <div class="glass rounded-3xl p-5 shadow-2xl hover:scale-[1.02] transition-all duration-300">
+        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-cyan-400/10 text-cyan-300 border border-cyan-400/20 inline-block mb-4">
+         RELAUNCH DISCOUNT
+        </span>
+
+        <h2 class="text-2xl font-extrabold tracking-wider mb-2 break-all">
+          HELLO-REDTREX
+        </h2>
+
+        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+          Get 16% off on every order | Expire : 2026-Jul-04</p>
+  <p class="text-gray-400 text-sm leading-relaxed mb-6">
+          Min order value : LKR 2,000 | Max Discount : LKR 1,180 </p>
+
+        <button
+          class="copy-btn glass w-full rounded-2xl px-5 py-3 text-sm font-semibold"
+          onclick="copyCode(this, 'HELLO-REDTREX')"
+        >
+          Copy Code
+        </button>
+      </div>
+
+      
+  </main>
+
+  <!-- Footer -->
+  <footer class="relative z-10 border-t border-white/10 glass mt-auto">
+    <div class="max-w-6xl mx-auto px-5 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img
+          src="https://www.redtrex.com.lk/Assest/company.png"
+          alt="RedTrex Technologies"
+          class="w-11 h-11 rounded-xl object-cover border border-white/10"
+        />
+
+        <div>
+          <h3 class="font-bold text-white text-base">
+            RedTrex Technologies
+          </h3>
+
+          <p class="text-xs text-gray-400">
+            Modern digital solutions & software services.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-500 text-center sm:text-right">
+        © 2026 RedTrex Technologies.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    async function copyCode(button, code) {
+      let copied = false;
+
+      try {
+        if (
+          navigator.clipboard &&
+          typeof navigator.clipboard.writeText === 'function' &&
+          window.isSecureContext
+        ) {
+          await navigator.clipboard.writeText(code);
+          copied = true;
+        }
+      } catch (error) {
+        console.warn('Clipboard API failed:', error);
+      }
+
+      if (!copied) {
+        try {
+          const textArea = document.createElement('textarea');
+          textArea.value = code;
+          textArea.style.position = 'fixed';
+          textArea.style.opacity = '0';
+
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+
+          copied = document.execCommand('copy');
+
+          document.body.removeChild(textArea);
+        } catch (err) {
+          console.error('Fallback copy failed:', err);
+        }
+      }
+
+      if (copied) {
+        const originalText = button.innerText;
+
+        button.innerText = 'Copied ✓';
+        button.classList.add('bg-cyan-400/20');
+
+        setTimeout(() => {
+          button.innerText = originalText;
+          button.classList.remove('bg-cyan-400/20');
+        }, 2000);
+      } else {
+        alert('Unable to copy automatically. Coupon code: ' + code);
+      }
+    }
+  </script>
+
+</body>
+</html>
