@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RedTrex Pay</title>
+    <title>RedTrex Pay — Secure Payment Gateway</title>
+    <meta name="description" content="Secure payment page for RedTrex Technologies orders. Encrypted checkout via DirectPay.">
+    <meta name="robots" content="noindex,nofollow">
     <link rel="icon" type="image/png" href="Assest/company.png" />
     <link rel="apple-touch-icon" href="Assest/company.png" />
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
 <!-- Cloudflare Turnstile (invisible bot check) -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady" async defer></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap"
       rel="stylesheet"
@@ -974,6 +977,15 @@
               </svg>
             </div>
           </button>
+
+          <!-- PayPal alternative -->
+          <div style="display:flex;align-items:center;gap:10px;margin:14px 0 4px;">
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+            <span style="font-size:11px;color:var(--text-muted);white-space:nowrap;">or pay with</span>
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+          </div>
+          <div id="paypal-pay-container" style="min-height:48px;"></div>
+          <div id="paypal-pay-msg" style="font-size:12px;color:var(--text-secondary);text-align:center;margin-top:6px;min-height:16px;"></div>
         </div>
 
         <!-- Footer -->
@@ -1259,7 +1271,7 @@
                 else console.warn('[pay] failed over to Render backup');
                 return res;
               }
-              // 4xx = client/validation/security error — don't fail over, return as-is
+              // 4xx = client/validation error — don't fail over, return as-is
               if (res.status >= 400 && res.status < 500) {
                 console.warn('[pay] ' + base + ' returned ' + res.status + ' (no failover)');
                 return res;
@@ -1277,11 +1289,8 @@
 
         try {
           setStep(1);
-          // Attach Turnstile token — abort early if widget failed to produce one
+          // Attach Turnstile token (worker silently ignores it if TURNSTILE_SECRET unset)
           payload.cf_turnstile_token = await window.getTurnstileToken();
-          if (!payload.cf_turnstile_token) {
-            throw new Error("Security check could not be completed. Please refresh the page and try again.");
-          }
           const fetchPromise = callPaymentBackend('/create-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1292,11 +1301,7 @@
           setStep(2);
 
           const res = await fetchPromise;
-          if (!res.ok) {
-            let errMsg = 'Payment failed. Please try again.';
-            try { const j = await res.json(); if (j && j.error) errMsg = j.error; } catch (e) {}
-            throw new Error(errMsg);
-          }
+          if (!res.ok) throw new Error('Server error');
 
           const { signature, dataString } = await res.json();
 
@@ -1321,9 +1326,9 @@
       function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
       // ---- Cloudflare Turnstile (invisible bot check) ----
-      // Cloudflare Turnstile invisible bot check.
-      // TURNSTILE_SECRET is required on both backends — no bypass exists.
-      // A null token from this widget will block the payment request.
+      // Replace TURNSTILE_SITE_KEY with the site key from your Cloudflare dashboard.
+      // Until then the widget renders nothing and no token is sent — the worker
+      // will skip verification (because TURNSTILE_SECRET also won't be set yet).
       window.turnstileToken = null;
       window.turnstileWidgetId = null;
       window._tsResolve = null;
@@ -1346,42 +1351,18 @@
       };
       window.getTurnstileToken = function () {
         if (window.turnstileToken) return Promise.resolve(window.turnstileToken);
+        if (typeof turnstile === 'undefined' || window.turnstileWidgetId === null) {
+          return Promise.resolve(null);
+        }
         return new Promise((resolve) => {
-          function doExecute() {
-            if (typeof turnstile === 'undefined' || window.turnstileWidgetId === null) {
-              resolve(null);
-              return;
-            }
-            window._tsResolve = resolve;
-            try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
-          }
-          if (window.turnstileWidgetId !== null) {
-            doExecute();
-          } else {
-            // Widget not ready yet — poll up to 5 s for it to initialise
-            let waited = 0;
-            const poll = setInterval(() => {
-              waited += 100;
-              if (window.turnstileWidgetId !== null) {
-                clearInterval(poll);
-                doExecute();
-              } else if (waited >= 5000) {
-                clearInterval(poll);
-                resolve(null);
-              }
-            }, 100);
-          }
-          // Hard cap: 15 s total
+          window._tsResolve = resolve;
+          try { turnstile.execute(window.turnstileWidgetId); } catch (e) { resolve(null); }
           setTimeout(() => {
             if (window._tsResolve) { window._tsResolve(null); window._tsResolve = null; }
-          }, 15000);
+          }, 10000);
         });
       };
 
-    </script>
-    <!-- Turnstile API loads AFTER onTurnstileReady is defined above -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady" defer></script>
-    <script>
       amountEl.addEventListener('input', () => {
         const { ok, msg } = validate(amountEl.value);
         hintEl.textContent = msg;
@@ -1407,6 +1388,136 @@
       modalCancel.addEventListener('click', closeModal);
       modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
       modalConfirm.addEventListener('click', processPayment);
+
+      // ====== PayPal Integration (pay.html) ======
+      (function () {
+        const WORKER    = 'https://redtrex-payment.projectmmdoffcialdev.workers.dev';
+        const SUCCESS   = 'https://www.redtrex.com.lk';
+        let sdkLoaded   = false;
+        let sdkLoading  = false;
+        let lkrPerUsd   = 310; // fallback rate
+
+        // Fetch exchange rate for LKR→USD conversion
+        (async function fetchRate() {
+          try {
+            const r = await fetch('https://open.er-api.com/v6/latest/USD');
+            const d = await r.json();
+            if (d && d.rates && d.rates.LKR) lkrPerUsd = d.rates.LKR;
+          } catch (e) { /* keep fallback */ }
+          loadPayPalSdk(); // init after rate is known
+        })();
+
+        async function loadPayPalSdk() {
+          if (sdkLoaded || sdkLoading) return;
+          sdkLoading = true;
+          const msgEl = document.getElementById('paypal-pay-msg');
+          try {
+            const cfgRes = await fetch(WORKER + '/paypal/config');
+            if (!cfgRes.ok) throw new Error('config unavailable');
+            const cfg = await cfgRes.json();
+            if (!cfg.client_id) throw new Error('PayPal not configured');
+
+            await new Promise(function (resolve, reject) {
+              var s = document.createElement('script');
+              s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(cfg.client_id) + '&currency=USD';
+              s.onload  = resolve;
+              s.onerror = reject;
+              document.head.appendChild(s);
+            });
+
+            sdkLoaded = true;
+            if (msgEl) msgEl.textContent = '';
+            renderPayPalButtons();
+          } catch (e) {
+            console.error('[pay][paypal] SDK load:', e);
+            if (msgEl) msgEl.textContent = 'PayPal unavailable — use the Pay Now button above.';
+          } finally {
+            sdkLoading = false;
+          }
+        }
+
+        function renderPayPalButtons() {
+          if (!window.paypal) return;
+          var container = document.getElementById('paypal-pay-container');
+          if (!container) return;
+          container.innerHTML = '';
+
+          paypal.Buttons({
+            style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'pay', height: 44 },
+
+            createOrder: async function () {
+              var lkr = parseFloat(amountEl.value) || 0;
+              if (lkr < 10) throw new Error('Enter a valid amount first.');
+              var usd = parseFloat((lkr / lkrPerUsd).toFixed(2));
+              if (usd < 0.50) throw new Error('Amount too small for PayPal.');
+
+              var name  = (document.getElementById('name')  || {}).value  || '';
+              var email = (document.getElementById('email') || {}).value  || '';
+              var phone = (document.getElementById('phone') || {}).value  || '';
+
+              var res = await fetch(WORKER + '/paypal/create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  amount_usd:   usd,
+                  amount_lkr:   lkr,
+                  product_name: 'RedTrex Pay (Quick Payment)',
+                  qty:          1,
+                  items:        [{ name: 'RedTrex Pay (Quick Payment)', quantity: 1 }],
+                  first_name:   name.split(' ')[0] || name,
+                  last_name:    name.split(' ').slice(1).join(' ') || '',
+                  email:        email.trim(),
+                  phone:        phone.trim()
+                })
+              });
+              if (!res.ok) {
+                var err = await res.json().catch(function () { return {}; });
+                throw new Error(err.error || 'Order creation failed.');
+              }
+              var data = await res.json();
+              window._ppPayOrderId = data.order_id;
+              return data.paypal_order_id;
+            },
+
+            onApprove: async function (data) {
+              var container = document.getElementById('paypal-pay-container');
+              var msgEl     = document.getElementById('paypal-pay-msg');
+              if (container) container.innerHTML = '<div style="text-align:center;padding:14px;font-size:13px;color:#6b6963;">Confirming payment…</div>';
+              if (msgEl) msgEl.textContent = '';
+
+              var res = await fetch(WORKER + '/paypal/capture-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  paypal_order_id: data.orderID,
+                  order_id:        window._ppPayOrderId
+                })
+              });
+              if (!res.ok) {
+                var err = await res.json().catch(function () { return {}; });
+                if (msgEl) msgEl.textContent = err.error || 'Payment failed. Please try again.';
+                setTimeout(renderPayPalButtons, 1500);
+                return;
+              }
+              var result = await res.json();
+              if (result.redirect) window.location.href = result.redirect;
+            },
+
+            onError: function (err) {
+              console.error('[pay][paypal] error:', err);
+              var msgEl = document.getElementById('paypal-pay-msg');
+              if (msgEl) msgEl.textContent = 'PayPal encountered an error. Please try again.';
+            },
+
+            onCancel: function () {
+              var msgEl = document.getElementById('paypal-pay-msg');
+              if (msgEl) msgEl.textContent = 'Payment cancelled — you can try again.';
+            }
+
+          }).render('#paypal-pay-container');
+        }
+      })();
+
     </script>
   </body>
 </html>
