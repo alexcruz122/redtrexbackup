@@ -1472,7 +1472,10 @@
               });
               if (!res.ok) {
                 var err = await res.json().catch(function () { return {}; });
-                throw new Error(err.error || 'Order creation failed.');
+                var errMsg = err.error || 'Order creation failed.';
+                var msgEl = document.getElementById('paypal-pay-msg');
+                if (msgEl) msgEl.textContent = errMsg;
+                throw new Error(errMsg);
               }
               var data = await res.json();
               window._ppPayOrderId = data.order_id;
