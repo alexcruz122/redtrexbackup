@@ -18,16 +18,27 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { 'primary-dark': '#1a1a2e', 'primary-light': '#ffffff', 'accent-blue': '#00d4ff' }
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'primary-dark': '#1a1a2e',
+                        'primary-light': '#ffffff',
+                        'accent-blue': '#00d4ff'
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        html { scroll-behavior: smooth; }
-        * { transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
 
         .hero-bg {
             background:
@@ -36,7 +47,10 @@
                 linear-gradient(135deg, #0f0f1f 0%, #1a1a2e 60%, #16213e 100%);
         }
 
-        .dotted { background-image: radial-gradient(rgba(0, 212, 255, 0.25) 1px, transparent 1px); background-size: 22px 22px; }
+        .dotted {
+            background-image: radial-gradient(rgba(0, 212, 255, 0.25) 1px, transparent 1px);
+            background-size: 22px 22px;
+        }
 
         .group-card {
             background: rgba(255, 255, 255, 0.97);
@@ -44,10 +58,12 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.35s ease;
         }
+
         .dark .group-card {
             background: rgba(26, 26, 46, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
         .group-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 18px 40px -12px rgba(0, 212, 255, 0.25);
@@ -74,14 +90,17 @@
             border: 1px solid transparent;
             transition: all 0.25s ease;
         }
+
         .page-link:hover {
             background: rgba(0, 212, 255, 0.06);
             border-color: rgba(0, 212, 255, 0.25);
             transform: translateX(4px);
         }
+
         .dark .page-link:hover {
             background: rgba(0, 212, 255, 0.1);
         }
+
         .page-link .dot {
             width: 8px;
             height: 8px;
@@ -91,6 +110,7 @@
             margin-top: 7px;
             flex-shrink: 0;
         }
+
         .page-link .arrow {
             margin-left: auto;
             opacity: 0;
@@ -99,23 +119,85 @@
             color: #00d4ff;
             flex-shrink: 0;
         }
+
         .page-link:hover .arrow {
             opacity: 1;
             transform: translateX(0);
         }
 
-        .glass-footer { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.15); }
-        .footer-icon { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.6rem; background: #00d4ff; box-shadow: 0 0 8px rgba(0, 212, 255, 0.6); }
-        .partner-logo { width: 90px; height: auto; object-fit: contain; filter: grayscale(100%) brightness(1.4); opacity: 0.75; transition: all 0.3s ease; }
-        .partner-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.08); }
+        .glass-footer {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
 
-        #theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 50; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 9999px; padding: 0.6rem; border: 1px solid rgba(255, 255, 255, 0.15); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); }
-        #theme-toggle:hover { transform: scale(1.08); background: rgba(255, 255, 255, 0.2); }
-        #theme-toggle svg { width: 22px; height: 22px; color: #00d4ff; }
-        .dark #theme-toggle svg { color: #ffd700; }
-        .sun-icon, .moon-icon { display: none; }
-        .dark .sun-icon { display: block; }
-        :not(.dark) .moon-icon { display: block; }
+        .footer-icon {
+            display: inline-block;
+            width: 0.6rem;
+            height: 0.6rem;
+            border-radius: 50%;
+            margin-right: 0.6rem;
+            background: #00d4ff;
+            box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+        }
+
+        .partner-logo {
+            width: 90px;
+            height: auto;
+            object-fit: contain;
+            filter: grayscale(100%) brightness(1.4);
+            opacity: 0.75;
+            transition: all 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.08);
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 9999px;
+            padding: 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        #theme-toggle:hover {
+            transform: scale(1.08);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #theme-toggle svg {
+            width: 22px;
+            height: 22px;
+            color: #00d4ff;
+        }
+
+        .dark #theme-toggle svg {
+            color: #ffd700;
+        }
+
+        .sun-icon,
+        .moon-icon {
+            display: none;
+        }
+
+        .dark .sun-icon {
+            display: block;
+        }
+
+        :not(.dark) .moon-icon {
+            display: block;
+        }
 
         .stat-pill {
             display: inline-flex;
@@ -135,8 +217,12 @@
 <body class="bg-gray-50 text-gray-900 dark:bg-primary-dark dark:text-primary-light font-sans min-h-screen flex flex-col">
 
     <button id="theme-toggle" aria-label="Toggle theme">
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z"/></svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+        </svg>
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Z" />
+        </svg>
     </button>
 
     <header class="bg-primary-dark dark:bg-gray-900 shadow-lg p-4 sticky top-0 z-40 transition-colors duration-500">
@@ -152,7 +238,9 @@
             <div class="absolute inset-0 dotted opacity-30"></div>
             <div class="max-w-5xl mx-auto px-6 py-16 sm:py-20 relative z-10 text-center">
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent-blue/15 border border-accent-blue/30 mb-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h10M4 14h16M4 18h10"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-accent-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h10M4 14h16M4 18h10" />
+                    </svg>
                 </div>
                 <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Sitemap</h1>
                 <p class="text-gray-300 max-w-2xl mx-auto">Every page on RedTrex Technologies, organized by section so you can find what you need in seconds.</p>
@@ -173,7 +261,9 @@
                     <div class="group-card rounded-2xl p-6 sm:p-7 shadow-xl">
                         <div class="flex items-center gap-4 mb-5 pb-4 border-b border-gray-200 dark:border-white/10">
                             <div class="group-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6" />
+                                </svg>
                             </div>
                             <div>
                                 <h2 class="text-xl font-bold text-primary-dark dark:text-primary-light">Main Pages</h2>
@@ -187,7 +277,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Home</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Landing page with featured products and brand story</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="about.html" class="page-link">
                                 <span class="dot"></span>
@@ -195,7 +287,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">About Us</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Company story, founder profile, values, and journey</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="services.html" class="page-link">
                                 <span class="dot"></span>
@@ -203,7 +297,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Services</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Software licensing, hosting, security, and hardware</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="contact.html" class="page-link">
                                 <span class="dot"></span>
@@ -211,7 +307,19 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Contact</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Get in touch — phone, email, address, and live chat</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                            <a href="news.html" class="page-link">
+                                <span class="dot"></span>
+                                <div class="flex-1">
+                                    <div class="font-semibold text-primary-dark dark:text-primary-light">News Room</div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">Daily updates from RedTrex Technologies.</div>
+                                </div>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -220,7 +328,9 @@
                     <div class="group-card rounded-2xl p-6 sm:p-7 shadow-xl">
                         <div class="flex items-center gap-4 mb-5 pb-4 border-b border-gray-200 dark:border-white/10">
                             <div class="group-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-8 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-8 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
+                                </svg>
                             </div>
                             <div>
                                 <h2 class="text-xl font-bold text-primary-dark dark:text-primary-light">Shop & Checkout</h2>
@@ -234,7 +344,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Checkout</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Review your cart and place an order</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="payment.html" class="page-link">
                                 <span class="dot"></span>
@@ -242,7 +354,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Payment</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Secure payment options and gateway</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="payment-success.html" class="page-link">
                                 <span class="dot"></span>
@@ -250,7 +364,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Payment Success</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Confirmation page after successful payment</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="thankyou.html" class="page-link">
                                 <span class="dot"></span>
@@ -258,7 +374,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Thank You</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Order completion and next steps</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="track-order.html" class="page-link">
                                 <span class="dot"></span>
@@ -266,7 +384,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Track Order</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Look up your order status and view delivered product keys</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="request-service.html" class="page-link">
                                 <span class="dot"></span>
@@ -274,7 +394,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Request a Service</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Submit a new service request — installation, repair, support, or recovery</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="track-service.html" class="page-link">
                                 <span class="dot"></span>
@@ -282,7 +404,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Track Service Request</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Check the live status of your submitted service request</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -291,7 +415,9 @@
                     <div class="group-card rounded-2xl p-6 sm:p-7 shadow-xl">
                         <div class="flex items-center gap-4 mb-5 pb-4 border-b border-gray-200 dark:border-white/10">
                             <div class="group-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z" />
+                                </svg>
                             </div>
                             <div>
                                 <h2 class="text-xl font-bold text-primary-dark dark:text-primary-light">My Account</h2>
@@ -305,7 +431,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Sign In</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Passwordless login — receive a 6-digit code by email</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="account.html" class="page-link">
                                 <span class="dot"></span>
@@ -313,7 +441,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">My Dashboard</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">View all your orders, downloads, and service requests in one place</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -322,7 +452,9 @@
                     <div class="group-card rounded-2xl p-6 sm:p-7 shadow-xl">
                         <div class="flex items-center gap-4 mb-5 pb-4 border-b border-gray-200 dark:border-white/10">
                             <div class="group-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093M12 17h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093M12 17h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                                </svg>
                             </div>
                             <div>
                                 <h2 class="text-xl font-bold text-primary-dark dark:text-primary-light">Help & Support</h2>
@@ -336,7 +468,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">FAQ</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Answers to common questions about products & orders</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="activation-guide.html" class="page-link">
                                 <span class="dot"></span>
@@ -344,7 +478,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Activation Guide</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Step-by-step instructions for activating your software keys</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="downloads.html" class="page-link">
                                 <span class="dot"></span>
@@ -352,7 +488,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Downloads</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Official installers and resources</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="actptl.html" class="page-link">
                                 <span class="dot"></span>
@@ -360,7 +498,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Activation Portal</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Customer portal for product activation</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -369,7 +509,9 @@
                     <div class="group-card rounded-2xl p-6 sm:p-7 shadow-xl">
                         <div class="flex items-center gap-4 mb-5 pb-4 border-b border-gray-200 dark:border-white/10">
                             <div class="group-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 0 0 6.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 0 0 6.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 0 0 6.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 0 0 6.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                </svg>
                             </div>
                             <div>
                                 <h2 class="text-xl font-bold text-primary-dark dark:text-primary-light">Legal & Policies</h2>
@@ -383,7 +525,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Terms & Conditions</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Rules and conditions for using our services</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="privacy.html" class="page-link">
                                 <span class="dot"></span>
@@ -391,7 +535,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Privacy Policy</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">How we collect, use, and protect your information</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                             <a href="refund.html" class="page-link">
                                 <span class="dot"></span>
@@ -399,7 +545,9 @@
                                     <div class="font-semibold text-primary-dark dark:text-primary-light">Refund Policy</div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">Returns, replacements, and refund process for digital & physical goods</div>
                                 </div>
-                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="arrow w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -475,11 +623,14 @@
     </footer>
 
     <script>
-        (function () {
+        (function() {
             const html = document.documentElement;
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) html.classList.add('dark');
             const btn = document.getElementById('theme-toggle');
-            btn && btn.addEventListener('click', () => { html.classList.toggle('dark'); localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light'; });
+            btn && btn.addEventListener('click', () => {
+                html.classList.toggle('dark');
+                localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+            });
         })();
     </script>
 </body>
