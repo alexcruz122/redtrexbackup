@@ -2,43 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.redtrex.com.lk/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/about</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/services</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/downloads</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/activation-guide</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/actptl</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/checkout</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -50,68 +50,74 @@
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/payment-success</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/contact</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/faq</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/privacy</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/terms</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/refund</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/thankyou</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/track-order</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/request-service</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/track-service</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.redtrex.com.lk/sitemap.html</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.redtrex.com.lk/news.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
