@@ -997,7 +997,7 @@
       <div class="ls-bar"><div class="ls-bar-fill"></div></div>
       <div class="ls-versions">
         <span class="ls-ver-pill">AI API VER : v1.0.6</span>
-        <span class="ls-ver-pill">SITE VER : v7.3.4</span>
+        <span class="ls-ver-pill">SITE VER : v7.3.6</span>
       </div>
     </div>
   </div>
@@ -1254,6 +1254,59 @@
       </button>
     </div>
   </nav>
+
+  <!-- ── Category Bar ── -->
+  <div class="cat-bar" id="cat-bar">
+    <div class="cat-bar-inner">
+
+      <div class="cat-item has-dropdown">
+        <button class="cat-btn" type="button" aria-haspopup="true" aria-expanded="false">
+          Microsoft <span class="cat-arrow">▾</span>
+        </button>
+        <div class="cat-dropdown">
+          <a href="#section-os-keys" class="cat-sub-link">Windows Products</a>
+          <a href="#section-software-keys" class="cat-sub-link">Office &amp; More</a>
+        </div>
+      </div>
+
+      <a class="cat-btn cat-direct" href="#section-easeus">EaseUs</a>
+
+      <a class="cat-btn cat-direct" href="#section-other">Other</a>
+
+    </div>
+  </div>
+  <script>
+    (function () {
+      var nav    = document.querySelector('nav');
+      var catBar = document.getElementById('cat-bar');
+
+      function syncTop() {
+        if (nav && catBar) {
+          catBar.style.top = nav.offsetHeight + 'px';
+        }
+      }
+      syncTop();
+      window.addEventListener('resize', syncTop);
+
+      var items = document.querySelectorAll('.cat-item.has-dropdown');
+      items.forEach(function (item) {
+        var btn = item.querySelector('.cat-btn');
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = item.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      });
+      document.querySelectorAll('.cat-sub-link').forEach(function (link) {
+        link.addEventListener('click', function () {
+          items.forEach(function (i) { i.classList.remove('open'); });
+        });
+      });
+      document.addEventListener('click', function () {
+        items.forEach(function (i) { i.classList.remove('open'); });
+      });
+    })();
+  </script>
 
   <script>
     // ===== Categorized menu — click-to-toggle (works on every device) =====
@@ -1630,7 +1683,7 @@
     <div class="mega-category-sub">Genuine Windows, Office, SQL Server, Visual Studio, Project &amp; more</div>
 
     <!-- ================= OS PRODUCT KEYS ================= -->
-    <h2>OS Product Keys</h2>
+    <h2 id="section-os-keys">OS Product Keys</h2>
     <div class="products">
 
       <div class="product-card" data-name="Windows 11 Pro OEM Key" data-unit-price="1581.44">
@@ -1880,7 +1933,7 @@
     </div>
 
     <!-- ================= SOFTWARE PRODUCT KEYS ================= -->
-    <h2>Software Product Keys</h2>
+    <h2 id="section-software-keys">Software Product Keys</h2>
     <div class="products">
 
       <div class="product-card" data-name="Microsoft Office 2024" data-unit-price="2807.22">
@@ -2701,7 +2754,7 @@
     </div>
 
     <!-- ================= EASEUS PRODUCTS ================= -->
-    <h1 class="mega-category">EaseUs Products</h1>
+    <h1 class="mega-category" id="section-easeus">EaseUs Products</h1>
     <div class="mega-category-sub">Data Recovery, Backup, Partition Manager &amp; PDF Editor</div>
     <div class="products">
 
@@ -3203,7 +3256,7 @@
     </div>
 
     <!-- ================= OTHER PRODUCTS ================= -->
-    <h1 class="mega-category">Other Products</h1>
+    <h1 class="mega-category" id="section-other">Other Products</h1>
     <div class="mega-category-sub">Design, graphics &amp; other software</div>
     <div class="products">
 
@@ -3325,7 +3378,7 @@
 
     <div class="footer-bottom" id="site-disclaimer">
       <p>&nbsp;<span class="site-version">AI API VER : v1.0.6</span>
-      <span class="site-version">SITE VER : v7.3.4</span>
+      <span class="site-version">SITE VER : v7.3.6</span>
         <span class="site-version">SECURITY : LKNG2026MAYDTRX425880BV(ENFORCED)</span>
       </p>
       
@@ -4077,6 +4130,97 @@
     }
     syncBadge();
 
+    /* ─── Product policy tags ─── */
+    (function() {
+      var headings = document.querySelectorAll('h1.mega-category');
+      var sections = {};
+      headings.forEach(function(h) {
+        var text = h.textContent.trim();
+        if (text === 'Microsoft Products') sections.ms = h;
+        else if (text === 'EaseUs Products') sections.easeus = h;
+        else if (text === 'Other Products') sections.other = h;
+      });
+
+      function injectTag(start, end, cls, label) {
+        if (!start) return;
+        var el = start.nextElementSibling;
+        while (el && el !== end) {
+          el.querySelectorAll('.product-card').forEach(function(card) {
+            if (!card.querySelector('.' + cls)) {
+              var h2 = card.querySelector('h2');
+              if (h2) {
+                var tag = document.createElement('span');
+                tag.className = cls;
+                tag.textContent = label;
+                h2.insertAdjacentElement('afterend', tag);
+              }
+            }
+          });
+          el = el.nextElementSibling;
+        }
+      }
+
+      injectTag(sections.ms,     sections.easeus, 'warranty-tag', '7 Day Return Warranty');
+      injectTag(sections.easeus, sections.other,  'refund-tag',   'Please Refer Official EaseUs Refund Policy');
+    })();
+
+    /* ─── Product Share Buttons ─── */
+    window.shareProduct = function shareProduct(btn) {
+      var card = btn.closest('.product-card');
+      var name = card.getAttribute('data-name');
+      var url  = location.origin + location.pathname + '?product=' + encodeURIComponent(name);
+      var original = btn.innerHTML;
+      function showCopied() {
+        btn.textContent = 'Link Copied!';
+        btn.classList.add('copied');
+        setTimeout(function () { btn.innerHTML = original; btn.classList.remove('copied'); }, 2200);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(showCopied).catch(function () {
+          fallbackCopy(url); showCopied();
+        });
+      } else {
+        fallbackCopy(url); showCopied();
+      }
+    }
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+
+    (function injectShareButtons() {
+      document.querySelectorAll('.product-card').forEach(function (card) {
+        if (card.querySelector('.share-btn')) return;
+        var btn = document.createElement('button');
+        btn.className = 'share-btn';
+        btn.type = 'button';
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share';
+        btn.setAttribute('onclick', 'shareProduct(this)');
+        card.appendChild(btn);
+      });
+    })();
+
+    (function highlightFromUrl() {
+      var params = new URLSearchParams(location.search);
+      var name   = params.get('product');
+      if (!name) return;
+      var target = null;
+      document.querySelectorAll('.product-card').forEach(function (card) {
+        if (card.getAttribute('data-name') === name) target = card;
+      });
+      if (!target) return;
+      setTimeout(function () {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.add('product-highlighted');
+        setTimeout(function () { target.classList.remove('product-highlighted'); }, 4200);
+      }, 600);
+    })();
+
     /* ─── Account state sync ─── */
     var ma = document.getElementById('accountBtn');
     var pa = document.getElementById('pillAccount');
@@ -4084,6 +4228,7 @@
       if (ma.href) pa.href = ma.href;
       if (ma.classList.contains('signed-in')) pa.classList.add('signed-in');
     }
+
   })();
   </script>
 
