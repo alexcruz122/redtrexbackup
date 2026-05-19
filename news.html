@@ -739,6 +739,32 @@ const newsData = [
 
 ];
 
+/* ─── Fetch custom articles from Cloudflare Worker ─── */
+var WORKER_URL = 'news-admin.redtrex.com.lk'; // e.g. https://redtrex-news-api.yourname.workers.dev
+
+(function() {
+  if (!WORKER_URL || WORKER_URL.startsWith('PASTE')) return;
+  fetch(WORKER_URL + '/api/news')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var custom = data.articles || [];
+      if (!custom.length) return;
+      custom.slice().reverse().forEach(function(a) {
+        newsData.unshift({
+          title: a.title,
+          shortDescription: a.shortDescription,
+          fullArticle: a.fullArticle,
+          category: a.category,
+          date: a.date,
+          image: a.image,
+          pinned: !!a.pinned
+        });
+      });
+      render();
+    })
+    .catch(function() {});
+})();
+
 /* ─── State ─── */
 var currentFilter  = 'All';
 var currentSearch  = '';
