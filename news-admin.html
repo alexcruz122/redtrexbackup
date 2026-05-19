@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News Admin — RedTrex</title>
+<link rel="icon" href="Assest/company.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --red:#e63030; --red-dim:rgba(230,48,48,0.13);
+  --bg:#0a0a0a; --surface:#111; --surface2:#181818;
+  --border:rgba(255,255,255,0.09); --text:#f0f0f0;
+  --muted:#888; --green:#27ae60; --green-dim:rgba(39,174,96,0.13);
+}
+body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+/* ── LOGIN ── */
+#loginScreen{
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+}
+.login-box{
+  background:var(--surface); border:1px solid var(--border); border-radius:24px;
+  padding:48px 40px; width:100%; max-width:420px; text-align:center;
+}
+.login-box img{ width:64px; border-radius:14px; margin-bottom:20px; }
+.login-box h1{ font-size:1.4rem; font-weight:800; margin-bottom:6px; }
+.login-box p{ color:var(--muted); font-size:0.85rem; margin-bottom:28px; }
+.login-error{ color:var(--red); font-size:0.82rem; margin-top:12px; min-height:18px; }
+
+/* ── ADMIN PANEL ── */
+#adminPanel{ display:none; }
+
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 28px; background:var(--surface);
+  border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100;
+}
+.topbar-left{ display:flex; align-items:center; gap:12px; }
+.topbar-left img{ width:38px; border-radius:9px; }
+.topbar-left span{ font-weight:700; font-size:1rem; }
+.topbar-left small{ color:var(--muted); font-size:0.75rem; display:block; margin-top:1px; }
+
+.layout{ display:grid; grid-template-columns:1fr 380px; gap:0; min-height:calc(100vh - 62px); }
+
+/* LEFT – article list */
+.article-list-panel{ padding:28px; border-right:1px solid var(--border); overflow-y:auto; }
+.panel-title{
+  font-size:0.7rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:18px;
+}
+.article-item{
+  background:var(--surface2); border:1px solid var(--border); border-radius:16px;
+  padding:16px 18px; margin-bottom:12px; display:flex; gap:14px; align-items:flex-start;
+  transition:border-color 0.2s;
+}
+.article-item:hover{ border-color:rgba(230,48,48,0.35); }
+.article-thumb{
+  width:72px; height:52px; border-radius:10px; object-fit:cover; flex-shrink:0;
+  background:var(--surface);
+}
+.article-info{ flex:1; min-width:0; }
+.article-info h4{ font-size:0.88rem; font-weight:700; line-height:1.4; margin-bottom:5px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.article-info .meta{ font-size:0.75rem; color:var(--muted); display:flex; gap:10px; flex-wrap:wrap; }
+.badge{
+  display:inline-block; padding:2px 9px; border-radius:999px;
+  background:var(--red-dim); color:#ff5555; font-size:0.68rem; font-weight:800;
+  letter-spacing:0.05em; text-transform:uppercase;
+}
+.badge.pinned{ background:rgba(255,193,7,0.15); color:#ffc107; }
+.badge.custom{ background:var(--green-dim); color:var(--green); }
+.item-actions{ display:flex; gap:6px; flex-shrink:0; }
+
+/* RIGHT – form */
+.form-panel{ padding:28px; overflow-y:auto; background:var(--surface); }
+.form-panel h2{ font-size:1rem; font-weight:800; margin-bottom:22px; }
+
+.field{ margin-bottom:18px; }
+.field label{ display:block; font-size:0.78rem; font-weight:700; color:#bbb; margin-bottom:7px; letter-spacing:0.02em; }
+.field input, .field select, .field textarea{
+  width:100%; padding:12px 14px; border-radius:12px;
+  background:var(--surface2); border:1px solid var(--border);
+  color:var(--text); font-size:0.88rem; font-family:inherit;
+  transition:border-color 0.2s; resize:vertical;
+}
+.field input:focus, .field select:focus, .field textarea:focus{
+  outline:none; border-color:var(--red);
+}
+.field input::placeholder, .field textarea::placeholder{ color:#555; }
+.field select option{ background:#1a1a1a; }
+.field textarea{ min-height:100px; }
+#fullArticleInput{ min-height:220px; font-size:0.82rem; line-height:1.65; }
+
+.img-preview{
+  margin-top:10px; border-radius:12px; overflow:hidden;
+  height:140px; background:var(--surface2); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+}
+.img-preview img{ width:100%; height:100%; object-fit:cover; display:none; }
+.img-preview span{ color:#555; font-size:0.82rem; }
+
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+.hint{ font-size:0.74rem; color:#555; margin-top:6px; line-height:1.5; }
+.hint code{ background:rgba(255,255,255,0.07); padding:1px 5px; border-radius:4px; font-family:monospace; font-size:0.85em; }
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:10px 18px; border-radius:11px; border:none;
+  font-size:0.84rem; font-weight:700; font-family:inherit;
+  cursor:pointer; transition:all 0.2s; white-space:nowrap;
+}
+.btn-primary{ background:linear-gradient(135deg,#e63030,#8b0000); color:#fff; }
+.btn-primary:hover{ opacity:0.88; transform:translateY(-1px); }
+.btn-ghost{
+  background:rgba(255,255,255,0.06); color:#aaa;
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{ background:rgba(255,255,255,0.1); color:#fff; }
+.btn-danger{ background:rgba(230,48,48,0.15); color:var(--red); border:1px solid rgba(230,48,48,0.25); }
+.btn-danger:hover{ background:rgba(230,48,48,0.25); }
+.btn-sm{ padding:7px 12px; font-size:0.78rem; border-radius:9px; }
+.btn-success{ background:var(--green-dim); color:var(--green); border:1px solid rgba(39,174,96,0.3); }
+.btn-success:hover{ background:rgba(39,174,96,0.22); }
+
+.form-actions{ display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; }
+
+.toast{
+  position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(100px);
+  background:#1a1a1a; border:1px solid var(--border); border-radius:14px;
+  padding:13px 22px; font-size:0.88rem; font-weight:600;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s;
+  opacity:0; z-index:9999; white-space:nowrap; pointer-events:none;
+}
+.toast.show{ transform:translateX(-50%) translateY(0); opacity:1; }
+.toast.success{ border-color:rgba(39,174,96,0.4); color:var(--green); }
+.toast.error{ border-color:rgba(230,48,48,0.4); color:var(--red); }
+
+.empty-list{ text-align:center; padding:40px 20px; color:var(--muted); font-size:0.88rem; }
+.section-divider{
+  font-size:0.68rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;
+  color:#444; margin:20px 0 10px; padding-bottom:8px; border-bottom:1px solid var(--border);
+}
+
+.char-count{ font-size:0.72rem; color:#555; text-align:right; margin-top:4px; }
+
+@media(max-width:900px){
+  .layout{ grid-template-columns:1fr; }
+  .article-list-panel{ border-right:none; border-bottom:1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <img src="Assest/company.png" alt="RedTrex">
+    <h1>News Admin</h1>
+    <p>Enter your Cloudflare Worker URL and admin password to continue.</p>
+    <div class="field" style="margin-bottom:14px;text-align:left;">
+      <label style="display:block;font-size:0.78rem;font-weight:700;color:#bbb;margin-bottom:7px;">WORKER URL</label>
+      <input type="url" id="apiUrlInput" placeholder="https://redtrex-news-api.yourname.workers.dev" autocomplete="off">
+    </div>
+    <div class="field" style="margin-bottom:0;text-align:left;">
+      <label style="display:block;font-size:0.78rem;font-weight:700;color:#bbb;margin-bottom:7px;">ADMIN PASSWORD</label>
+      <input type="password" id="passwordInput" placeholder="Your NEWS_ADMIN_PASSWORD" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:20px;" onclick="tryLogin()">Connect &amp; Sign In</button>
+    <p class="login-error" id="loginError"></p>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="Assest/company.png" alt="RedTrex">
+      <div>
+        <span>News Admin</span>
+        <small>RedTrex Technologies</small>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="news.html" target="_blank" class="btn btn-ghost btn-sm">View News Page ↗</a>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: Article List -->
+    <div class="article-list-panel">
+      <p class="panel-title">All Articles</p>
+      <div id="articleList"></div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="form-panel">
+      <h2 id="formTitle">➕ Add New Article</h2>
+
+      <div class="field">
+        <label>HEADLINE *</label>
+        <input type="text" id="fTitle" placeholder="e.g. Microsoft Launches Windows 12…" maxlength="200">
+        <div class="char-count"><span id="titleCount">0</span>/200</div>
+      </div>
+
+      <div class="field">
+        <label>SHORT DESCRIPTION * <span style="color:#555;font-weight:400">(shown on card)</span></label>
+        <textarea id="fShort" placeholder="A brief 1–2 sentence summary shown on the news card…" maxlength="300" rows="3"></textarea>
+        <div class="char-count"><span id="shortCount">0</span>/300</div>
+      </div>
+
+      <div class="field">
+        <label>FULL ARTICLE CONTENT *</label>
+        <textarea id="fullArticleInput" placeholder="Write each paragraph on its own line. Leave a blank line between paragraphs.
+
+You can also use:
+[h3]Section Heading[/h3]
+[bullet] List item one
+[bullet] List item two
+[bold]Important text[/bold]"></textarea>
+        <p class="hint">Each paragraph = one line. Use <code>[h3]…[/h3]</code>, <code>[bullet] …</code>, <code>[bold]…[/bold]</code> for formatting.</p>
+      </div>
+
+      <div class="field-row">
+        <div class="field" style="margin-bottom:0">
+          <label>CATEGORY *</label>
+          <select id="fCategory">
+            <option value="Latest">Latest</option>
+            <option value="AI">AI</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Security">Security</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>DATE *</label>
+          <input type="date" id="fDate">
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:18px;">
+        <label>IMAGE URL *</label>
+        <input type="url" id="fImage" placeholder="https://example.com/image.jpg" oninput="previewImage()">
+        <div class="img-preview" id="imgPreview">
+          <img id="imgPreviewImg" alt="preview">
+          <span id="imgPreviewPlaceholder">Image preview will appear here</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input type="checkbox" id="fPinned" style="width:auto;accent-color:var(--red);">
+          <span>Pin this article (shows as featured)</span>
+        </label>
+      </div>
+
+      <input type="hidden" id="editingId">
+
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="saveArticle()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="saveBtnText">Publish Article</span>
+        </button>
+        <button class="btn btn-ghost" onclick="resetForm()" id="cancelBtn" style="display:none;">Cancel Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── CONFIG (stored in sessionStorage — cleared when tab closes) ── */
+var API_URL  = sessionStorage.getItem('rt_api_url')  || '';
+var API_PASS = sessionStorage.getItem('rt_api_pass') || '';
+
+/* ── SHOW / HIDE panels ── */
+function showPanel(name) {
+  document.getElementById('loginScreen').style.display  = name === 'login'  ? 'flex'  : 'none';
+  document.getElementById('adminPanel').style.display   = name === 'admin'  ? 'block' : 'none';
+}
+
+/* ── BOOT: skip login if session credentials already exist ── */
+(function boot() {
+  if (API_URL && API_PASS) {
+    showPanel('admin');
+    initAdmin();
+  } else {
+    showPanel('login');
+  }
+})();
+
+/* ── LOGIN ── */
+function tryLogin() {
+  var url  = document.getElementById('apiUrlInput').value.trim().replace(/\/$/, '');
+  var pass = document.getElementById('passwordInput').value.trim();
+  var err  = document.getElementById('loginError');
+  err.textContent = '';
+
+  if (!url || !pass) { err.textContent = 'Please fill in both fields.'; return; }
+
+  err.textContent = 'Connecting…';
+  fetch(url + '/api/news')
+    .then(function(r) {
+      if (!r.ok) throw new Error('Worker responded with ' + r.status);
+      return r.json();
+    })
+    .then(function() {
+      API_URL  = url;
+      API_PASS = pass;
+      sessionStorage.setItem('rt_api_url',  API_URL);
+      sessionStorage.setItem('rt_api_pass', API_PASS);
+      showPanel('admin');
+      initAdmin();
+    })
+    .catch(function(e) {
+      err.textContent = 'Could not reach Worker. Check the URL and try again.';
+    });
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var pi = document.getElementById('passwordInput');
+  if (pi) pi.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
+  var ai = document.getElementById('apiUrlInput');
+  if (ai) ai.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
+});
+
+function logout() {
+  sessionStorage.removeItem('rt_api_url');
+  sessionStorage.removeItem('rt_api_pass');
+  API_URL = ''; API_PASS = '';
+  showPanel('login');
+}
+
+/* ── API HELPERS ── */
+function apiFetch(path, options) {
+  options = options || {};
+  options.headers = Object.assign({ 'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + API_PASS }, options.headers || {});
+  return fetch(API_URL + path, options).then(function(r) {
+    if (r.status === 401) { logout(); throw new Error('Unauthorized'); }
+    return r.json();
+  });
+}
+
+/* ── TOAST ── */
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  setTimeout(function() { t.className = 'toast'; }, 2800);
+}
+
+/* ── INIT ── */
+var _articles = [];
+
+function initAdmin() {
+  document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fTitle').addEventListener('input', function() {
+    document.getElementById('titleCount').textContent = this.value.length;
+  });
+  document.getElementById('fShort').addEventListener('input', function() {
+    document.getElementById('shortCount').textContent = this.value.length;
+  });
+  loadAndRender();
+}
+
+/* ── LOAD & RENDER ── */
+function loadAndRender() {
+  var el = document.getElementById('articleList');
+  el.innerHTML = '<div class="empty-list">Loading…</div>';
+  apiFetch('/api/news')
+    .then(function(data) {
+      _articles = (data.articles || []).slice().sort(function(a, b) { return b.id - a.id; });
+      renderList();
+    })
+    .catch(function() {
+      el.innerHTML = '<div class="empty-list">Failed to load articles.<br>Check your Worker URL.</div>';
+    });
+}
+
+function renderList() {
+  var el = document.getElementById('articleList');
+  if (_articles.length === 0) {
+    el.innerHTML = '<div class="empty-list">No custom articles yet.<br>Use the form to publish your first one.</div>';
+    return;
+  }
+  el.innerHTML = '';
+  _articles.forEach(function(art) {
+    var div = document.createElement('div');
+    div.className = 'article-item';
+    div.innerHTML =
+      '<img class="article-thumb" src="' + (art.image || '') + '" alt="" onerror="this.style.display=\'none\'">' +
+      '<div class="article-info">' +
+        '<h4>' + art.title + '</h4>' +
+        '<div class="meta">' +
+          '<span class="badge">' + art.category + '</span>' +
+          (art.pinned ? '<span class="badge pinned">📌 Pinned</span>' : '') +
+          '<span>' + art.date + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="item-actions">' +
+        '<button class="btn btn-ghost btn-sm" onclick="editArticle(' + art.id + ')" title="Edit">✏️</button>' +
+        '<button class="btn btn-danger btn-sm" onclick="deleteArticle(' + art.id + ')" title="Delete">🗑</button>' +
+      '</div>';
+    el.appendChild(div);
+  });
+}
+
+/* ── IMAGE PREVIEW ── */
+function previewImage() {
+  var url = document.getElementById('fImage').value.trim();
+  var img = document.getElementById('imgPreviewImg');
+  var ph  = document.getElementById('imgPreviewPlaceholder');
+  if (url) {
+    img.src = url; img.style.display = 'block'; ph.style.display = 'none';
+    img.onerror = function() { img.style.display='none'; ph.style.display='block'; ph.textContent='Could not load image'; };
+  } else {
+    img.style.display = 'none'; ph.style.display = 'block';
+    ph.textContent = 'Image preview will appear here';
+  }
+}
+
+/* ── MARKUP PARSER ── */
+function parseContent(raw) {
+  var html = '', lines = raw.split('\n'), inList = false;
+  lines.forEach(function(line) {
+    line = line.replace(/\[bold\](.*?)\[\/bold\]/g, '<strong>$1</strong>')
+               .replace(/\[h3\](.*?)\[\/h3\]/g, '|||H3|||$1|||/H3|||');
+    var t = line.trim();
+    if (!t) { if (inList) { html += '</ul>'; inList = false; } return; }
+    if (t.startsWith('[bullet]')) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += '<li>' + t.replace('[bullet]', '').trim() + '</li>';
+    } else if (t.startsWith('|||H3|||')) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += '<h3>' + t.replace('|||H3|||', '').replace('|||/H3|||', '') + '</h3>';
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += '<p>' + t + '</p>';
+    }
+  });
+  if (inList) html += '</ul>';
+  return html;
+}
+
+/* ── SAVE (create or update) ── */
+function saveArticle() {
+  var title   = document.getElementById('fTitle').value.trim();
+  var shortD  = document.getElementById('fShort').value.trim();
+  var rawBody = document.getElementById('fullArticleInput').value.trim();
+  var cat     = document.getElementById('fCategory').value;
+  var dateRaw = document.getElementById('fDate').value;
+  var image   = document.getElementById('fImage').value.trim();
+  var pinned  = document.getElementById('fPinned').checked;
+  var editId  = document.getElementById('editingId').value;
+
+  if (!title || !shortD || !rawBody || !dateRaw || !image) {
+    showToast('Please fill in all required fields.', 'error'); return;
+  }
+
+  var dateStr  = new Date(dateRaw + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  var payload  = { title:title, shortDescription:shortD, fullArticle:parseContent(rawBody),
+    category:cat, date:dateStr, image:image, pinned:pinned };
+
+  var btn = document.querySelector('[onclick="saveArticle()"]');
+  btn.disabled = true;
+
+  var req = editId
+    ? apiFetch('/api/news/' + editId, { method:'PUT',  body: JSON.stringify(payload) })
+    : apiFetch('/api/news',           { method:'POST', body: JSON.stringify(payload) });
+
+  req.then(function() {
+      showToast(editId ? 'Article updated!' : 'Article published!', 'success');
+      resetForm();
+      loadAndRender();
+    })
+    .catch(function() { showToast('Save failed. Check connection.', 'error'); })
+    .finally(function() { btn.disabled = false; });
+}
+
+/* ── EDIT ── */
+window.editArticle = function(id) {
+  var art = _articles.find(function(a) { return a.id === id; });
+  if (!art) return;
+  document.getElementById('fTitle').value = art.title;
+  document.getElementById('titleCount').textContent = art.title.length;
+  document.getElementById('fShort').value = art.shortDescription;
+  document.getElementById('shortCount').textContent = art.shortDescription.length;
+  document.getElementById('fullArticleInput').value = htmlToPlain(art.fullArticle);
+  document.getElementById('fCategory').value = art.category;
+  document.getElementById('fImage').value = art.image;
+  document.getElementById('fPinned').checked = !!art.pinned;
+  document.getElementById('editingId').value = id;
+  document.getElementById('formTitle').textContent = '✏️ Edit Article';
+  document.getElementById('saveBtnText').textContent = 'Save Changes';
+  document.getElementById('cancelBtn').style.display = 'inline-flex';
+  var d = new Date(art.date);
+  if (!isNaN(d)) document.getElementById('fDate').value = d.toISOString().split('T')[0];
+  previewImage();
+  document.querySelector('.form-panel').scrollTop = 0;
+};
+
+/* ── DELETE ── */
+window.deleteArticle = function(id) {
+  if (!confirm('Delete this article? This cannot be undone.')) return;
+  apiFetch('/api/news/' + id, { method: 'DELETE' })
+    .then(function() { showToast('Article deleted.', ''); loadAndRender(); })
+    .catch(function() { showToast('Delete failed.', 'error'); });
+};
+
+/* ── RESET ── */
+function resetForm() {
+  ['fTitle','fShort','fullArticleInput','fImage','editingId'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('titleCount').textContent = '0';
+  document.getElementById('shortCount').textContent = '0';
+  document.getElementById('fCategory').value = 'Latest';
+  document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fPinned').checked = false;
+  document.getElementById('formTitle').textContent = '➕ Add New Article';
+  document.getElementById('saveBtnText').textContent = 'Publish Article';
+  document.getElementById('cancelBtn').style.display = 'none';
+  document.getElementById('imgPreviewImg').style.display = 'none';
+  document.getElementById('imgPreviewPlaceholder').style.display = 'block';
+  document.getElementById('imgPreviewPlaceholder').textContent = 'Image preview will appear here';
+}
+window.resetForm = resetForm;
+
+/* ── HTML → PLAIN ── */
+function htmlToPlain(html) {
+  return html
+    .replace(/<h3>(.*?)<\/h3>/g, '[h3]$1[/h3]')
+    .replace(/<li>(.*?)<\/li>/g, '[bullet] $1')
+    .replace(/<ul>|<\/ul>/g, '')
+    .replace(/<strong>(.*?)<\/strong>/g, '[bold]$1[/bold]')
+    .replace(/<p>(.*?)<\/p>/g, '$1\n')
+    .replace(/<br\s*\/?>/g, '\n')
+    .replace(/<[^>]+>/g, '').trim();
+}
+</script>
+</body>
+</html>
