@@ -4232,5 +4232,38 @@
   })();
   </script>
 
+<!-- ── Cookie Consent Popup ── -->
+<div id="cookiePopup" role="dialog" aria-label="Cookie consent">
+  <div class="cookie-icon">🍪</div>
+  <div class="cookie-body">
+    <h4>We Use Cookies</h4>
+    <p>
+      RedTrex Technologies uses cookies to enhance your browsing experience, remember your preferences, and analyse site traffic.
+      By clicking <strong style="color:#fff">Accept All</strong>, you consent to our use of cookies.
+      See our <a href="privacy.html">Privacy Policy</a> for details.
+    </p>
+    <div class="cookie-btns">
+      <button class="cookie-btn-accept" onclick="cookieConsent('accept')">Accept All</button>
+      <button class="cookie-btn-decline" onclick="cookieConsent('decline')">Continue Without Accepting</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'redtrex_cookie_choice';
+  if (localStorage.getItem(KEY)) return;
+  var popup = document.getElementById('cookiePopup');
+  setTimeout(function () { popup.classList.add('popup-visible'); }, 900);
+
+  window.cookieConsent = function (choice) {
+    localStorage.setItem(KEY, choice);
+    popup.classList.remove('popup-visible');
+    popup.classList.add('popup-hiding');
+    popup.addEventListener('animationend', function () { popup.style.display = 'none'; }, { once: true });
+  };
+})();
+</script>
+
 </body>
 </html>
