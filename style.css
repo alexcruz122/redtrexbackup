@@ -2156,3 +2156,152 @@ h2#section-software-keys {
     margin-top: 4px;
   }
 }
+
+/* ═══════════════════════════════════════
+   COOKIE CONSENT POPUP — AERO GLASS
+═══════════════════════════════════════ */
+#cookiePopup {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(160%);
+  z-index: 99999;
+  width: min(700px, calc(100vw - 32px));
+
+  /* Aero glass core */
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(180, 200, 255, 0.10) 40%,
+      rgba(120, 140, 200, 0.08) 100%
+    );
+  backdrop-filter: blur(40px) saturate(180%) brightness(1.08);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.08);
+
+  /* Glass border: bright highlight on top, fades on sides */
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-bottom-color: rgba(255, 255, 255, 0.10);
+  border-radius: 20px;
+  padding: 22px 26px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  opacity: 0;
+
+  /* Layered shadows: ambient + red brand glow + inner top highlight */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 2px 8px  rgba(0, 0, 0, 0.30),
+    0 0 0 1px  rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 0 40px rgba(180, 60, 60, 0.12);
+}
+
+/* Sheen overlay — the diagonal glass reflection */
+#cookiePopup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.04) 45%,
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+#cookiePopup.popup-visible {
+  animation: cookieSlideUp 0.58s cubic-bezier(0.34, 1.46, 0.64, 1) forwards;
+}
+#cookiePopup.popup-hiding {
+  animation: cookieSlideDown 0.30s ease-in forwards;
+}
+@keyframes cookieSlideUp {
+  from { transform: translateX(-50%) translateY(160%); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+}
+@keyframes cookieSlideDown {
+  from { transform: translateX(-50%) translateY(0);   opacity: 1; }
+  to   { transform: translateX(-50%) translateY(160%); opacity: 0; }
+}
+
+.cookie-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 3px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.cookie-body { flex: 1; min-width: 0; position: relative; }
+.cookie-body h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.cookie-body p {
+  font-size: 0.82rem;
+  color: rgba(220, 225, 240, 0.85);
+  line-height: 1.65;
+  margin-bottom: 16px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.cookie-body p a {
+  color: rgba(255, 160, 160, 0.95);
+  text-decoration: none;
+  font-weight: 600;
+}
+.cookie-body p a:hover { color: #fff; text-decoration: underline; }
+
+.cookie-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.cookie-btn-accept {
+  padding: 9px 22px;
+  background: linear-gradient(180deg, rgba(220,50,50,0.9) 0%, rgba(140,20,20,0.95) 100%);
+  color: #fff;
+  border: 1px solid rgba(255,120,120,0.35);
+  border-bottom-color: rgba(80,0,0,0.5);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255,180,180,0.35), 0 2px 6px rgba(0,0,0,0.35);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+.cookie-btn-accept:hover { opacity: 0.90; transform: translateY(-1px); }
+
+.cookie-btn-decline {
+  padding: 9px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 100%);
+  color: rgba(220, 225, 240, 0.80);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-bottom-color: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.25);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+.cookie-btn-decline:hover {
+  background: linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.10) 100%);
+  color: #fff;
+  border-color: rgba(255,255,255,0.35);
+}
+
+@media (max-width: 520px) {
+  #cookiePopup { flex-direction: column; gap: 12px; padding: 18px; bottom: 16px; }
+  .cookie-icon { font-size: 1.6rem; }
+}
