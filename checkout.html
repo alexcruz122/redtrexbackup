@@ -82,14 +82,14 @@
             background-size: 420px 160px;
           }
           body.dark-mode::after {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='160' viewBox='0 0 420 160'><text x='210' y='90' font-family='monospace' font-size='15' font-weight='700' letter-spacing='2' fill='%23f87171' fill-opacity='0.13' text-anchor='middle' transform='rotate(-22 210 90)'>LKNG2026MAYDTRX425880BV(ENFORCED)</text></svg>");
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='160' viewBox='0 0 420 160'><text x='210' y='90' font-family='monospace' font-size='15' font-weight='700' letter-spacing='2' fill='%23f87171' fill-opacity='0.13' text-anchor='middle' transform='rotate(-22 210 90)'>LKNG2026JUN_RDTRX_429476WS(ENFORCED)</text></svg>");
           }
 
           .checkout-container {
             background: rgba(255, 255, 255, 0.78);
             backdrop-filter: blur(18px) saturate(160%);
             -webkit-backdrop-filter: blur(18px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 25a5, 255, 0.6);
             border-radius: 16px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 12px 40px rgba(17, 24, 39, 0.12);
             padding: 36px 32px;
@@ -490,6 +490,80 @@
         font-weight: 600; font-size: 13px;
         color: var(--text-primary, #111);
       }
+
+      /* ===== PHONE COUNTRY SELECTOR ===== */
+      .phone-field-wrapper { position: relative; display: flex; }
+      .cc-btn {
+        display: flex; align-items: center; gap: 5px;
+        padding: 0 10px 0 12px;
+        background: var(--input-bg);
+        border: 1px solid var(--border-strong);
+        border-right: none;
+        border-radius: 10px 0 0 10px;
+        cursor: pointer; white-space: nowrap;
+        font-size: 13px; font-weight: 600; font-family: inherit;
+        color: var(--text-primary);
+        transition: background 0.15s, border-color 0.15s;
+        flex-shrink: 0; min-width: 82px;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .cc-btn:hover { background: var(--section-bg); }
+      .cc-btn:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(220,38,38,0.12); }
+      .cc-btn .cc-flag { font-size: 19px; line-height: 1; }
+      .cc-btn .cc-dial-code { font-size: 13px; letter-spacing: 0.2px; }
+      .cc-btn .cc-chevron { font-size: 9px; opacity: 0.45; margin-left: 1px; transition: transform 0.2s; }
+      .cc-btn.open .cc-chevron { transform: rotate(180deg); }
+      .phone-field-wrapper input[type="tel"] {
+        border-radius: 0 10px 10px 0 !important;
+        border-left: none !important;
+        flex: 1; min-width: 0;
+      }
+      .phone-field-wrapper input[type="tel"]:focus {
+        border-color: var(--brand) !important;
+        box-shadow: 0 0 0 3px rgba(220,38,38,0.12) !important;
+        z-index: 1;
+      }
+      .cc-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        width: 285px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-strong);
+        border-radius: 12px;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+        z-index: 2000;
+        overflow: hidden;
+        flex-direction: column;
+      }
+      .cc-dropdown.open { display: flex; flex-direction: column; animation: pmFade 0.18s ease; }
+      .cc-dropdown.drop-up { top: auto; bottom: calc(100% + 5px); }
+      .cc-search-wrap { padding: 10px 10px 8px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+      .cc-search {
+        width: 100%; padding: 8px 11px 8px 32px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px; font-size: 13px;
+        background: var(--input-bg); color: var(--text-primary);
+        font-family: inherit; outline: none;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='M21 21l-4.35-4.35'/></svg>");
+        background-repeat: no-repeat; background-position: 10px center;
+      }
+      .cc-search:focus { border-color: var(--brand); }
+      .cc-list { overflow-y: auto; max-height: 220px; flex: 1; }
+      .cc-list::-webkit-scrollbar { width: 5px; }
+      .cc-list::-webkit-scrollbar-track { background: transparent; }
+      .cc-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+      .cc-item {
+        display: flex; align-items: center; gap: 9px;
+        padding: 8px 12px; cursor: pointer;
+        transition: background 0.1s;
+      }
+      .cc-item:hover, .cc-item.selected { background: var(--brand-soft); }
+      .cc-item-flag { font-size: 18px; line-height: 1; flex-shrink: 0; }
+      .cc-item-name { flex: 1; font-size: 12.5px; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .cc-item-dial { font-size: 12px; font-weight: 700; color: var(--brand); white-space: nowrap; }
+      .cc-no-results { padding: 18px 12px; text-align: center; color: var(--text-tertiary); font-size: 13px; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="console-banner.js" defer></script>
@@ -534,14 +608,27 @@
             <input type="text" id="lastName"  placeholder="Last name *"  autocomplete="family-name" maxlength="40" style="flex:1;" />
           </div>
           <div class="input-wrapper" style="margin-top:8px;">
-            <input type="email" id="email" placeholder="Email address *" autocomplete="email" maxlength="120" />
+            <input type="email" id="email" placeholder="Valid Email address *" autocomplete="email" maxlength="120" />
           </div>
           <div class="input-wrapper" style="margin-top:8px;">
-            <input type="tel" id="phone" placeholder="Phone (optional)" autocomplete="tel" maxlength="20" />
+            <div class="phone-field-wrapper">
+              <button type="button" class="cc-btn" id="ccBtn" aria-haspopup="listbox" aria-expanded="false">
+                <span class="cc-flag" id="ccFlag">🇱🇰</span>
+                <span class="cc-dial-code" id="ccDialCode">+94</span>
+                <span class="cc-chevron">▾</span>
+              </button>
+              <div class="cc-dropdown" id="ccDropdown" role="listbox">
+                <div class="cc-search-wrap">
+                  <input type="text" class="cc-search" id="ccSearch" placeholder="Search country or code…" autocomplete="off" />
+                </div>
+                <div class="cc-list" id="ccList"></div>
+              </div>
+              <input type="tel" id="phone" placeholder="Phone number *" autocomplete="tel" maxlength="25" />
+            </div>
           </div>
-          <div class="error" id="customerError">Please fill in your name and a valid email</div>
+          <div class="error" id="customerError">Please fill in your name and a valid email/Phone Number</div>
           <div style="margin-top:6px; font-size:12px; color:var(--text-tertiary);">
-            Your email is required so you can track your order and receive your product key.
+            Your email is required so you can track your order or receive your product key.
           </div>
         </div>
       </div>
@@ -624,6 +711,39 @@
             <div class="pm-desc">Pay securely with any Visa, Mastercard or American Express card via DirectPay — Sri Lanka's PCI-DSS compliant payment gateway. Order is validated and confirmed automatically within seconds.</div>
           </div>
         </div>
+        <div id="cardServiceFeeNotice" style="display:flex; align-items:center; gap:8px; margin:-4px 0 8px; padding:9px 14px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.3); border-radius:8px; font-size:12px; color:#92400e;">
+          <span style="font-size:14px; flex-shrink:0;"></span>
+          <span><strong style="color:#92400e;">Service fee applied:</strong> +LKR 30.00 for card payments (included in total below)</span>
+        </div>
+
+        <!-- 3. Bybit / Binance Pay -->
+        <div class="pm-option" data-method="crypto">
+          <div class="pm-radio"></div>
+          <div class="pm-content">
+            <div class="pm-header">
+              <span class="pm-name">Bybit / Binance Pay</span>
+              <span class="pm-badge">Crypto</span>
+            </div>
+            <div class="pm-desc">Pay with USDT or any supported coin via Binance Pay or Bybit Pay using a UID transfer. Instant, zero gas fee, ideal for international customers.</div>
+          </div>
+        </div>
+        <div class="pm-details" id="pm-details-crypto">
+          <h4>Binance Pay</h4>
+          <div class="pm-row"><strong>Binance UID:</strong><span>491329885</span></div>
+          <div class="pm-row"><strong>Name:</strong><span>RedTrex</span></div>
+          <h4>Bybit Pay</h4>
+          <div class="pm-row"><strong>Bybit UID:</strong><span>492259959</span></div>
+          <div class="pm-row"><strong>Name:</strong><span>RedTrex</span></div>
+          <h4>Preferred Coin</h4>
+          <div class="pm-row"><strong>Asset:</strong><span>USDT (TRC20 / BEP20)</span></div>
+          <div class="pm-note">Send screenshot of the transfer (TXID + amount) via WhatsApp to receive your product key.</div>
+          <div class="token-block">
+            <strong>Step 1 — Download your Payment Token</strong>
+            <p>Required. This PDF contains your order reference, items, total, and applied coupon. Attach it together with your TXID screenshot when you message us.</p>
+            <button type="button" class="token-btn" onclick="downloadPaymentToken('crypto', this)">⬇ Download Payment Token (PDF)</button>
+          </div>
+          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20crypto%20payment%20(Binance%2FBybit)%20for%20my%20order.%20Payment%20token%20attached." target="_blank" class="pm-cta">Step 2 — Notify on WhatsApp</a>
+        </div>
 
         <!-- ===== GROUP B: Manual / Delayed Order Validation ===== -->
         <div class="pm-group-title manual"><span class="pm-group-icon"></span><span>Manual / Delayed Order Validation</span><span class="pm-group-icon"></span></div>
@@ -701,34 +821,6 @@
           <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20bank%20transfer%20for%20my%20order.%20Payment%20token%20attached." target="_blank" class="pm-cta">Step 2 — Notify on WhatsApp</a>
         </div>
 
-        <!-- 3. Bybit / Binance Pay -->
-        <div class="pm-option" data-method="crypto">
-          <div class="pm-radio"></div>
-          <div class="pm-content">
-            <div class="pm-header">
-              <span class="pm-name">Bybit / Binance Pay</span>
-              <span class="pm-badge">Crypto</span>
-            </div>
-            <div class="pm-desc">Pay with USDT or any supported coin via Binance Pay or Bybit Pay using a UID transfer. Instant, zero gas fee, ideal for international customers.</div>
-          </div>
-        </div>
-        <div class="pm-details" id="pm-details-crypto">
-          <h4>Binance Pay</h4>
-          <div class="pm-row"><strong>Binance UID:</strong><span>491329885</span></div>
-          <div class="pm-row"><strong>Name:</strong><span>RedTrex</span></div>
-          <h4>Bybit Pay</h4>
-          <div class="pm-row"><strong>Bybit UID:</strong><span>492259959</span></div>
-          <div class="pm-row"><strong>Name:</strong><span>RedTrex</span></div>
-          <h4>Preferred Coin</h4>
-          <div class="pm-row"><strong>Asset:</strong><span>USDT (TRC20 / BEP20)</span></div>
-          <div class="pm-note">Send screenshot of the transfer (TXID + amount) via WhatsApp to receive your product key.</div>
-          <div class="token-block">
-            <strong>Step 1 — Download your Payment Token</strong>
-            <p>Required. This PDF contains your order reference, items, total, and applied coupon. Attach it together with your TXID screenshot when you message us.</p>
-            <button type="button" class="token-btn" onclick="downloadPaymentToken('crypto', this)">⬇ Download Payment Token (PDF)</button>
-          </div>
-          <a href="https://wa.me/94712622012?text=Hi%2C%20I%20completed%20a%20crypto%20payment%20(Binance%2FBybit)%20for%20my%20order.%20Payment%20token%20attached." target="_blank" class="pm-cta">Step 2 — Notify on WhatsApp</a>
-        </div>
 
       </div>
 
@@ -860,7 +952,7 @@
       </div>
     </div>
 
-    <div class="version-tag">LKNG2026MAYDTRX425880BV(ENFORCED)</div>
+    <div class="version-tag">LKNG2026JUN_RDTRX_429476WS(ENFORCED)</div>
 
     <script src="https://cdn.directpay.lk/v3/directpayipg.min.js"></script>
     <script>
@@ -998,8 +1090,12 @@
               + '</tr>';
           });
           var totalColspan = showRemove ? 3 : 2;
-          html += '<tr><td colspan="' + totalColspan + '" style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;">Total:</td>'
-            + '<td style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;">' + Number(runningTotal.toFixed(2)).toLocaleString() + '</td></tr>';
+          html += '<tr id="serviceFeeRow" style="display:none;">'
+            + '<td colspan="' + totalColspan + '" style="text-align:right;padding:4px 2px;font-size:12.5px;color:#b45309;font-style:italic;">Service fee:</td>'
+            + '<td style="text-align:right;padding:4px 2px;font-size:12.5px;color:#b45309;font-weight:600;white-space:nowrap;">+ 30.00</td>'
+            + '</tr>';
+          html += '<tr><td colspan="' + totalColspan + '" style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;border-top:1px solid var(--border-color);">Total:</td>'
+            + '<td id="orderSummaryTotal" data-base="' + runningTotal.toFixed(2) + '" style="text-align:right;padding:8px 2px;font-weight:700;color:var(--brand);font-size:14px;border-top:1px solid var(--border-color);">' + Number(runningTotal.toFixed(2)).toLocaleString() + '</td></tr>';
           html += '</table>';
           totalAmount = runningTotal;
           productInfoEl.style.textAlign = 'left';
@@ -1056,9 +1152,12 @@
             if (inp) inp.value = codeToReapply;
             if (typeof applyCoupon === 'function') applyCoupon();
           } else {
-            if (amtEl) amtEl.value = totalAmount.toFixed(2);
+            var fee = (typeof cardFeeApplied !== 'undefined' && cardFeeApplied) ? (typeof CARD_SERVICE_FEE !== 'undefined' ? CARD_SERVICE_FEE : 30) : 0;
+            if (amtEl) amtEl.value = (totalAmount + fee).toFixed(2);
             if (amtEl) amtEl.dispatchEvent(new Event('input'));
           }
+          // Re-sync the fee row and total cell in the order summary table
+          if (typeof syncOrderSummaryFeeRow === 'function') syncOrderSummaryFeeRow();
         }
 
         if (params.get('multi') === '1') {
@@ -1119,11 +1218,12 @@
 
       function applyDiscountedTotal(coupon) {
         appliedCoupon = coupon;
-        amountInput.value = coupon.finalAmount.toFixed(2);
+        var fee = (typeof cardFeeApplied !== 'undefined' && cardFeeApplied) ? CARD_SERVICE_FEE : 0;
+        amountInput.value = (coupon.finalAmount + fee).toFixed(2);
         document.getElementById('couponSubtotal').textContent = 'LKR ' + fmtLKR(subtotalAmount);
         document.getElementById('couponDiscount').textContent = '− LKR ' + fmtLKR(coupon.discountAmount);
         document.getElementById('couponAppliedCode').textContent = coupon.code;
-        document.getElementById('couponNewTotal').textContent = 'LKR ' + fmtLKR(coupon.finalAmount);
+        document.getElementById('couponNewTotal').textContent = 'LKR ' + fmtLKR(coupon.finalAmount + fee);
         couponSummary.style.display = 'block';
         couponInput.value = coupon.code;
         couponInput.disabled = true;
@@ -1146,7 +1246,8 @@
 
       function removeCoupon() {
         appliedCoupon = null;
-        amountInput.value = subtotalAmount.toFixed(2);
+        var fee = (typeof cardFeeApplied !== 'undefined' && cardFeeApplied) ? CARD_SERVICE_FEE : 0;
+        amountInput.value = (subtotalAmount + fee).toFixed(2);
         couponSummary.style.display = 'none';
         couponInput.disabled = false;
         couponInput.value = '';
@@ -1277,7 +1378,48 @@
 
       // ====== Payment Method Selector ======
       const CARD_MAX_LKR = 49000;
+      const CARD_SERVICE_FEE = 30;
       let selectedMethod = "card";
+      let cardFeeApplied = false;
+
+      function syncOrderSummaryFeeRow() {
+        const feeRow = document.getElementById("serviceFeeRow");
+        const totalCell = document.getElementById("orderSummaryTotal");
+        if (!feeRow || !totalCell) return;
+        const base = parseFloat(totalCell.getAttribute("data-base")) || 0;
+        if (cardFeeApplied) {
+          feeRow.style.display = "";
+          totalCell.textContent = Number((base + CARD_SERVICE_FEE).toFixed(2)).toLocaleString();
+        } else {
+          feeRow.style.display = "none";
+          totalCell.textContent = Number(base.toFixed(2)).toLocaleString();
+        }
+      }
+
+      function applyCardFee() {
+        if (cardFeeApplied) return;
+        const amtEl = document.getElementById("amount");
+        const current = parseFloat(amtEl.value) || 0;
+        amtEl.value = (current + CARD_SERVICE_FEE).toFixed(2);
+        amtEl.dispatchEvent(new Event("input"));
+        cardFeeApplied = true;
+        const feeNotice = document.getElementById("cardServiceFeeNotice");
+        if (feeNotice) feeNotice.style.display = "flex";
+        syncOrderSummaryFeeRow();
+      }
+
+      function removeCardFee() {
+        if (!cardFeeApplied) return;
+        const amtEl = document.getElementById("amount");
+        const current = parseFloat(amtEl.value) || 0;
+        amtEl.value = Math.max(0, current - CARD_SERVICE_FEE).toFixed(2);
+        amtEl.dispatchEvent(new Event("input"));
+        cardFeeApplied = false;
+        const feeNotice = document.getElementById("cardServiceFeeNotice");
+        if (feeNotice) feeNotice.style.display = "none";
+        syncOrderSummaryFeeRow();
+      }
+
       function updateCardLimitState() {
         const amount = parseFloat(document.getElementById("amount").value) || 0;
         const overLimit = selectedMethod === "card" && amount > CARD_MAX_LKR;
@@ -1291,6 +1433,7 @@
         }
       }
       function selectPaymentMethod(method) {
+        const wasCard = selectedMethod === "card";
         selectedMethod = method;
         document.querySelectorAll(".pm-option").forEach(opt => {
           opt.classList.toggle("active", opt.dataset.method === method);
@@ -1310,6 +1453,14 @@
         if (termsSection) termsSection.style.display = isCard ? "" : "none";
         const customerSection = document.getElementById("customerDetailsSection");
         if (customerSection) customerSection.style.display = isCard ? "" : "none";
+
+        // Apply / remove the card service fee
+        if (isCard) {
+          applyCardFee();
+        } else if (wasCard) {
+          removeCardFee();
+        }
+
         updateCardLimitState();
       }
       document.querySelectorAll(".pm-option").forEach(opt => {
@@ -1393,7 +1544,7 @@
             first_name: (document.getElementById("firstName").value || "").trim(),
             last_name:  (document.getElementById("lastName").value  || "").trim(),
             email:      (document.getElementById("email").value     || "").trim(),
-            phone:      (document.getElementById("phone").value     || "").trim(),
+            phone:      ((document.getElementById("ccDialCode")?.textContent || '') + (document.getElementById("phone").value || "")).trim(),
             return_url: "https://www.redtrex.com.lk/payment-success"
           };
 
@@ -1666,5 +1817,315 @@
         }
       }
     </script>
+
+  <script>
+  (function() {
+    var COUNTRIES = [
+      {f:'🇦🇫',n:'Afghanistan',d:'+93'},
+      {f:'🇦🇱',n:'Albania',d:'+355'},
+      {f:'🇩🇿',n:'Algeria',d:'+213'},
+      {f:'🇦🇩',n:'Andorra',d:'+376'},
+      {f:'🇦🇴',n:'Angola',d:'+244'},
+      {f:'🇦🇬',n:'Antigua & Barbuda',d:'+1268'},
+      {f:'🇦🇷',n:'Argentina',d:'+54'},
+      {f:'🇦🇲',n:'Armenia',d:'+374'},
+      {f:'🇦🇺',n:'Australia',d:'+61'},
+      {f:'🇦🇹',n:'Austria',d:'+43'},
+      {f:'🇦🇿',n:'Azerbaijan',d:'+994'},
+      {f:'🇧🇸',n:'Bahamas',d:'+1242'},
+      {f:'🇧🇭',n:'Bahrain',d:'+973'},
+      {f:'🇧🇩',n:'Bangladesh',d:'+880'},
+      {f:'🇧🇧',n:'Barbados',d:'+1246'},
+      {f:'🇧🇾',n:'Belarus',d:'+375'},
+      {f:'🇧🇪',n:'Belgium',d:'+32'},
+      {f:'🇧🇿',n:'Belize',d:'+501'},
+      {f:'🇧🇯',n:'Benin',d:'+229'},
+      {f:'🇧🇹',n:'Bhutan',d:'+975'},
+      {f:'🇧🇴',n:'Bolivia',d:'+591'},
+      {f:'🇧🇦',n:'Bosnia & Herzegovina',d:'+387'},
+      {f:'🇧🇼',n:'Botswana',d:'+267'},
+      {f:'🇧🇷',n:'Brazil',d:'+55'},
+      {f:'🇧🇳',n:'Brunei',d:'+673'},
+      {f:'🇧🇬',n:'Bulgaria',d:'+359'},
+      {f:'🇧🇫',n:'Burkina Faso',d:'+226'},
+      {f:'🇧🇮',n:'Burundi',d:'+257'},
+      {f:'🇨🇻',n:'Cabo Verde',d:'+238'},
+      {f:'🇰🇭',n:'Cambodia',d:'+855'},
+      {f:'🇨🇲',n:'Cameroon',d:'+237'},
+      {f:'🇨🇦',n:'Canada',d:'+1'},
+      {f:'🇨🇫',n:'Central African Rep.',d:'+236'},
+      {f:'🇹🇩',n:'Chad',d:'+235'},
+      {f:'🇨🇱',n:'Chile',d:'+56'},
+      {f:'🇨🇳',n:'China',d:'+86'},
+      {f:'🇨🇴',n:'Colombia',d:'+57'},
+      {f:'🇰🇲',n:'Comoros',d:'+269'},
+      {f:'🇨🇩',n:'Congo (DRC)',d:'+243'},
+      {f:'🇨🇬',n:'Congo (Republic)',d:'+242'},
+      {f:'🇨🇷',n:'Costa Rica',d:'+506'},
+      {f:'🇭🇷',n:'Croatia',d:'+385'},
+      {f:'🇨🇺',n:'Cuba',d:'+53'},
+      {f:'🇨🇾',n:'Cyprus',d:'+357'},
+      {f:'🇨🇿',n:'Czech Republic',d:'+420'},
+      {f:'🇩🇰',n:'Denmark',d:'+45'},
+      {f:'🇩🇯',n:'Djibouti',d:'+253'},
+      {f:'🇩🇲',n:'Dominica',d:'+1767'},
+      {f:'🇩🇴',n:'Dominican Republic',d:'+1809'},
+      {f:'🇪🇨',n:'Ecuador',d:'+593'},
+      {f:'🇪🇬',n:'Egypt',d:'+20'},
+      {f:'🇸🇻',n:'El Salvador',d:'+503'},
+      {f:'🇬🇶',n:'Equatorial Guinea',d:'+240'},
+      {f:'🇪🇷',n:'Eritrea',d:'+291'},
+      {f:'🇪🇪',n:'Estonia',d:'+372'},
+      {f:'🇸🇿',n:'Eswatini',d:'+268'},
+      {f:'🇪🇹',n:'Ethiopia',d:'+251'},
+      {f:'🇫🇯',n:'Fiji',d:'+679'},
+      {f:'🇫🇮',n:'Finland',d:'+358'},
+      {f:'🇫🇷',n:'France',d:'+33'},
+      {f:'🇬🇦',n:'Gabon',d:'+241'},
+      {f:'🇬🇲',n:'Gambia',d:'+220'},
+      {f:'🇬🇪',n:'Georgia',d:'+995'},
+      {f:'🇩🇪',n:'Germany',d:'+49'},
+      {f:'🇬🇭',n:'Ghana',d:'+233'},
+      {f:'🇬🇷',n:'Greece',d:'+30'},
+      {f:'🇬🇩',n:'Grenada',d:'+1473'},
+      {f:'🇬🇹',n:'Guatemala',d:'+502'},
+      {f:'🇬🇳',n:'Guinea',d:'+224'},
+      {f:'🇬🇼',n:'Guinea-Bissau',d:'+245'},
+      {f:'🇬🇾',n:'Guyana',d:'+592'},
+      {f:'🇭🇹',n:'Haiti',d:'+509'},
+      {f:'🇭🇳',n:'Honduras',d:'+504'},
+      {f:'🇭🇺',n:'Hungary',d:'+36'},
+      {f:'🇮🇸',n:'Iceland',d:'+354'},
+      {f:'🇮🇳',n:'India',d:'+91'},
+      {f:'🇮🇩',n:'Indonesia',d:'+62'},
+      {f:'🇮🇷',n:'Iran',d:'+98'},
+      {f:'🇮🇶',n:'Iraq',d:'+964'},
+      {f:'🇮🇪',n:'Ireland',d:'+353'},
+      {f:'🇮🇱',n:'Israel',d:'+972'},
+      {f:'🇮🇹',n:'Italy',d:'+39'},
+      {f:'🇯🇲',n:'Jamaica',d:'+1876'},
+      {f:'🇯🇵',n:'Japan',d:'+81'},
+      {f:'🇯🇴',n:'Jordan',d:'+962'},
+      {f:'🇰🇿',n:'Kazakhstan',d:'+7'},
+      {f:'🇰🇪',n:'Kenya',d:'+254'},
+      {f:'🇰🇮',n:'Kiribati',d:'+686'},
+      {f:'🇽🇰',n:'Kosovo',d:'+383'},
+      {f:'🇰🇼',n:'Kuwait',d:'+965'},
+      {f:'🇰🇬',n:'Kyrgyzstan',d:'+996'},
+      {f:'🇱🇦',n:'Laos',d:'+856'},
+      {f:'🇱🇻',n:'Latvia',d:'+371'},
+      {f:'🇱🇧',n:'Lebanon',d:'+961'},
+      {f:'🇱🇸',n:'Lesotho',d:'+266'},
+      {f:'🇱🇷',n:'Liberia',d:'+231'},
+      {f:'🇱🇾',n:'Libya',d:'+218'},
+      {f:'🇱🇮',n:'Liechtenstein',d:'+423'},
+      {f:'🇱🇹',n:'Lithuania',d:'+370'},
+      {f:'🇱🇺',n:'Luxembourg',d:'+352'},
+      {f:'🇲🇬',n:'Madagascar',d:'+261'},
+      {f:'🇲🇼',n:'Malawi',d:'+265'},
+      {f:'🇲🇾',n:'Malaysia',d:'+60'},
+      {f:'🇲🇻',n:'Maldives',d:'+960'},
+      {f:'🇲🇱',n:'Mali',d:'+223'},
+      {f:'🇲🇹',n:'Malta',d:'+356'},
+      {f:'🇲🇭',n:'Marshall Islands',d:'+692'},
+      {f:'🇲🇷',n:'Mauritania',d:'+222'},
+      {f:'🇲🇺',n:'Mauritius',d:'+230'},
+      {f:'🇲🇽',n:'Mexico',d:'+52'},
+      {f:'🇫🇲',n:'Micronesia',d:'+691'},
+      {f:'🇲🇩',n:'Moldova',d:'+373'},
+      {f:'🇲🇨',n:'Monaco',d:'+377'},
+      {f:'🇲🇳',n:'Mongolia',d:'+976'},
+      {f:'🇲🇪',n:'Montenegro',d:'+382'},
+      {f:'🇲🇦',n:'Morocco',d:'+212'},
+      {f:'🇲🇿',n:'Mozambique',d:'+258'},
+      {f:'🇲🇲',n:'Myanmar',d:'+95'},
+      {f:'🇳🇦',n:'Namibia',d:'+264'},
+      {f:'🇳🇷',n:'Nauru',d:'+674'},
+      {f:'🇳🇵',n:'Nepal',d:'+977'},
+      {f:'🇳🇱',n:'Netherlands',d:'+31'},
+      {f:'🇳🇿',n:'New Zealand',d:'+64'},
+      {f:'🇳🇮',n:'Nicaragua',d:'+505'},
+      {f:'🇳🇪',n:'Niger',d:'+227'},
+      {f:'🇳🇬',n:'Nigeria',d:'+234'},
+      {f:'🇲🇰',n:'North Macedonia',d:'+389'},
+      {f:'🇳🇴',n:'Norway',d:'+47'},
+      {f:'🇴🇲',n:'Oman',d:'+968'},
+      {f:'🇵🇰',n:'Pakistan',d:'+92'},
+      {f:'🇵🇼',n:'Palau',d:'+680'},
+      {f:'🇵🇦',n:'Panama',d:'+507'},
+      {f:'🇵🇬',n:'Papua New Guinea',d:'+675'},
+      {f:'🇵🇾',n:'Paraguay',d:'+595'},
+      {f:'🇵🇪',n:'Peru',d:'+51'},
+      {f:'🇵🇭',n:'Philippines',d:'+63'},
+      {f:'🇵🇱',n:'Poland',d:'+48'},
+      {f:'🇵🇹',n:'Portugal',d:'+351'},
+      {f:'🇶🇦',n:'Qatar',d:'+974'},
+      {f:'🇷🇴',n:'Romania',d:'+40'},
+      {f:'🇷🇺',n:'Russia',d:'+7'},
+      {f:'🇷🇼',n:'Rwanda',d:'+250'},
+      {f:'🇰🇳',n:'Saint Kitts & Nevis',d:'+1869'},
+      {f:'🇱🇨',n:'Saint Lucia',d:'+1758'},
+      {f:'🇻🇨',n:'Saint Vincent',d:'+1784'},
+      {f:'🇼🇸',n:'Samoa',d:'+685'},
+      {f:'🇸🇲',n:'San Marino',d:'+378'},
+      {f:'🇸🇹',n:'São Tomé & Príncipe',d:'+239'},
+      {f:'🇸🇦',n:'Saudi Arabia',d:'+966'},
+      {f:'🇸🇳',n:'Senegal',d:'+221'},
+      {f:'🇷🇸',n:'Serbia',d:'+381'},
+      {f:'🇸🇨',n:'Seychelles',d:'+248'},
+      {f:'🇸🇱',n:'Sierra Leone',d:'+232'},
+      {f:'🇸🇬',n:'Singapore',d:'+65'},
+      {f:'🇸🇰',n:'Slovakia',d:'+421'},
+      {f:'🇸🇮',n:'Slovenia',d:'+386'},
+      {f:'🇸🇧',n:'Solomon Islands',d:'+677'},
+      {f:'🇸🇴',n:'Somalia',d:'+252'},
+      {f:'🇿🇦',n:'South Africa',d:'+27'},
+      {f:'🇸🇸',n:'South Sudan',d:'+211'},
+      {f:'🇪🇸',n:'Spain',d:'+34'},
+      {f:'🇱🇰',n:'Sri Lanka',d:'+94'},
+      {f:'🇸🇩',n:'Sudan',d:'+249'},
+      {f:'🇸🇷',n:'Suriname',d:'+597'},
+      {f:'🇸🇪',n:'Sweden',d:'+46'},
+      {f:'🇨🇭',n:'Switzerland',d:'+41'},
+      {f:'🇸🇾',n:'Syria',d:'+963'},
+      {f:'🇹🇼',n:'Taiwan',d:'+886'},
+      {f:'🇹🇯',n:'Tajikistan',d:'+992'},
+      {f:'🇹🇿',n:'Tanzania',d:'+255'},
+      {f:'🇹🇭',n:'Thailand',d:'+66'},
+      {f:'🇹🇱',n:'Timor-Leste',d:'+670'},
+      {f:'🇹🇬',n:'Togo',d:'+228'},
+      {f:'🇹🇴',n:'Tonga',d:'+676'},
+      {f:'🇹🇹',n:'Trinidad & Tobago',d:'+1868'},
+      {f:'🇹🇳',n:'Tunisia',d:'+216'},
+      {f:'🇹🇷',n:'Turkey',d:'+90'},
+      {f:'🇹🇲',n:'Turkmenistan',d:'+993'},
+      {f:'🇹🇻',n:'Tuvalu',d:'+688'},
+      {f:'🇺🇬',n:'Uganda',d:'+256'},
+      {f:'🇺🇦',n:'Ukraine',d:'+380'},
+      {f:'🇦🇪',n:'United Arab Emirates',d:'+971'},
+      {f:'🇬🇧',n:'United Kingdom',d:'+44'},
+      {f:'🇺🇸',n:'United States',d:'+1'},
+      {f:'🇺🇾',n:'Uruguay',d:'+598'},
+      {f:'🇺🇿',n:'Uzbekistan',d:'+998'},
+      {f:'🇻🇺',n:'Vanuatu',d:'+678'},
+      {f:'🇻🇪',n:'Venezuela',d:'+58'},
+      {f:'🇻🇳',n:'Vietnam',d:'+84'},
+      {f:'🇾🇪',n:'Yemen',d:'+967'},
+      {f:'🇿🇲',n:'Zambia',d:'+260'},
+      {f:'🇿🇼',n:'Zimbabwe',d:'+263'},
+    ];
+
+    // Sort alphabetically, then move Sri Lanka to top as default
+    COUNTRIES.sort(function(a, b) { return a.n.localeCompare(b.n); });
+    var sriLankaIdx = COUNTRIES.findIndex(function(c) { return c.d === '+94'; });
+    if (sriLankaIdx > 0) {
+      var sl = COUNTRIES.splice(sriLankaIdx, 1)[0];
+      COUNTRIES.unshift(sl);
+    }
+
+    var selectedCountry = COUNTRIES[0];
+    var ccBtn = document.getElementById('ccBtn');
+    var ccDropdown = document.getElementById('ccDropdown');
+    var ccSearch = document.getElementById('ccSearch');
+    var ccList = document.getElementById('ccList');
+    var ccFlag = document.getElementById('ccFlag');
+    var ccDialCode = document.getElementById('ccDialCode');
+    var isOpen = false;
+
+    function renderList(filter) {
+      var q = (filter || '').toLowerCase().trim();
+      var filtered = q
+        ? COUNTRIES.filter(function(c) {
+            return c.n.toLowerCase().includes(q) || c.d.includes(q);
+          })
+        : COUNTRIES;
+      if (!filtered.length) {
+        ccList.innerHTML = '<div class="cc-no-results">No results for "' + q + '"</div>';
+        return;
+      }
+      ccList.innerHTML = filtered.map(function(c) {
+        var isSel = c === selectedCountry;
+        return '<div class="cc-item' + (isSel ? ' selected' : '') + '" data-dial="' + c.d + '" data-flag="' + c.f + '" data-name="' + c.n + '" role="option" aria-selected="' + isSel + '">'
+          + '<span class="cc-item-flag">' + c.f + '</span>'
+          + '<span class="cc-item-name">' + c.n + '</span>'
+          + '<span class="cc-item-dial">' + c.d + '</span>'
+          + '</div>';
+      }).join('');
+      // Scroll selected item into view
+      var selEl = ccList.querySelector('.selected');
+      if (selEl) selEl.scrollIntoView({ block: 'nearest' });
+    }
+
+    function openDropdown() {
+      isOpen = true;
+      ccBtn.classList.add('open');
+      ccBtn.setAttribute('aria-expanded', 'true');
+      ccDropdown.classList.add('open');
+      // Check if dropdown would overflow viewport bottom — if so, open upward
+      var rect = ccBtn.getBoundingClientRect();
+      var spaceBelow = window.innerHeight - rect.bottom;
+      if (spaceBelow < 300) {
+        ccDropdown.classList.add('drop-up');
+      } else {
+        ccDropdown.classList.remove('drop-up');
+      }
+      renderList('');
+      ccSearch.value = '';
+      ccSearch.focus();
+    }
+
+    function closeDropdown() {
+      isOpen = false;
+      ccBtn.classList.remove('open');
+      ccBtn.setAttribute('aria-expanded', 'false');
+      ccDropdown.classList.remove('open');
+    }
+
+    function selectCountry(dial, flag, name) {
+      selectedCountry = COUNTRIES.find(function(c) { return c.d === dial && c.n === name; }) || selectedCountry;
+      ccFlag.textContent = flag;
+      ccDialCode.textContent = dial;
+      closeDropdown();
+      document.getElementById('phone').focus();
+    }
+
+    ccBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      isOpen ? closeDropdown() : openDropdown();
+    });
+
+    ccList.addEventListener('click', function(e) {
+      var item = e.target.closest('.cc-item');
+      if (!item) return;
+      selectCountry(item.dataset.dial, item.dataset.flag, item.dataset.name);
+    });
+
+    ccSearch.addEventListener('input', function() {
+      renderList(ccSearch.value);
+    });
+
+    ccSearch.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { closeDropdown(); ccBtn.focus(); }
+      if (e.key === 'Enter') {
+        var first = ccList.querySelector('.cc-item');
+        if (first) selectCountry(first.dataset.dial, first.dataset.flag, first.dataset.name);
+      }
+      if (e.key === 'ArrowDown') {
+        var first = ccList.querySelector('.cc-item');
+        if (first) first.focus();
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (isOpen && !ccBtn.contains(e.target) && !ccDropdown.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isOpen) closeDropdown();
+    });
+  })();
+  </script>
   </body>
 </html>
